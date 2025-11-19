@@ -1,0 +1,473 @@
+openapi: 3.0.0
+info:
+  title: LORIS API
+  description: |
+    LORIS (Longitudinal Online Research and Imaging System) REST API
+    for managing clinical neuroimaging and behavioral research data.
+  version: 0.0.4
+  contact:
+    name: ACES Team
+    url: https://github.com/aces/Loris
+  license:
+    name: GPLv3
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+
+servers:
+  - url: '{protocol}://{host}/api/{version}'
+    description: LORIS API Server
+    variables:
+      protocol:
+        default: https
+        enum:
+          - http
+          - https
+      host:
+        default: localhost
+        description: LORIS server hostname
+      version:
+        default: v0.0.4
+        enum:
+          - v0.0.3
+          - v0.0.4
+          - v0.0.4-dev
+
+security:
+  - BearerAuth: []
+
+paths:
+  /login:
+    post:
+      summary: Authenticate and obtain JWT token
+      description: Login to LORIS API with username and password credentials
+      operationId: authenticate
+      tags:
+        - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  description: LORIS username
+                password:
+                  type: string
+                  format: password
+                  description: User password
+      responses:
+        '200':
+          description: Successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: JWT authentication token
+        '401':
+          description: Invalid credentials
+        '400':
+          description: Bad request
+
+  /instruments:
+    get:
+      summary: Get list of instruments
+      description: Retrieve all available instruments in LORIS
+      operationId: getInstruments
+      tags:
+        - Clinical
+      responses:
+        '200':
+          description: List of instruments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Instruments:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /candidates:
+    get:
+      summary: Get list of candidates
+      description: Retrieve all candidates matching the filters
+      operationId: getCandidates
+      tags:
+        - Clinical
+      parameters:
+        - name: PSCID
+          in: query
+          schema:
+            type: string
+        - name: Site
+          in: query
+          schema:
+            type: string
+        - name: Project
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of candidates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Candidates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Candidate'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    post:
+      summary: Create a new candidate
+      description: Create a new candidate record in LORIS
+      operationId: createCandidate
+      tags:
+        - Clinical
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CandidateCreate'
+      responses:
+        '201':
+          description: Candidate created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Meta:
+                    type: object
+                    properties:
+                      CandID:
+                        type: string
+                  Message:
+                    type: string
+        '400':
+          description: Invalid request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /candidates/{candID}:
+    get:
+      summary: Get candidate details
+      description: Retrieve detailed information about a specific candidate
+      operationId: getCandidate
+      tags:
+        - Clinical
+      parameters:
+        - $ref: '#/components/parameters/candID'
+      responses:
+        '200':
+          description: Candidate details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CandidateDetail'
+        '404':
+          description: Candidate not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /candidates/{candID}/{visitLabel}:
+    get:
+      summary: Get visit/timepoint information
+      description: Retrieve information about a specific visit for a candidate
+      operationId: getVisit
+      tags:
+        - Clinical
+      parameters:
+        - $ref: '#/components/parameters/candID'
+        - $ref: '#/components/parameters/visitLabel'
+      responses:
+        '200':
+          description: Visit information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '404':
+          description: Visit not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    put:
+      summary: Create timepoint/visit
+      description: Create a new timepoint for a candidate
+      operationId: createTimepoint
+      tags:
+        - Clinical
+      parameters:
+        - $ref: '#/components/parameters/candID'
+        - $ref: '#/components/parameters/visitLabel'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitCreate'
+      responses:
+        '201':
+          description: Timepoint created
+        '400':
+          description: Invalid request
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /candidates/{candID}/{visitLabel}/instruments/{instrument}:
+    get:
+      summary: Get instrument data
+      description: Retrieve instrument data for a candidate's visit
+      operationId: getInstrumentData
+      tags:
+        - Clinical
+      parameters:
+        - $ref: '#/components/parameters/candID'
+        - $ref: '#/components/parameters/visitLabel'
+        - $ref: '#/components/parameters/instrument'
+      responses:
+        '200':
+          description: Instrument data
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          description: Data not found
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+    put:
+      summary: Upload instrument data
+      description: Upload or update instrument data for a candidate's visit
+      operationId: uploadInstrumentData
+      tags:
+        - Clinical
+      parameters:
+        - $ref: '#/components/parameters/candID'
+        - $ref: '#/components/parameters/visitLabel'
+        - $ref: '#/components/parameters/instrument'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        '201':
+          description: Data uploaded successfully
+        '400':
+          description: Invalid data
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /instrument_manager/instrument_data:
+    post:
+      summary: Upload instrument CSV file
+      description: Bulk upload instrument data via CSV file
+      operationId: uploadInstrumentCSV
+      tags:
+        - Clinical
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - instrument
+                - action
+                - data_file
+              properties:
+                instrument:
+                  type: string
+                  description: Instrument name
+                action:
+                  type: string
+                  enum:
+                    - CREATE_SESSIONS
+                    - UPDATE_DATA
+                  default: CREATE_SESSIONS
+                data_file:
+                  type: string
+                  format: binary
+                  description: CSV file with instrument data
+      responses:
+        '200':
+          description: Upload successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+        '400':
+          description: Invalid file or parameters
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Endpoint not found (fallback to web module)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /login endpoint
+
+  parameters:
+    candID:
+      name: candID
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Candidate ID
+
+    visitLabel:
+      name: visitLabel
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Visit/Timepoint label
+
+    instrument:
+      name: instrument
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Instrument name
+
+  schemas:
+    Candidate:
+      type: object
+      properties:
+        CandID:
+          type: string
+        PSCID:
+          type: string
+        Site:
+          type: string
+        Project:
+          type: string
+        Sex:
+          type: string
+          enum: [Male, Female, Other]
+        DoB:
+          type: string
+          format: date
+
+    CandidateCreate:
+      type: object
+      required:
+        - Project
+        - Sex
+      properties:
+        Candidate:
+          type: object
+          required:
+            - Sex
+          properties:
+            PSCID:
+              type: string
+            DoB:
+              type: string
+              format: date
+            Sex:
+              type: string
+              enum: [Male, Female, Other]
+            EDC:
+              type: string
+              format: date
+        Project:
+          type: string
+        Site:
+          type: string
+
+    CandidateDetail:
+      allOf:
+        - $ref: '#/components/schemas/Candidate'
+        - type: object
+          properties:
+            Visits:
+              type: array
+              items:
+                type: string
+
+    Visit:
+      type: object
+      properties:
+        CandID:
+          type: string
+        Visit:
+          type: string
+        Site:
+          type: string
+        Battery:
+          type: string
+        Project:
+          type: string
+        Instruments:
+          type: array
+          items:
+            type: string
+
+    VisitCreate:
+      type: object
+      required:
+        - CandID
+        - Visit
+      properties:
+        CandID:
+          type: string
+        Visit:
+          type: string
+        Site:
+          type: string
+        Project:
+          type: string
+        Battery:
+          type: string
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required or token expired
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Unauthorized"
+
+tags:
+  - name: Authentication
+    description: Authentication and token management
+  - name: Clinical
+    description: Clinical data operations

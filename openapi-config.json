@@ -1,0 +1,8 @@
+{
+  "invokerPackage": "LORISClient",
+  "apiPackage": "LORISClient\\Api",
+  "modelPackage": "LORISClient\\Model",
+  "srcBasePath": "lib",
+  "variableNamingConvention": "camelCase",
+  "phpVersion": "8.1"
+}
