@@ -1,23 +1,21 @@
 # LORISClient\AuthenticationApi
 
-Authentication and token management
+Login and JWT token
 
-All URIs are relative to https://localhost/api/v0.0.4, except if the operation defines another base path.
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**authenticate()**](AuthenticationApi.md#authenticate) | **POST** /login | Authenticate and obtain JWT token |
+| [**login()**](AuthenticationApi.md#login) | **POST** /login | Authenticate and obtain JWT token |
 
 
-## `authenticate()`
+## `login()`
 
 ```php
-authenticate($authenticateRequest): \LORISClient\LORISClient\Model\Authenticate200Response
+login($loginRequest): \LORISClient\LORISClient\Model\LoginResponse
 ```
 
 Authenticate and obtain JWT token
-
-Login to LORIS API with username and password credentials
 
 ### Example
 
@@ -32,13 +30,13 @@ $apiInstance = new LORISClient\Api\AuthenticationApi(
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
 );
-$authenticateRequest = new \LORISClient\LORISClient\Model\AuthenticateRequest(); // \LORISClient\LORISClient\Model\AuthenticateRequest
+$loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->authenticate($authenticateRequest);
+    $result = $apiInstance->login($loginRequest);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling AuthenticationApi->authenticate: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthenticationApi->login: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -46,11 +44,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **authenticateRequest** | [**\LORISClient\LORISClient\Model\AuthenticateRequest**](../Model/AuthenticateRequest.md)|  | |
+| **loginRequest** | [**\LORISClient\LORISClient\Model\LoginRequest**](../Model/LoginRequest.md)|  | |
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\Authenticate200Response**](../Model/Authenticate200Response.md)
+[**\LORISClient\LORISClient\Model\LoginResponse**](../Model/LoginResponse.md)
 
 ### Authorization
 

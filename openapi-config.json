@@ -4,5 +4,9 @@
   "modelPackage": "LORISClient\\Model",
   "srcBasePath": "lib",
   "variableNamingConvention": "camelCase",
-  "phpVersion": "8.1"
+  "phpLegacySupport": false,
+  "hideGenerationTimestamp": true,
+  "gitUserId": "aces",
+  "gitRepoId": "loris-php-api-client",
+  "artifactVersion": "0.0.4-dev"
 }

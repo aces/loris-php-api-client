@@ -1,6 +1,7 @@
 {
-    "name": "loris/php-client",
-    "description": "LORIS (Longitudinal Online Research and Imaging System) REST API for managing clinical neuroimaging and behavioral research data.",
+    "name": "aces/loris-php-api-client",
+    "version": "0.0.4-dev",
+    "description": "LORIS REST API for clinical data ingestion pipelines. Authentication via JWT - POST /login to get token, use as \"Bearer <token>\".",
     "keywords": [
         "openapitools",
         "openapi-generator",
