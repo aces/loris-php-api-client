@@ -78,18 +78,18 @@ Class | Method | HTTP request | Description
 *CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
 *CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
 *CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | Get list of candidates
-*InstrumentManagerApi* | [**createInstrument**](docs/Api/InstrumentManagerApi.md#createinstrument) | **POST** /instrument_manager | Create instrument from LINST or REDCap data dictionary
-*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data
-*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV
+*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data ingestion
+*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary
+*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV file
 *InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data for a candidate/visit
 *InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | Get instruments for a visit
-*InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data
-*InstrumentsApi* | [**putInstrumentData**](docs/Api/InstrumentsApi.md#putinstrumentdata) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data
+*InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data (preserves unspecified fields)
+*InstrumentsApi* | [**putInstrumentData**](docs/Api/InstrumentsApi.md#putinstrumentdata) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data (nulls unspecified fields)
 *ProjectsApi* | [**getProject**](docs/Api/ProjectsApi.md#getproject) | **GET** /projects/{project} | Get project details including instruments
 *ProjectsApi* | [**getProjectInstruments**](docs/Api/ProjectsApi.md#getprojectinstruments) | **GET** /projects/{project}/instruments | Get instruments for a project
 *ProjectsApi* | [**getProjects**](docs/Api/ProjectsApi.md#getprojects) | **GET** /projects | Get list of projects
 *SitesApi* | [**getSites**](docs/Api/SitesApi.md#getsites) | **GET** /sites | Get list of sites
-*VisitsApi* | [**createVisit**](docs/Api/VisitsApi.md#createvisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit
+*VisitsApi* | [**createVisit**](docs/Api/VisitsApi.md#createvisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit/timepoint
 *VisitsApi* | [**getVisit**](docs/Api/VisitsApi.md#getvisit) | **GET** /candidates/{candid}/{visit} | Get visit details
 
 ## Models

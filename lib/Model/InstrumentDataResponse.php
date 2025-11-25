@@ -370,7 +370,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     /**
      * Sets idMapping
      *
-     * @param \LORISClient\Model\IdMapping[]|null $idMapping Mapping of external to internal IDs
+     * @param \LORISClient\Model\IdMapping[]|null $idMapping Mapping of external PSCID to internal CandID (for CREATE_SESSIONS)
      *
      * @return self
      */

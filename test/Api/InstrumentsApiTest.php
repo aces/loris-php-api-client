@@ -98,7 +98,7 @@ class InstrumentsApiTest extends TestCase
     /**
      * Test case for patchInstrumentData
      *
-     * Update instrument data.
+     * Update instrument data (preserves unspecified fields).
      *
      */
     public function testPatchInstrumentData()
@@ -110,7 +110,7 @@ class InstrumentsApiTest extends TestCase
     /**
      * Test case for putInstrumentData
      *
-     * Replace instrument data.
+     * Replace instrument data (nulls unspecified fields).
      *
      */
     public function testPutInstrumentData()

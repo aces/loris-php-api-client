@@ -336,7 +336,7 @@ class InstrumentDataRequest implements ModelInterface, ArrayAccess, \JsonSeriali
     /**
      * Sets data
      *
-     * @param array<string,mixed>|null $data data
+     * @param array<string,mixed>|null $data Instrument field values to update
      *
      * @return self
      */

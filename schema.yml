@@ -13,13 +13,18 @@ info:
   version: 0.0.4-dev
 
 servers:
-  - url: '{protocol}://{host}/api/v0.0.4-dev'
+  - url: '{protocol}://{host}/api/{version}'
     variables:
       protocol:
         default: https
         enum: [http, https]
       host:
         default: demo.loris.ca
+        description: LORIS instance hostname
+      version:
+        default: v0.0.4-dev
+        enum: [v0.0.3, v0.0.3-dev, v0.0.4-dev, v0.0.4]
+        description: API version
 
 security:
   - BearerAuth: []
@@ -56,74 +61,96 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   # ============================================
-  # INSTRUMENT MANAGER - Bulk CSV Upload
-  # (Used by ClinicalPipeline.uploadInstrumentCSV)
+  # INSTRUMENT MANAGER
   # ============================================
   /instrument_manager:
     post:
       tags:
         - InstrumentManager
-      summary: Create instrument from LINST or REDCap data dictionary
-      operationId: createInstrument
+      summary: Install instrument from LINST file or REDCap data dictionary
+      description: |
+        Creates/installs a new instrument in LORIS from either:
+        - A LINST file (.linst)
+        - A CSV file with one or more REDCap data dictionaries
+      operationId: installInstrument
       requestBody:
+        required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/InstrumentManagerForm'
+              $ref: '#/components/schemas/InstrumentInstallForm'
       responses:
         '201':
-          description: Instrument created
+          description: Instrument successfully created/installed
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid file or format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /instrument_manager/instrument_data:
     get:
       tags:
         - InstrumentManager
-      summary: Get expected CSV headers for instrument data
+      summary: Get expected CSV headers for instrument data ingestion
       description: |
-        Returns CSV with expected headers for the specified instrument(s).
+        Generates and returns a CSV file with the expected headers for the specified instrument(s).
         Either "instrument" OR "instruments" must be set, not both.
       operationId: getInstrumentDataHeaders
       parameters:
         - name: action
           in: query
-          description: CREATE_SESSIONS or VALIDATE_SESSIONS
+          description: |
+            - CREATE_SESSIONS: For when sessions may need to be created
+            - VALIDATE_SESSIONS: For when all sessions must already exist
           required: true
           schema:
             type: string
             enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
         - name: instrument
           in: query
-          description: Single instrument name
+          description: Single instrument name (mutually exclusive with instruments)
           required: false
           schema:
             type: string
         - name: instruments
           in: query
-          description: Multiple instrument names (comma-separated)
+          description: Multiple instrument names, comma-separated (mutually exclusive with instrument)
           required: false
           schema:
             type: string
       responses:
         '200':
-          description: CSV with expected headers
+          description: CSV file with expected headers
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
     post:
       tags:
         - InstrumentManager
-      summary: Bulk insert instrument data from CSV
+      summary: Bulk insert instrument data from CSV file
       description: |
-        Upload CSV file to insert data for one or more instruments.
-        CREATE_SESSIONS mode will create candidates/sessions if they don't exist.
-        VALIDATE_SESSIONS mode requires all sessions to already exist.
+        Uploads a CSV file to insert data for one or more instruments.
+        
+        Actions:
+        - CREATE_SESSIONS: Creates candidates and sessions if they don't exist
+        - VALIDATE_SESSIONS: Requires all candidates/sessions to already exist
+        
+        CSV must have columns: PSCID, Visit_label, plus instrument fields.
       operationId: uploadInstrumentData
       requestBody:
         required: true
@@ -133,7 +160,7 @@ paths:
               $ref: '#/components/schemas/InstrumentDataUploadForm'
       responses:
         '200':
-          description: Validation errors occurred
+          description: Validation errors occurred (partial or no data inserted)
           content:
             application/json:
               schema:
@@ -146,7 +173,7 @@ paths:
                 $ref: '#/components/schemas/InstrumentDataResponse'
 
   # ============================================
-  # PROJECTS - Check instruments exist
+  # PROJECTS
   # ============================================
   /projects:
     get:
@@ -237,6 +264,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CandidateObject'
+        '400':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: PSCID already exists
           content:
@@ -263,6 +296,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CandidateObject'
+        '404':
+          description: Candidate not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   # ============================================
   # VISITS
@@ -295,7 +334,7 @@ paths:
     put:
       tags:
         - Visits
-      summary: Create a new visit
+      summary: Create a new visit/timepoint
       operationId: createVisit
       parameters:
         - name: candid
@@ -321,9 +360,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VisitObject'
+        '409':
+          description: Visit already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   # ============================================
-  # INDIVIDUAL INSTRUMENT DATA
+  # INSTRUMENTS (Per Candidate/Visit)
   # ============================================
   /candidates/{candid}/{visit}/instruments:
     get:
@@ -383,7 +428,7 @@ paths:
     put:
       tags:
         - Instruments
-      summary: Replace instrument data
+      summary: Replace instrument data (nulls unspecified fields)
       operationId: putInstrumentData
       parameters:
         - name: candid
@@ -418,7 +463,7 @@ paths:
     patch:
       tags:
         - Instruments
-      summary: Update instrument data
+      summary: Update instrument data (preserves unspecified fields)
       operationId: patchInstrumentData
       parameters:
         - name: candid
@@ -508,15 +553,19 @@ components:
           default: "ok"
 
     # ============================================
-    # Instrument Manager (Bulk Upload)
+    # Instrument Manager
     # ============================================
-    InstrumentManagerForm:
+    InstrumentInstallForm:
       type: object
+      required: [install_file]
       properties:
         install_file:
           type: string
           format: binary
-          description: LINST file or REDCap CSV
+          description: |
+            Instrument definition file to install:
+            - LINST file (.linst)
+            - CSV with REDCap data dictionary
 
     InstrumentDataUploadForm:
       type: object
@@ -525,17 +574,19 @@ components:
         action:
           type: string
           enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
-          description: CREATE_SESSIONS creates missing candidates/sessions
+          description: |
+            - CREATE_SESSIONS: Creates candidates/sessions if missing
+            - VALIDATE_SESSIONS: Fails if any candidate/session doesn't exist
         instrument:
           type: string
           description: Single instrument name
         multi-instrument:
           type: string
-          description: Multiple instruments flag
+          description: Set to "true" when uploading multi-instrument CSV
         data_file:
           type: string
           format: binary
-          description: CSV with instrument data (headers must match)
+          description: CSV file with instrument data (must include PSCID, Visit_label columns)
 
     InstrumentDataResponse:
       type: object
@@ -549,12 +600,12 @@ components:
             - type: array
               items:
                 type: object
-          description: Success message or validation errors
+          description: Success message (e.g., "Saved 10 out of 10") or validation errors
         idMapping:
           type: array
           items:
             $ref: '#/components/schemas/IdMapping'
-          description: Mapping of external to internal IDs
+          description: Mapping of external PSCID to internal CandID (for CREATE_SESSIONS)
 
     IdMapping:
       type: object
@@ -606,6 +657,7 @@ components:
               type: string
             PSCID:
               type: string
+              description: Required if PSCID generation is set to "prompt"
             DoB:
               type: string
               format: date
@@ -679,7 +731,7 @@ components:
             type: string
 
     # ============================================
-    # Individual Instrument Data
+    # Instrument Data (Per Candidate/Visit)
     # ============================================
     InstrumentData:
       type: object
@@ -698,6 +750,7 @@ components:
         Data:
           type: object
           additionalProperties: true
+          description: Instrument field values
 
     InstrumentDataRequest:
       type: object
@@ -714,6 +767,7 @@ components:
         Data:
           type: object
           additionalProperties: true
+          description: Instrument field values to update
 
     # ============================================
     # Projects
@@ -780,7 +834,11 @@ tags:
   - name: Authentication
     description: Login and JWT token
   - name: InstrumentManager
-    description: Bulk CSV upload (used by ClinicalPipeline)
+    description: |
+      Instrument installation and bulk data operations:
+      - Install instruments from LINST/REDCap files
+      - Bulk upload instrument data via CSV
+      - Get expected CSV headers
   - name: Projects
     description: Project and instrument info
   - name: Candidates
@@ -788,6 +846,6 @@ tags:
   - name: Visits
     description: Visit/timepoint management
   - name: Instruments
-    description: Individual instrument data operations
+    description: Individual instrument data operations (per candidate/visit)
   - name: Sites
     description: Site information

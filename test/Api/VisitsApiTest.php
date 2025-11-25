@@ -74,7 +74,7 @@ class VisitsApiTest extends TestCase
     /**
      * Test case for createVisit
      *
-     * Create a new visit.
+     * Create a new visit/timepoint.
      *
      */
     public function testCreateVisit()

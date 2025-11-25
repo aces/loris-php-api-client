@@ -141,7 +141,7 @@ class CandidatesApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse
+     * @return \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse|\LORISClient\Model\ErrorResponse
      */
     public function createCandidate($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
     {
@@ -159,7 +159,7 @@ class CandidatesApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function createCandidateWithHttpInfo($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
     {
@@ -192,6 +192,12 @@ class CandidatesApi
                 case 201:
                     return $this->handleResponseWithDataType(
                         '\LORISClient\Model\CandidateObject',
+                        $request,
+                        $response,
+                    );
+                case 400:
+                    return $this->handleResponseWithDataType(
+                        '\LORISClient\Model\ErrorResponse',
                         $request,
                         $response,
                     );
@@ -229,6 +235,14 @@ class CandidatesApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\LORISClient\Model\CandidateObject',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 400:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\LORISClient\Model\ErrorResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -426,7 +440,7 @@ class CandidatesApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \LORISClient\Model\CandidateObject
+     * @return \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse
      */
     public function getCandidate($candid, string $contentType = self::contentTypes['getCandidate'][0])
     {
@@ -444,7 +458,7 @@ class CandidatesApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \LORISClient\Model\CandidateObject, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function getCandidateWithHttpInfo($candid, string $contentType = self::contentTypes['getCandidate'][0])
     {
@@ -480,6 +494,12 @@ class CandidatesApi
                         $request,
                         $response,
                     );
+                case 404:
+                    return $this->handleResponseWithDataType(
+                        '\LORISClient\Model\ErrorResponse',
+                        $request,
+                        $response,
+                    );
             }
 
             
@@ -508,6 +528,14 @@ class CandidatesApi
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
                         '\LORISClient\Model\CandidateObject',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\LORISClient\Model\ErrorResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);

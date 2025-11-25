@@ -741,7 +741,7 @@ class InstrumentsApi
     /**
      * Operation patchInstrumentData
      *
-     * Update instrument data
+     * Update instrument data (preserves unspecified fields)
      *
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
@@ -762,7 +762,7 @@ class InstrumentsApi
     /**
      * Operation patchInstrumentDataWithHttpInfo
      *
-     * Update instrument data
+     * Update instrument data (preserves unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -850,7 +850,7 @@ class InstrumentsApi
     /**
      * Operation patchInstrumentDataAsync
      *
-     * Update instrument data
+     * Update instrument data (preserves unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -874,7 +874,7 @@ class InstrumentsApi
     /**
      * Operation patchInstrumentDataAsyncWithHttpInfo
      *
-     * Update instrument data
+     * Update instrument data (preserves unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -1072,7 +1072,7 @@ class InstrumentsApi
     /**
      * Operation putInstrumentData
      *
-     * Replace instrument data
+     * Replace instrument data (nulls unspecified fields)
      *
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
@@ -1093,7 +1093,7 @@ class InstrumentsApi
     /**
      * Operation putInstrumentDataWithHttpInfo
      *
-     * Replace instrument data
+     * Replace instrument data (nulls unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -1181,7 +1181,7 @@ class InstrumentsApi
     /**
      * Operation putInstrumentDataAsync
      *
-     * Replace instrument data
+     * Replace instrument data (nulls unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -1205,7 +1205,7 @@ class InstrumentsApi
     /**
      * Operation putInstrumentDataAsyncWithHttpInfo
      *
-     * Replace instrument data
+     * Replace instrument data (nulls unspecified fields)
      *
      * @param  string $candid (required)
      * @param  string $visit (required)

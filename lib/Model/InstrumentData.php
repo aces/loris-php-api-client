@@ -336,7 +336,7 @@ class InstrumentData implements ModelInterface, ArrayAccess, \JsonSerializable
     /**
      * Sets data
      *
-     * @param array<string,mixed>|null $data data
+     * @param array<string,mixed>|null $data Instrument field values
      *
      * @return self
      */

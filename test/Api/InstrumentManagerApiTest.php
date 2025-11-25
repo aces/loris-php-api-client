@@ -72,21 +72,9 @@ class InstrumentManagerApiTest extends TestCase
     }
 
     /**
-     * Test case for createInstrument
-     *
-     * Create instrument from LINST or REDCap data dictionary.
-     *
-     */
-    public function testCreateInstrument()
-    {
-        // TODO: implement
-        self::markTestIncomplete('Not implemented');
-    }
-
-    /**
      * Test case for getInstrumentDataHeaders
      *
-     * Get expected CSV headers for instrument data.
+     * Get expected CSV headers for instrument data ingestion.
      *
      */
     public function testGetInstrumentDataHeaders()
@@ -96,9 +84,21 @@ class InstrumentManagerApiTest extends TestCase
     }
 
     /**
+     * Test case for installInstrument
+     *
+     * Install instrument from LINST file or REDCap data dictionary.
+     *
+     */
+    public function testInstallInstrument()
+    {
+        // TODO: implement
+        self::markTestIncomplete('Not implemented');
+    }
+
+    /**
      * Test case for uploadInstrumentData
      *
-     * Bulk insert instrument data from CSV.
+     * Bulk insert instrument data from CSV file.
      *
      */
     public function testUploadInstrumentData()

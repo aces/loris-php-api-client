@@ -131,7 +131,7 @@ class VisitsApi
     /**
      * Operation createVisit
      *
-     * Create a new visit
+     * Create a new visit/timepoint
      *
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
@@ -140,7 +140,7 @@ class VisitsApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return \LORISClient\Model\VisitObject
+     * @return \LORISClient\Model\VisitObject|\LORISClient\Model\ErrorResponse
      */
     public function createVisit($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
     {
@@ -151,7 +151,7 @@ class VisitsApi
     /**
      * Operation createVisitWithHttpInfo
      *
-     * Create a new visit
+     * Create a new visit/timepoint
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -160,7 +160,7 @@ class VisitsApi
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
-     * @return array of \LORISClient\Model\VisitObject, HTTP status code, HTTP response headers (array of strings)
+     * @return array of \LORISClient\Model\VisitObject|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
     public function createVisitWithHttpInfo($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
     {
@@ -196,6 +196,12 @@ class VisitsApi
                         $request,
                         $response,
                     );
+                case 409:
+                    return $this->handleResponseWithDataType(
+                        '\LORISClient\Model\ErrorResponse',
+                        $request,
+                        $response,
+                    );
             }
 
             
@@ -228,6 +234,14 @@ class VisitsApi
                     );
                     $e->setResponseObject($data);
                     throw $e;
+                case 409:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\LORISClient\Model\ErrorResponse',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    throw $e;
             }
         
 
@@ -238,7 +252,7 @@ class VisitsApi
     /**
      * Operation createVisitAsync
      *
-     * Create a new visit
+     * Create a new visit/timepoint
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
@@ -261,7 +275,7 @@ class VisitsApi
     /**
      * Operation createVisitAsyncWithHttpInfo
      *
-     * Create a new visit
+     * Create a new visit/timepoint
      *
      * @param  string $candid (required)
      * @param  string $visit (required)

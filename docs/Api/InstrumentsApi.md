@@ -1,6 +1,6 @@
 # LORISClient\InstrumentsApi
 
-Individual instrument data operations
+Individual instrument data operations (per candidate/visit)
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
@@ -8,8 +8,8 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 | ------------- | ------------- | ------------- |
 | [**getInstrumentData()**](InstrumentsApi.md#getInstrumentData) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data for a candidate/visit |
 | [**getVisitInstruments()**](InstrumentsApi.md#getVisitInstruments) | **GET** /candidates/{candid}/{visit}/instruments | Get instruments for a visit |
-| [**patchInstrumentData()**](InstrumentsApi.md#patchInstrumentData) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data |
-| [**putInstrumentData()**](InstrumentsApi.md#putInstrumentData) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data |
+| [**patchInstrumentData()**](InstrumentsApi.md#patchInstrumentData) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data (preserves unspecified fields) |
+| [**putInstrumentData()**](InstrumentsApi.md#putInstrumentData) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data (nulls unspecified fields) |
 
 
 ## `getInstrumentData()`
@@ -140,7 +140,7 @@ try {
 patchInstrumentData($candid, $visit, $instrument, $instrumentDataRequest): \LORISClient\LORISClient\Model\InstrumentData
 ```
 
-Update instrument data
+Update instrument data (preserves unspecified fields)
 
 ### Example
 
@@ -204,7 +204,7 @@ try {
 putInstrumentData($candid, $visit, $instrument, $instrumentDataRequest): \LORISClient\LORISClient\Model\InstrumentData
 ```
 
-Replace instrument data
+Replace instrument data (nulls unspecified fields)
 
 ### Example
 

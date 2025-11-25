@@ -395,7 +395,7 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
     /**
      * Sets pSCID
      *
-     * @param string|null $pSCID pSCID
+     * @param string|null $pSCID Required if PSCID generation is set to \"prompt\"
      *
      * @return self
      */

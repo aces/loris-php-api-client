@@ -34,7 +34,7 @@ use PHPUnit\Framework\TestCase;
  * InstrumentDataResponseMessageTest Class Doc Comment
  *
  * @category    Class
- * @description Success message or validation errors
+ * @description Success message (e.g., \&quot;Saved 10 out of 10\&quot;) or validation errors
  * @package     LORISClient
  * @author      OpenAPI Generator team
  * @link        https://openapi-generator.tech

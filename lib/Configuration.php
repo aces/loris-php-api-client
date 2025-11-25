@@ -530,7 +530,7 @@ class Configuration
     {
         return [
             [
-                "url" => "{protocol}://{host}/api/v0.0.4-dev",
+                "url" => "{protocol}://{host}/api/{version}",
                 "description" => "No description provided",
                 "variables" => [
                     "protocol" => [
@@ -542,8 +542,18 @@ class Configuration
                         ]
                     ],
                     "host" => [
-                        "description" => "No description provided",
+                        "description" => "LORIS instance hostname",
                         "default_value" => "demo.loris.ca",
+                    ],
+                    "version" => [
+                        "description" => "API version",
+                        "default_value" => "v0.0.4-dev",
+                        "enum_values" => [
+                            "v0.0.3",
+                            "v0.0.3-dev",
+                            "v0.0.4-dev",
+                            "v0.0.4"
+                        ]
                     ]
                 ]
             ]
