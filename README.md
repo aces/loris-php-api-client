@@ -154,8 +154,6 @@ if ($result->getSuccess()) {
 ## Regenerate Client
 
 ```bash
-# Using Docker (recommended)
-USE_DOCKER=1 ./generate.sh
 
 # Using local OpenAPI Generator
 ./generate.sh
