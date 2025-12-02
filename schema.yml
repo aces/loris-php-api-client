@@ -6,15 +6,10 @@ info:
     
     ## Server Configuration
     
-    This schema has TWO types of endpoints with different base URLs:
-    
-    | Type | Base URL | Endpoints |
-    |------|----------|-----------|
-    | REST API (versioned) | `{baseUrl}/api/{version}` | /login, /candidates, /projects, /sites |
-    | Module (non-versioned) | `{baseUrl}` (root) | /instrument_manager, /instrument_manager/instrument_data |
-    
-    **InstrumentManager endpoints use path-level server overrides** to specify the non-versioned base URL.
-    When using `InstrumentManagerApi`, configure with base URL only (no `/api/{version}`).
+    | Type | Configuration | Endpoints |
+    |------|---------------|-----------|
+    | REST API | `setHost("{$baseUrl}/api/{$version}")` | /login, /candidates, /projects, /sites |
+    | Module | `setHost($baseUrl)` | /instrument_manager/* |
   contact:
     name: LORIS Development Team
     url: https://github.com/aces/Loris
@@ -24,19 +19,11 @@ info:
   version: 0.0.4-dev
 
 servers:
-  - url: '{protocol}://{host}/api/{version}'
-    description: REST API (versioned)
+  - url: '{baseUrl}'
     variables:
-      protocol:
-        default: https
-        enum: [http, https]
-      host:
-        default: demo.loris.ca
-        description: LORIS instance hostname
-      version:
-        default: v0.0.4-dev
-        enum: [v0.0.3, v0.0.3-dev, v0.0.4-dev, v0.0.4]
-        description: API version
+      baseUrl:
+        default: ''
+        description: Set via Configuration::setHost()
 
 security:
   - BearerAuth: []
@@ -72,28 +59,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   # ═══════════════════════════════════════════════════════════════════════════
-  # INSTRUMENT MANAGER (Module endpoints - NON-versioned)
-  # These use path-level server override to remove /api/{version} prefix
+  # INSTRUMENT MANAGER (Module endpoints)
+  # Configure: $config->setHost($baseUrl)  -- NO /api/{version}
   # ═══════════════════════════════════════════════════════════════════════════
   /instrument_manager:
-    servers:
-      - url: '{protocol}://{host}'
-        description: Module endpoint (non-versioned)
-        variables:
-          protocol:
-            default: https
-            enum: [http, https]
-          host:
-            default: demo.loris.ca
     post:
       tags: [InstrumentManager]
       summary: Install instrument from LINST file or REDCap data dictionary
-      description: |
-        Installs a new instrument in LORIS from either:
-        - A LINST file (.linst)
-        - A CSV file with REDCap data dictionary format
-        
-        **Note**: This is a module endpoint. Configure client with base URL only, not `/api/{version}`.
       operationId: installInstrument
       requestBody:
         required: true
@@ -122,23 +94,9 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /instrument_manager/instrument_data:
-    servers:
-      - url: '{protocol}://{host}'
-        description: Module endpoint (non-versioned)
-        variables:
-          protocol:
-            default: https
-            enum: [http, https]
-          host:
-            default: demo.loris.ca
     get:
       tags: [InstrumentManager]
       summary: Get expected CSV headers for instrument data upload
-      description: |
-        Returns a CSV template with expected headers for the specified instrument(s).
-        Use either `instrument` (single) or `instruments` (comma-separated), not both.
-        
-        **Note**: This is a module endpoint. Configure client with base URL only.
       operationId: getInstrumentDataHeaders
       parameters:
         - name: action
@@ -147,21 +105,16 @@ paths:
           schema:
             type: string
             enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
-          description: |
-            - CREATE_SESSIONS: Headers for creating new candidates/sessions
-            - VALIDATE_SESSIONS: Headers for existing candidates/sessions only
         - name: instrument
           in: query
           required: false
           schema:
             type: string
-          description: Single instrument name
         - name: instruments
           in: query
           required: false
           schema:
             type: string
-          description: Multiple instrument names (comma-separated)
       responses:
         '200':
           description: CSV template with headers
@@ -179,19 +132,6 @@ paths:
     post:
       tags: [InstrumentManager]
       summary: Bulk upload instrument data from CSV
-      description: |
-        Uploads CSV data for one or more instruments.
-        
-        **Actions**:
-        - `CREATE_SESSIONS`: Creates candidates/sessions if they don't exist
-        - `VALIDATE_SESSIONS`: Fails if any candidate/session is missing
-        
-        **CSV Requirements**:
-        - Must include `PSCID` and `Visit_label` columns
-        - For single instrument: include instrument field columns
-        - For multi-instrument: set `multi-instrument=true` and include `Instrument` column
-        
-        **Note**: This is a module endpoint. Configure client with base URL only.
       operationId: uploadInstrumentData
       requestBody:
         required: true
@@ -206,7 +146,7 @@ paths:
                   enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
                 instrument:
                   type: string
-                  description: Single instrument name (omit for multi-instrument)
+                  description: Single instrument name
                 multi-instrument:
                   type: string
                   description: Set to "true" for multi-instrument CSV
@@ -557,9 +497,6 @@ components:
       bearerFormat: JWT
 
   schemas:
-    # ─────────────────────────────────────────────────────────────────────────
-    # Authentication
-    # ─────────────────────────────────────────────────────────────────────────
     LoginRequest:
       type: object
       required: [username, password]
@@ -589,9 +526,6 @@ components:
           type: string
           default: "ok"
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Instrument Manager
-    # ─────────────────────────────────────────────────────────────────────────
     InstrumentDataResponse:
       type: object
       properties:
@@ -613,14 +547,9 @@ components:
       properties:
         ExtStudyID:
           type: string
-          description: External study ID (PSCID)
         CandID:
           type: string
-          description: LORIS candidate ID
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Candidates
-    # ─────────────────────────────────────────────────────────────────────────
     CandidatesResponse:
       type: object
       properties:
@@ -667,9 +596,6 @@ components:
             Site:
               type: string
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Visits
-    # ─────────────────────────────────────────────────────────────────────────
     VisitObject:
       type: object
       properties:
@@ -712,9 +638,6 @@ components:
           items:
             type: string
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Instrument Data
-    # ─────────────────────────────────────────────────────────────────────────
     InstrumentData:
       type: object
       properties:
@@ -749,9 +672,6 @@ components:
           type: object
           additionalProperties: true
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Projects
-    # ─────────────────────────────────────────────────────────────────────────
     ProjectsResponse:
       type: object
       properties:
@@ -788,9 +708,6 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/InstrumentMeta'
 
-    # ─────────────────────────────────────────────────────────────────────────
-    # Sites
-    # ─────────────────────────────────────────────────────────────────────────
     SitesResponse:
       type: object
       properties:
@@ -812,14 +729,8 @@ tags:
     description: JWT authentication
   - name: InstrumentManager
     description: |
-      **Module endpoints (non-versioned)**
-      
-      These endpoints do NOT use the `/api/{version}` prefix. Configure client with base URL only.
-      
-      ```php
-      // For InstrumentManager, use base URL without /api/{version}
-      $moduleConfig->setHost('https://your-loris.ca');
-      ```
+      Instrument installation and bulk data upload.
+      Configure: `$config->setHost($baseUrl)` (no `/api/{version}`)
   - name: Candidates
     description: Candidate management
   - name: Visits

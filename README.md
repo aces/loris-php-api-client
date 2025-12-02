@@ -4,15 +4,10 @@ LORIS REST API and Module endpoints.
 
 ## Server Configuration
 
-This schema has TWO types of endpoints with different base URLs:
-
-| Type | Base URL | Endpoints |
-|------|----------|-----------|
-| REST API (versioned) | `{baseUrl}/api/{version}` | /login, /candidates, /projects, /sites |
-| Module (non-versioned) | `{baseUrl}` (root) | /instrument_manager, /instrument_manager/instrument_data |
-
-**InstrumentManager endpoints use path-level server overrides** to specify the non-versioned base URL.
-When using `InstrumentManagerApi`, configure with base URL only (no `/api/{version}`).
+| Type | Configuration | Endpoints |
+|------|---------------|-----------|
+| REST API | `setHost(\"{$baseUrl}/api/{$version}\")` | /login, /candidates, /projects, /sites |
+| Module | `setHost($baseUrl)` | /instrument_manager/_* |
 
 
 For more information, please visit [https://github.com/aces/Loris](https://github.com/aces/Loris).
@@ -81,7 +76,7 @@ try {
 
 ## API Endpoints
 
-All URIs are relative to *https://demo.loris.ca/api/v0.0.4-dev*
+All URIs are relative to *http://http:*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
