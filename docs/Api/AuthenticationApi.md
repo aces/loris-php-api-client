@@ -1,18 +1,18 @@
 # LORISClient\AuthenticationApi
 
-
+Login and JWT token
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**loginPost()**](AuthenticationApi.md#loginPost) | **POST** /login | Authenticate and obtain JWT token |
+| [**login()**](AuthenticationApi.md#login) | **POST** /login | Authenticate and obtain JWT token |
 
 
-## `loginPost()`
+## `login()`
 
 ```php
-loginPost($loginRequest): \LORISClient\LORISClient\Model\LoginResponse
+login($loginRequest): \LORISClient\LORISClient\Model\LoginResponse
 ```
 
 Authenticate and obtain JWT token
@@ -24,23 +24,19 @@ Authenticate and obtain JWT token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
-// Configure Bearer (JWT) authorization: BearerAuth
-$config = LORISClient\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
-
 
 $apiInstance = new LORISClient\Api\AuthenticationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client(),
-    $config
+    new GuzzleHttp\Client()
 );
 $loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->loginPost($loginRequest);
+    $result = $apiInstance->login($loginRequest);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling AuthenticationApi->loginPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthenticationApi->login: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -56,7 +52,7 @@ try {
 
 ### Authorization
 
-[BearerAuth](../../README.md#BearerAuth)
+No authorization required
 
 ### HTTP request headers
 

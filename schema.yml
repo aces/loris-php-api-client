@@ -2,8 +2,8 @@ openapi: 3.0.1
 info:
   title: LORIS - REST API endpoints
   description: |
-    LORIS REST API for clinical data ingestion and management.
-    Standard HTTP error codes are used. Responses contain either an empty body or a JSON object.
+    LORIS REST API for clinical data ingestion pipelines.
+    Authentication via JWT - POST /login to get token, use as "Bearer <token>".
   contact:
     name: LORIS Development Team
     url: https://github.com/aces/loris
@@ -24,6 +24,7 @@ servers:
       version:
         default: v0.0.4-dev
         enum: [v0.0.3, v0.0.3-dev, v0.0.4-dev, v0.0.4]
+        description: API version
 
 security:
   - BearerAuth: []
@@ -37,6 +38,8 @@ paths:
       tags:
         - Authentication
       summary: Authenticate and obtain JWT token
+      operationId: login
+      security: []
       requestBody:
         required: true
         content:
@@ -63,12 +66,13 @@ paths:
   /instrument_manager:
     post:
       tags:
-        - Instrument Manager
-      summary: Install instrument from LINST file or REDCap CSV
+        - InstrumentManager
+      summary: Install instrument from LINST file or REDCap data dictionary
       description: |
-        Create/install a new instrument in LORIS from:
-        - LINST file (.linst)
-        - CSV with REDCap data dictionary(s)
+        Creates/installs a new instrument in LORIS from either:
+        - A LINST file (.linst)
+        - A CSV file with one or more REDCap data dictionaries
+      operationId: installInstrument
       requestBody:
         required: true
         content:
@@ -77,7 +81,7 @@ paths:
               $ref: '#/components/schemas/InstrumentInstallForm'
       responses:
         '201':
-          description: Instrument created successfully
+          description: Instrument successfully created/installed
           content:
             application/json:
               schema:
@@ -92,26 +96,31 @@ paths:
   /instrument_manager/instrument_data:
     get:
       tags:
-        - Instrument Manager
-      summary: Generate expected CSV headers for instrument data ingestion
-      description: Either `instrument` or `instruments` must be set, not both
+        - InstrumentManager
+      summary: Get expected CSV headers for instrument data ingestion
+      description: |
+        Generates and returns a CSV file with the expected headers for the specified instrument(s).
+        Either "instrument" OR "instruments" must be set, not both.
+      operationId: getInstrumentDataHeaders
       parameters:
         - name: action
           in: query
-          description: CREATE_SESSIONS (creates missing sessions) or VALIDATE_SESSIONS (requires sessions exist)
+          description: |
+            - CREATE_SESSIONS: For when sessions may need to be created
+            - VALIDATE_SESSIONS: For when all sessions must already exist
           required: true
           schema:
             type: string
             enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
         - name: instrument
           in: query
-          description: Single instrument name
+          description: Single instrument name (mutually exclusive with instruments)
           required: false
           schema:
             type: string
         - name: instruments
           in: query
-          description: Comma-separated list of instruments
+          description: Multiple instrument names, comma-separated (mutually exclusive with instrument)
           required: false
           schema:
             type: string
@@ -132,12 +141,17 @@ paths:
 
     post:
       tags:
-        - Instrument Manager
-      summary: Bulk insert instrument data from CSV
+        - InstrumentManager
+      summary: Bulk insert instrument data from CSV file
       description: |
+        Uploads a CSV file to insert data for one or more instruments.
+        
         Actions:
-        - CREATE_SESSIONS: creates candidates/sessions if missing
-        - VALIDATE_SESSIONS: fails if candidate/session doesn't exist
+        - CREATE_SESSIONS: Creates candidates and sessions if they don't exist
+        - VALIDATE_SESSIONS: Requires all candidates/sessions to already exist
+        
+        CSV must have columns: PSCID, Visit_label, plus instrument fields.
+      operationId: uploadInstrumentData
       requestBody:
         required: true
         content:
@@ -146,7 +160,7 @@ paths:
               $ref: '#/components/schemas/InstrumentDataUploadForm'
       responses:
         '200':
-          description: Validation errors occurred
+          description: Validation errors occurred (partial or no data inserted)
           content:
             application/json:
               schema:
@@ -231,6 +245,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CandidatesResponse'
+
     post:
       tags:
         - Candidates
@@ -315,6 +330,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VisitObject'
+
     put:
       tags:
         - Visits
@@ -504,23 +520,30 @@ components:
       bearerFormat: JWT
 
   schemas:
+    # ============================================
     # Authentication
+    # ============================================
     LoginRequest:
       type: object
       required: [username, password]
       properties:
-        username: { type: string }
-        password: { type: string, format: password }
+        username:
+          type: string
+        password:
+          type: string
+          format: password
 
     LoginResponse:
       type: object
       properties:
-        token: { type: string }
+        token:
+          type: string
 
     ErrorResponse:
       type: object
       properties:
-        error: { type: string }
+        error:
+          type: string
 
     SuccessResponse:
       type: object
@@ -529,7 +552,9 @@ components:
           type: string
           default: "ok"
 
+    # ============================================
     # Instrument Manager
+    # ============================================
     InstrumentInstallForm:
       type: object
       required: [install_file]
@@ -537,7 +562,10 @@ components:
         install_file:
           type: string
           format: binary
-          description: LINST or REDCap CSV instrument
+          description: |
+            Instrument definition file to install:
+            - LINST file (.linst)
+            - CSV with REDCap data dictionary
 
     InstrumentDataUploadForm:
       type: object
@@ -546,35 +574,52 @@ components:
         action:
           type: string
           enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
+          description: |
+            - CREATE_SESSIONS: Creates candidates/sessions if missing
+            - VALIDATE_SESSIONS: Fails if any candidate/session doesn't exist
         instrument:
           type: string
-        multi_instrument:
+          description: Single instrument name
+        multi-instrument:
           type: string
+          description: Set to "true" when uploading multi-instrument CSV
         data_file:
           type: string
           format: binary
+          description: CSV file with instrument data (must include PSCID, Visit_label columns)
 
     InstrumentDataResponse:
       type: object
       properties:
-        success: { type: boolean }
+        success:
+          type: boolean
+          description: Whether insertion was successful
         message:
           oneOf:
             - type: string
             - type: array
-              items: { type: object }
+              items:
+                type: object
+          description: Success message (e.g., "Saved 10 out of 10") or validation errors
         idMapping:
           type: array
           items:
             $ref: '#/components/schemas/IdMapping'
+          description: Mapping of external PSCID to internal CandID (for CREATE_SESSIONS)
 
     IdMapping:
       type: object
       properties:
-        ExtStudyID: { type: string }
-        CandID: { type: string }
+        ExtStudyID:
+          type: string
+          description: External study ID (PSCID)
+        CandID:
+          type: string
+          description: LORIS candidate ID
 
+    # ============================================
     # Candidates
+    # ============================================
     CandidatesResponse:
       type: object
       properties:
@@ -586,12 +631,20 @@ components:
     CandidateObject:
       type: object
       properties:
-        CandID: { type: string }
-        Project: { type: string }
-        PSCID: { type: string }
-        Site: { type: string }
-        DoB: { type: string, format: date }
-        Sex: { type: string, enum: [Male, Female, Other] }
+        CandID:
+          type: string
+        Project:
+          type: string
+        PSCID:
+          type: string
+        Site:
+          type: string
+        DoB:
+          type: string
+          format: date
+        Sex:
+          type: string
+          enum: [Male, Female, Other]
 
     CandidateCreateRequest:
       type: object
@@ -600,31 +653,52 @@ components:
           type: object
           required: [Project, DoB, Sex, Site]
           properties:
-            Project: { type: string }
-            PSCID: { type: string }
-            DoB: { type: string, format: date }
-            Sex: { type: string, enum: [Male, Female, Other] }
-            Site: { type: string }
+            Project:
+              type: string
+            PSCID:
+              type: string
+              description: Required if PSCID generation is set to "prompt"
+            DoB:
+              type: string
+              format: date
+            Sex:
+              type: string
+              enum: [Male, Female, Other]
+            Site:
+              type: string
 
+    # ============================================
     # Visits
+    # ============================================
     VisitObject:
       type: object
       properties:
         Meta:
           type: object
           properties:
-            CandID: { type: string }
-            Visit: { type: string }
-            Site: { type: string }
-            Project: { type: string }
+            CandID:
+              type: string
+            Visit:
+              type: string
+            Site:
+              type: string
+            Project:
+              type: string
         Stages:
           type: object
           properties:
             Visit:
-              type: object
-              properties:
-                Status: { type: string, enum: [Not Started, In Progress, Pass, Failure, Withdrawal] }
-                Date: { type: string, format: date }
+              $ref: '#/components/schemas/StageObject'
+
+    StageObject:
+      type: object
+      properties:
+        Status:
+          type: string
+          enum: [Not Started, In Progress, Pass, Failure, Withdrawal]
+        Date:
+          type: string
+          format: date
 
     VisitCreateRequest:
       type: object
@@ -632,10 +706,14 @@ components:
         Meta:
           type: object
           properties:
-            CandID: { type: string }
-            Visit: { type: string }
-            Site: { type: string }
-            Project: { type: string }
+            CandID:
+              type: string
+            Visit:
+              type: string
+            Site:
+              type: string
+            Project:
+              type: string
 
     VisitInstrumentsResponse:
       type: object
@@ -643,25 +721,36 @@ components:
         Meta:
           type: object
           properties:
-            CandID: { type: string }
-            Visit: { type: string }
+            CandID:
+              type: string
+            Visit:
+              type: string
         Instruments:
           type: array
-          items: { type: string }
+          items:
+            type: string
 
+    # ============================================
+    # Instrument Data (Per Candidate/Visit)
+    # ============================================
     InstrumentData:
       type: object
       properties:
         Meta:
           type: object
           properties:
-            Instrument: { type: string }
-            Visit: { type: string }
-            CandID: { type: string }
-            DDE: { type: boolean }
+            Instrument:
+              type: string
+            Visit:
+              type: string
+            CandID:
+              type: string
+            DDE:
+              type: boolean
         Data:
           type: object
           additionalProperties: true
+          description: Instrument field values
 
     InstrumentDataRequest:
       type: object
@@ -669,20 +758,27 @@ components:
         Meta:
           type: object
           properties:
-            Instrument: { type: string }
-            Visit: { type: string }
-            CandID: { type: string }
+            Instrument:
+              type: string
+            Visit:
+              type: string
+            CandID:
+              type: string
         Data:
           type: object
           additionalProperties: true
+          description: Instrument field values to update
 
+    # ============================================
     # Projects
+    # ============================================
     ProjectsResponse:
       type: object
       properties:
         Projects:
           type: array
-          items: { type: string }
+          items:
+            type: string
 
     ProjectResponse:
       type: object
@@ -690,7 +786,8 @@ components:
         Meta:
           type: object
           properties:
-            Project: { type: string }
+            Project:
+              type: string
         Instruments:
           type: object
           additionalProperties:
@@ -699,9 +796,12 @@ components:
     InstrumentMeta:
       type: object
       properties:
-        FullName: { type: string }
-        Subgroup: { type: string }
-        DoubleDataEntryEnabled: { type: boolean }
+        FullName:
+          type: string
+        Subgroup:
+          type: string
+        DoubleDataEntryEnabled:
+          type: boolean
 
     InstrumentsResponse:
       type: object
@@ -711,7 +811,9 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/InstrumentMeta'
 
+    # ============================================
     # Sites
+    # ============================================
     SitesResponse:
       type: object
       properties:
@@ -723,5 +825,27 @@ components:
     Site:
       type: object
       properties:
-        Name: { type: string }
-        Alias: { type: string }
+        Name:
+          type: string
+        Alias:
+          type: string
+
+tags:
+  - name: Authentication
+    description: Login and JWT token
+  - name: InstrumentManager
+    description: |
+      Instrument installation and bulk data operations:
+      - Install instruments from LINST/REDCap files
+      - Bulk upload instrument data via CSV
+      - Get expected CSV headers
+  - name: Projects
+    description: Project and instrument info
+  - name: Candidates
+    description: Candidate management
+  - name: Visits
+    description: Visit/timepoint management
+  - name: Instruments
+    description: Individual instrument data operations (per candidate/visit)
+  - name: Sites
+    description: Site information

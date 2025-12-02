@@ -1,6 +1,6 @@
 # LORISClient\VisitsApi
 
-
+Visit/timepoint management
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 

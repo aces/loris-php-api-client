@@ -1,7 +1,7 @@
 # OpenAPIClient-php
 
-LORIS REST API for clinical data ingestion and management.
-Standard HTTP error codes are used. Responses contain either an empty body or a JSON object.
+LORIS REST API for clinical data ingestion pipelines.
+Authentication via JWT - POST /login to get token, use as \"Bearer <token>\".
 
 
 For more information, please visit [https://github.com/aces/loris](https://github.com/aces/loris).
@@ -51,23 +51,19 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 
-// Configure Bearer (JWT) authorization: BearerAuth
-$config = LORISClient\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
-
 
 $apiInstance = new LORISClient\Api\AuthenticationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client(),
-    $config
+    new GuzzleHttp\Client()
 );
 $loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->loginPost($loginRequest);
+    $result = $apiInstance->login($loginRequest);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling AuthenticationApi->loginPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthenticationApi->login: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -78,13 +74,13 @@ All URIs are relative to *https://demo.loris.ca/api/v0.0.4-dev*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AuthenticationApi* | [**loginPost**](docs/Api/AuthenticationApi.md#loginpost) | **POST** /login | Authenticate and obtain JWT token
+*AuthenticationApi* | [**login**](docs/Api/AuthenticationApi.md#login) | **POST** /login | Authenticate and obtain JWT token
 *CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
 *CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
 *CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | Get list of candidates
-*InstrumentManagerApi* | [**instrumentManagerInstrumentDataGet**](docs/Api/InstrumentManagerApi.md#instrumentmanagerinstrumentdataget) | **GET** /instrument_manager/instrument_data | Generate expected CSV headers for instrument data ingestion
-*InstrumentManagerApi* | [**instrumentManagerInstrumentDataPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerinstrumentdatapost) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV
-*InstrumentManagerApi* | [**instrumentManagerPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerpost) | **POST** /instrument_manager | Install instrument from LINST file or REDCap CSV
+*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data ingestion
+*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary
+*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV file
 *InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data for a candidate/visit
 *InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | Get instruments for a visit
 *InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data (preserves unspecified fields)
@@ -119,6 +115,7 @@ Class | Method | HTTP request | Description
 - [ProjectsResponse](docs/Model/ProjectsResponse.md)
 - [Site](docs/Model/Site.md)
 - [SitesResponse](docs/Model/SitesResponse.md)
+- [StageObject](docs/Model/StageObject.md)
 - [SuccessResponse](docs/Model/SuccessResponse.md)
 - [VisitCreateRequest](docs/Model/VisitCreateRequest.md)
 - [VisitInstrumentsResponse](docs/Model/VisitInstrumentsResponse.md)
@@ -126,7 +123,6 @@ Class | Method | HTTP request | Description
 - [VisitObject](docs/Model/VisitObject.md)
 - [VisitObjectMeta](docs/Model/VisitObjectMeta.md)
 - [VisitObjectStages](docs/Model/VisitObjectStages.md)
-- [VisitObjectStagesVisit](docs/Model/VisitObjectStagesVisit.md)
 
 ## Authorization
 

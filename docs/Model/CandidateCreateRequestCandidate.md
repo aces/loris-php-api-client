@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **project** | **string** |  |
-**pSCID** | **string** |  | [optional]
+**pSCID** | **string** | Required if PSCID generation is set to \&quot;prompt\&quot; | [optional]
 **doB** | **\DateTime** |  |
 **sex** | **string** |  |
 **site** | **string** |  |

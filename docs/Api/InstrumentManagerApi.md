@@ -1,25 +1,25 @@
 # LORISClient\InstrumentManagerApi
 
-
+Instrument installation and bulk data operations: - Install instruments from LINST/REDCap files - Bulk upload instrument data via CSV - Get expected CSV headers
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**instrumentManagerInstrumentDataGet()**](InstrumentManagerApi.md#instrumentManagerInstrumentDataGet) | **GET** /instrument_manager/instrument_data | Generate expected CSV headers for instrument data ingestion |
-| [**instrumentManagerInstrumentDataPost()**](InstrumentManagerApi.md#instrumentManagerInstrumentDataPost) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV |
-| [**instrumentManagerPost()**](InstrumentManagerApi.md#instrumentManagerPost) | **POST** /instrument_manager | Install instrument from LINST file or REDCap CSV |
+| [**getInstrumentDataHeaders()**](InstrumentManagerApi.md#getInstrumentDataHeaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data ingestion |
+| [**installInstrument()**](InstrumentManagerApi.md#installInstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary |
+| [**uploadInstrumentData()**](InstrumentManagerApi.md#uploadInstrumentData) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV file |
 
 
-## `instrumentManagerInstrumentDataGet()`
+## `getInstrumentDataHeaders()`
 
 ```php
-instrumentManagerInstrumentDataGet($action, $instrument, $instruments): \SplFileObject
+getInstrumentDataHeaders($action, $instrument, $instruments): \SplFileObject
 ```
 
-Generate expected CSV headers for instrument data ingestion
+Get expected CSV headers for instrument data ingestion
 
-Either `instrument` or `instruments` must be set, not both
+Generates and returns a CSV file with the expected headers for the specified instrument(s). Either \"instrument\" OR \"instruments\" must be set, not both.
 
 ### Example
 
@@ -38,15 +38,15 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string | CREATE_SESSIONS (creates missing sessions) or VALIDATE_SESSIONS (requires sessions exist)
-$instrument = 'instrument_example'; // string | Single instrument name
-$instruments = 'instruments_example'; // string | Comma-separated list of instruments
+$action = 'action_example'; // string | - CREATE_SESSIONS: For when sessions may need to be created - VALIDATE_SESSIONS: For when all sessions must already exist
+$instrument = 'instrument_example'; // string | Single instrument name (mutually exclusive with instruments)
+$instruments = 'instruments_example'; // string | Multiple instrument names, comma-separated (mutually exclusive with instrument)
 
 try {
-    $result = $apiInstance->instrumentManagerInstrumentDataGet($action, $instrument, $instruments);
+    $result = $apiInstance->getInstrumentDataHeaders($action, $instrument, $instruments);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling InstrumentManagerApi->instrumentManagerInstrumentDataGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling InstrumentManagerApi->getInstrumentDataHeaders: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -54,9 +54,9 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**| CREATE_SESSIONS (creates missing sessions) or VALIDATE_SESSIONS (requires sessions exist) | |
-| **instrument** | **string**| Single instrument name | [optional] |
-| **instruments** | **string**| Comma-separated list of instruments | [optional] |
+| **action** | **string**| - CREATE_SESSIONS: For when sessions may need to be created - VALIDATE_SESSIONS: For when all sessions must already exist | |
+| **instrument** | **string**| Single instrument name (mutually exclusive with instruments) | [optional] |
+| **instruments** | **string**| Multiple instrument names, comma-separated (mutually exclusive with instrument) | [optional] |
 
 ### Return type
 
@@ -75,15 +75,15 @@ try {
 [[Back to Model list]](../../README.md#models)
 [[Back to README]](../../README.md)
 
-## `instrumentManagerInstrumentDataPost()`
+## `installInstrument()`
 
 ```php
-instrumentManagerInstrumentDataPost($action, $dataFile, $instrument, $multiInstrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
+installInstrument($installFile): \LORISClient\LORISClient\Model\SuccessResponse
 ```
 
-Bulk insert instrument data from CSV
+Install instrument from LINST file or REDCap data dictionary
 
-Actions: - CREATE_SESSIONS: creates candidates/sessions if missing - VALIDATE_SESSIONS: fails if candidate/session doesn't exist
+Creates/installs a new instrument in LORIS from either: - A LINST file (.linst) - A CSV file with one or more REDCap data dictionaries
 
 ### Example
 
@@ -102,16 +102,13 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string
-$dataFile = '/path/to/file.txt'; // \SplFileObject
-$instrument = 'instrument_example'; // string
-$multiInstrument = 'multiInstrument_example'; // string
+$installFile = '/path/to/file.txt'; // \SplFileObject | Instrument definition file to install: - LINST file (.linst) - CSV with REDCap data dictionary
 
 try {
-    $result = $apiInstance->instrumentManagerInstrumentDataPost($action, $dataFile, $instrument, $multiInstrument);
+    $result = $apiInstance->installInstrument($installFile);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling InstrumentManagerApi->instrumentManagerInstrumentDataPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling InstrumentManagerApi->installInstrument: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -119,14 +116,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**|  | |
-| **dataFile** | **\SplFileObject****\SplFileObject**|  | |
-| **instrument** | **string**|  | [optional] |
-| **multiInstrument** | **string**|  | [optional] |
+| **installFile** | **\SplFileObject****\SplFileObject**| Instrument definition file to install: - LINST file (.linst) - CSV with REDCap data dictionary | |
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\InstrumentDataResponse**](../Model/InstrumentDataResponse.md)
+[**\LORISClient\LORISClient\Model\SuccessResponse**](../Model/SuccessResponse.md)
 
 ### Authorization
 
@@ -141,15 +135,15 @@ try {
 [[Back to Model list]](../../README.md#models)
 [[Back to README]](../../README.md)
 
-## `instrumentManagerPost()`
+## `uploadInstrumentData()`
 
 ```php
-instrumentManagerPost($installFile): \LORISClient\LORISClient\Model\SuccessResponse
+uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
 ```
 
-Install instrument from LINST file or REDCap CSV
+Bulk insert instrument data from CSV file
 
-Create/install a new instrument in LORIS from: - LINST file (.linst) - CSV with REDCap data dictionary(s)
+Uploads a CSV file to insert data for one or more instruments.  Actions: - CREATE_SESSIONS: Creates candidates and sessions if they don't exist - VALIDATE_SESSIONS: Requires all candidates/sessions to already exist  CSV must have columns: PSCID, Visit_label, plus instrument fields.
 
 ### Example
 
@@ -168,13 +162,16 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$installFile = '/path/to/file.txt'; // \SplFileObject | LINST or REDCap CSV instrument
+$action = 'action_example'; // string | - CREATE_SESSIONS: Creates candidates/sessions if missing - VALIDATE_SESSIONS: Fails if any candidate/session doesn't exist
+$dataFile = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data (must include PSCID, Visit_label columns)
+$instrument = 'instrument_example'; // string | Single instrument name
+$multiInstrument = 'multiInstrument_example'; // string | Set to \\\"true\\\" when uploading multi-instrument CSV
 
 try {
-    $result = $apiInstance->instrumentManagerPost($installFile);
+    $result = $apiInstance->uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling InstrumentManagerApi->instrumentManagerPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling InstrumentManagerApi->uploadInstrumentData: ', $e->getMessage(), PHP_EOL;
 }
 ```
 
@@ -182,11 +179,14 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **installFile** | **\SplFileObject****\SplFileObject**| LINST or REDCap CSV instrument | |
+| **action** | **string**| - CREATE_SESSIONS: Creates candidates/sessions if missing - VALIDATE_SESSIONS: Fails if any candidate/session doesn&#39;t exist | |
+| **dataFile** | **\SplFileObject****\SplFileObject**| CSV file with instrument data (must include PSCID, Visit_label columns) | |
+| **instrument** | **string**| Single instrument name | [optional] |
+| **multiInstrument** | **string**| Set to \\\&quot;true\\\&quot; when uploading multi-instrument CSV | [optional] |
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\SuccessResponse**](../Model/SuccessResponse.md)
+[**\LORISClient\LORISClient\Model\InstrumentDataResponse**](../Model/InstrumentDataResponse.md)
 
 ### Authorization
 
