@@ -80,18 +80,18 @@ class IdMappingTest extends TestCase
     }
 
     /**
-     * Test attribute "extStudyID"
+     * Test attribute "ext_study_id"
      */
-    public function testPropertyExtStudyID()
+    public function testPropertyExtStudyId()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "candID"
+     * Test attribute "cand_id"
      */
-    public function testPropertyCandID()
+    public function testPropertyCandId()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

@@ -98,7 +98,7 @@ class InstrumentDataResponseTest extends TestCase
     }
 
     /**
-     * Test attribute "idMapping"
+     * Test attribute "id_mapping"
      */
     public function testPropertyIdMapping()
     {

@@ -57,8 +57,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'extStudyID' => 'string',
-        'candID' => 'string'
+        'ext_study_id' => 'string',
+        'cand_id' => 'string'
     ];
 
     /**
@@ -69,8 +69,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'extStudyID' => null,
-        'candID' => null
+        'ext_study_id' => null,
+        'cand_id' => null
     ];
 
     /**
@@ -79,8 +79,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'extStudyID' => false,
-        'candID' => false
+        'ext_study_id' => false,
+        'cand_id' => false
     ];
 
     /**
@@ -169,8 +169,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'extStudyID' => 'ExtStudyID',
-        'candID' => 'CandID'
+        'ext_study_id' => 'ExtStudyID',
+        'cand_id' => 'CandID'
     ];
 
     /**
@@ -179,8 +179,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'extStudyID' => 'setExtStudyID',
-        'candID' => 'setCandID'
+        'ext_study_id' => 'setExtStudyId',
+        'cand_id' => 'setCandId'
     ];
 
     /**
@@ -189,8 +189,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'extStudyID' => 'getExtStudyID',
-        'candID' => 'getCandID'
+        'ext_study_id' => 'getExtStudyId',
+        'cand_id' => 'getCandId'
     ];
 
     /**
@@ -250,8 +250,8 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('extStudyID', $data ?? [], null);
-        $this->setIfExists('candID', $data ?? [], null);
+        $this->setIfExists('ext_study_id', $data ?? [], null);
+        $this->setIfExists('cand_id', $data ?? [], null);
     }
 
     /**
@@ -297,55 +297,55 @@ class IdMapping implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets extStudyID
+     * Gets ext_study_id
      *
      * @return string|null
      */
-    public function getExtStudyID()
+    public function getExtStudyId()
     {
-        return $this->container['extStudyID'];
+        return $this->container['ext_study_id'];
     }
 
     /**
-     * Sets extStudyID
+     * Sets ext_study_id
      *
-     * @param string|null $extStudyID extStudyID
+     * @param string|null $ext_study_id ext_study_id
      *
      * @return self
      */
-    public function setExtStudyID($extStudyID)
+    public function setExtStudyId($ext_study_id)
     {
-        if (is_null($extStudyID)) {
-            throw new \InvalidArgumentException('non-nullable extStudyID cannot be null');
+        if (is_null($ext_study_id)) {
+            throw new \InvalidArgumentException('non-nullable ext_study_id cannot be null');
         }
-        $this->container['extStudyID'] = $extStudyID;
+        $this->container['ext_study_id'] = $ext_study_id;
 
         return $this;
     }
 
     /**
-     * Gets candID
+     * Gets cand_id
      *
      * @return string|null
      */
-    public function getCandID()
+    public function getCandId()
     {
-        return $this->container['candID'];
+        return $this->container['cand_id'];
     }
 
     /**
-     * Sets candID
+     * Sets cand_id
      *
-     * @param string|null $candID candID
+     * @param string|null $cand_id cand_id
      *
      * @return self
      */
-    public function setCandID($candID)
+    public function setCandId($cand_id)
     {
-        if (is_null($candID)) {
-            throw new \InvalidArgumentException('non-nullable candID cannot be null');
+        if (is_null($cand_id)) {
+            throw new \InvalidArgumentException('non-nullable cand_id cannot be null');
         }
-        $this->container['candID'] = $candID;
+        $this->container['cand_id'] = $cand_id;
 
         return $this;
     }

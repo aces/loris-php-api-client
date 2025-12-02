@@ -59,7 +59,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static $openAPITypes = [
         'instrument' => 'string',
         'visit' => 'string',
-        'candID' => 'string'
+        'cand_id' => 'string'
     ];
 
     /**
@@ -72,7 +72,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static $openAPIFormats = [
         'instrument' => null,
         'visit' => null,
-        'candID' => null
+        'cand_id' => null
     ];
 
     /**
@@ -83,7 +83,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static array $openAPINullables = [
         'instrument' => false,
         'visit' => false,
-        'candID' => false
+        'cand_id' => false
     ];
 
     /**
@@ -174,7 +174,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static $attributeMap = [
         'instrument' => 'Instrument',
         'visit' => 'Visit',
-        'candID' => 'CandID'
+        'cand_id' => 'CandID'
     ];
 
     /**
@@ -185,7 +185,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static $setters = [
         'instrument' => 'setInstrument',
         'visit' => 'setVisit',
-        'candID' => 'setCandID'
+        'cand_id' => 'setCandId'
     ];
 
     /**
@@ -196,7 +196,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     protected static $getters = [
         'instrument' => 'getInstrument',
         'visit' => 'getVisit',
-        'candID' => 'getCandID'
+        'cand_id' => 'getCandId'
     ];
 
     /**
@@ -258,7 +258,7 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     {
         $this->setIfExists('instrument', $data ?? [], null);
         $this->setIfExists('visit', $data ?? [], null);
-        $this->setIfExists('candID', $data ?? [], null);
+        $this->setIfExists('cand_id', $data ?? [], null);
     }
 
     /**
@@ -358,28 +358,28 @@ class InstrumentDataRequestMeta implements ModelInterface, ArrayAccess, \JsonSer
     }
 
     /**
-     * Gets candID
+     * Gets cand_id
      *
      * @return string|null
      */
-    public function getCandID()
+    public function getCandId()
     {
-        return $this->container['candID'];
+        return $this->container['cand_id'];
     }
 
     /**
-     * Sets candID
+     * Sets cand_id
      *
-     * @param string|null $candID candID
+     * @param string|null $cand_id cand_id
      *
      * @return self
      */
-    public function setCandID($candID)
+    public function setCandId($cand_id)
     {
-        if (is_null($candID)) {
-            throw new \InvalidArgumentException('non-nullable candID cannot be null');
+        if (is_null($cand_id)) {
+            throw new \InvalidArgumentException('non-nullable cand_id cannot be null');
         }
-        $this->container['candID'] = $candID;
+        $this->container['cand_id'] = $cand_id;
 
         return $this;
     }

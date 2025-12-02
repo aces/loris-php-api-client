@@ -135,16 +135,16 @@ class VisitsApi
      *
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
-     * @param  \LORISClient\Model\VisitCreateRequest $visitCreateRequest visitCreateRequest (required)
+     * @param  \LORISClient\Model\VisitCreateRequest $visit_create_request visit_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createVisit'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\VisitObject|\LORISClient\Model\ErrorResponse
      */
-    public function createVisit($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
+    public function createVisit($candid, $visit, $visit_create_request, string $contentType = self::contentTypes['createVisit'][0])
     {
-        list($response) = $this->createVisitWithHttpInfo($candid, $visit, $visitCreateRequest, $contentType);
+        list($response) = $this->createVisitWithHttpInfo($candid, $visit, $visit_create_request, $contentType);
         return $response;
     }
 
@@ -155,16 +155,16 @@ class VisitsApi
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
-     * @param  \LORISClient\Model\VisitCreateRequest $visitCreateRequest (required)
+     * @param  \LORISClient\Model\VisitCreateRequest $visit_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createVisit'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\VisitObject|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createVisitWithHttpInfo($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
+    public function createVisitWithHttpInfo($candid, $visit, $visit_create_request, string $contentType = self::contentTypes['createVisit'][0])
     {
-        $request = $this->createVisitRequest($candid, $visit, $visitCreateRequest, $contentType);
+        $request = $this->createVisitRequest($candid, $visit, $visit_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -256,15 +256,15 @@ class VisitsApi
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
-     * @param  \LORISClient\Model\VisitCreateRequest $visitCreateRequest (required)
+     * @param  \LORISClient\Model\VisitCreateRequest $visit_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createVisit'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createVisitAsync($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
+    public function createVisitAsync($candid, $visit, $visit_create_request, string $contentType = self::contentTypes['createVisit'][0])
     {
-        return $this->createVisitAsyncWithHttpInfo($candid, $visit, $visitCreateRequest, $contentType)
+        return $this->createVisitAsyncWithHttpInfo($candid, $visit, $visit_create_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -279,16 +279,16 @@ class VisitsApi
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
-     * @param  \LORISClient\Model\VisitCreateRequest $visitCreateRequest (required)
+     * @param  \LORISClient\Model\VisitCreateRequest $visit_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createVisit'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createVisitAsyncWithHttpInfo($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
+    public function createVisitAsyncWithHttpInfo($candid, $visit, $visit_create_request, string $contentType = self::contentTypes['createVisit'][0])
     {
         $returnType = '\LORISClient\Model\VisitObject';
-        $request = $this->createVisitRequest($candid, $visit, $visitCreateRequest, $contentType);
+        $request = $this->createVisitRequest($candid, $visit, $visit_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -331,13 +331,13 @@ class VisitsApi
      *
      * @param  string $candid (required)
      * @param  string $visit (required)
-     * @param  \LORISClient\Model\VisitCreateRequest $visitCreateRequest (required)
+     * @param  \LORISClient\Model\VisitCreateRequest $visit_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createVisit'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createVisitRequest($candid, $visit, $visitCreateRequest, string $contentType = self::contentTypes['createVisit'][0])
+    public function createVisitRequest($candid, $visit, $visit_create_request, string $contentType = self::contentTypes['createVisit'][0])
     {
 
         // verify the required parameter 'candid' is set
@@ -354,10 +354,10 @@ class VisitsApi
             );
         }
 
-        // verify the required parameter 'visitCreateRequest' is set
-        if ($visitCreateRequest === null || (is_array($visitCreateRequest) && count($visitCreateRequest) === 0)) {
+        // verify the required parameter 'visit_create_request' is set
+        if ($visit_create_request === null || (is_array($visit_create_request) && count($visit_create_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $visitCreateRequest when calling createVisit'
+                'Missing the required parameter $visit_create_request when calling createVisit'
             );
         }
 
@@ -396,12 +396,12 @@ class VisitsApi
         );
 
         // for model (json/xml)
-        if (isset($visitCreateRequest)) {
+        if (isset($visit_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($visitCreateRequest));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($visit_create_request));
             } else {
-                $httpBody = $visitCreateRequest;
+                $httpBody = $visit_create_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

@@ -63,10 +63,10 @@ $apiInstance = new LORISClient\Api\AuthenticationApi(
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
 );
-$loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
+$login_request = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->login($loginRequest);
+    $result = $apiInstance->login($login_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling AuthenticationApi->login: ', $e->getMessage(), PHP_EOL;

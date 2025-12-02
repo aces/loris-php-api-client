@@ -76,7 +76,7 @@ try {
 ## `installInstrument()`
 
 ```php
-installInstrument($installFile): \LORISClient\LORISClient\Model\SuccessResponse
+installInstrument($install_file): \LORISClient\LORISClient\Model\SuccessResponse
 ```
 
 Install instrument from LINST file or REDCap data dictionary
@@ -98,10 +98,10 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$installFile = '/path/to/file.txt'; // \SplFileObject | LINST file or REDCap CSV to install
+$install_file = '/path/to/file.txt'; // \SplFileObject | LINST file or REDCap CSV to install
 
 try {
-    $result = $apiInstance->installInstrument($installFile);
+    $result = $apiInstance->installInstrument($install_file);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->installInstrument: ', $e->getMessage(), PHP_EOL;
@@ -112,7 +112,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **installFile** | **\SplFileObject****\SplFileObject**| LINST file or REDCap CSV to install | |
+| **install_file** | **\SplFileObject****\SplFileObject**| LINST file or REDCap CSV to install | |
 
 ### Return type
 
@@ -134,7 +134,7 @@ try {
 ## `uploadInstrumentData()`
 
 ```php
-uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
+uploadInstrumentData($action, $data_file, $instrument, $multi_instrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
 ```
 
 Bulk upload instrument data from CSV
@@ -157,12 +157,12 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     $config
 );
 $action = 'action_example'; // string
-$dataFile = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data
+$data_file = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data
 $instrument = 'instrument_example'; // string | Single instrument name
-$multiInstrument = 'multiInstrument_example'; // string | Set to \\\"true\\\" for multi-instrument CSV
+$multi_instrument = 'multi_instrument_example'; // string | Set to \\\"true\\\" for multi-instrument CSV
 
 try {
-    $result = $apiInstance->uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument);
+    $result = $apiInstance->uploadInstrumentData($action, $data_file, $instrument, $multi_instrument);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->uploadInstrumentData: ', $e->getMessage(), PHP_EOL;
@@ -174,9 +174,9 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **action** | **string**|  | |
-| **dataFile** | **\SplFileObject****\SplFileObject**| CSV file with instrument data | |
+| **data_file** | **\SplFileObject****\SplFileObject**| CSV file with instrument data | |
 | **instrument** | **string**| Single instrument name | [optional] |
-| **multiInstrument** | **string**| Set to \\\&quot;true\\\&quot; for multi-instrument CSV | [optional] |
+| **multi_instrument** | **string**| Set to \\\&quot;true\\\&quot; for multi-instrument CSV | [optional] |
 
 ### Return type
 

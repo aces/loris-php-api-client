@@ -59,8 +59,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPITypes = [
         'instrument' => 'string',
         'visit' => 'string',
-        'candID' => 'string',
-        'dDE' => 'bool'
+        'cand_id' => 'string',
+        'dde' => 'bool'
     ];
 
     /**
@@ -73,8 +73,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $openAPIFormats = [
         'instrument' => null,
         'visit' => null,
-        'candID' => null,
-        'dDE' => null
+        'cand_id' => null,
+        'dde' => null
     ];
 
     /**
@@ -85,8 +85,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static array $openAPINullables = [
         'instrument' => false,
         'visit' => false,
-        'candID' => false,
-        'dDE' => false
+        'cand_id' => false,
+        'dde' => false
     ];
 
     /**
@@ -177,8 +177,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $attributeMap = [
         'instrument' => 'Instrument',
         'visit' => 'Visit',
-        'candID' => 'CandID',
-        'dDE' => 'DDE'
+        'cand_id' => 'CandID',
+        'dde' => 'DDE'
     ];
 
     /**
@@ -189,8 +189,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $setters = [
         'instrument' => 'setInstrument',
         'visit' => 'setVisit',
-        'candID' => 'setCandID',
-        'dDE' => 'setDDE'
+        'cand_id' => 'setCandId',
+        'dde' => 'setDde'
     ];
 
     /**
@@ -201,8 +201,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     protected static $getters = [
         'instrument' => 'getInstrument',
         'visit' => 'getVisit',
-        'candID' => 'getCandID',
-        'dDE' => 'getDDE'
+        'cand_id' => 'getCandId',
+        'dde' => 'getDde'
     ];
 
     /**
@@ -264,8 +264,8 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     {
         $this->setIfExists('instrument', $data ?? [], null);
         $this->setIfExists('visit', $data ?? [], null);
-        $this->setIfExists('candID', $data ?? [], null);
-        $this->setIfExists('dDE', $data ?? [], null);
+        $this->setIfExists('cand_id', $data ?? [], null);
+        $this->setIfExists('dde', $data ?? [], null);
     }
 
     /**
@@ -365,55 +365,55 @@ class InstrumentDataMeta implements ModelInterface, ArrayAccess, \JsonSerializab
     }
 
     /**
-     * Gets candID
+     * Gets cand_id
      *
      * @return string|null
      */
-    public function getCandID()
+    public function getCandId()
     {
-        return $this->container['candID'];
+        return $this->container['cand_id'];
     }
 
     /**
-     * Sets candID
+     * Sets cand_id
      *
-     * @param string|null $candID candID
+     * @param string|null $cand_id cand_id
      *
      * @return self
      */
-    public function setCandID($candID)
+    public function setCandId($cand_id)
     {
-        if (is_null($candID)) {
-            throw new \InvalidArgumentException('non-nullable candID cannot be null');
+        if (is_null($cand_id)) {
+            throw new \InvalidArgumentException('non-nullable cand_id cannot be null');
         }
-        $this->container['candID'] = $candID;
+        $this->container['cand_id'] = $cand_id;
 
         return $this;
     }
 
     /**
-     * Gets dDE
+     * Gets dde
      *
      * @return bool|null
      */
-    public function getDDE()
+    public function getDde()
     {
-        return $this->container['dDE'];
+        return $this->container['dde'];
     }
 
     /**
-     * Sets dDE
+     * Sets dde
      *
-     * @param bool|null $dDE dDE
+     * @param bool|null $dde dde
      *
      * @return self
      */
-    public function setDDE($dDE)
+    public function setDde($dde)
     {
-        if (is_null($dDE)) {
-            throw new \InvalidArgumentException('non-nullable dDE cannot be null');
+        if (is_null($dde)) {
+            throw new \InvalidArgumentException('non-nullable dde cannot be null');
         }
-        $this->container['dDE'] = $dDE;
+        $this->container['dde'] = $dde;
 
         return $this;
     }

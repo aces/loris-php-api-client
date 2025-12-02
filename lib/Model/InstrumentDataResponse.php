@@ -59,7 +59,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $openAPITypes = [
         'success' => 'bool',
         'message' => '\LORISClient\Model\InstrumentDataResponseMessage',
-        'idMapping' => '\LORISClient\Model\IdMapping[]'
+        'id_mapping' => '\LORISClient\Model\IdMapping[]'
     ];
 
     /**
@@ -72,7 +72,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $openAPIFormats = [
         'success' => null,
         'message' => null,
-        'idMapping' => null
+        'id_mapping' => null
     ];
 
     /**
@@ -83,7 +83,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static array $openAPINullables = [
         'success' => false,
         'message' => false,
-        'idMapping' => false
+        'id_mapping' => false
     ];
 
     /**
@@ -174,7 +174,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $attributeMap = [
         'success' => 'success',
         'message' => 'message',
-        'idMapping' => 'idMapping'
+        'id_mapping' => 'idMapping'
     ];
 
     /**
@@ -185,7 +185,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $setters = [
         'success' => 'setSuccess',
         'message' => 'setMessage',
-        'idMapping' => 'setIdMapping'
+        'id_mapping' => 'setIdMapping'
     ];
 
     /**
@@ -196,7 +196,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     protected static $getters = [
         'success' => 'getSuccess',
         'message' => 'getMessage',
-        'idMapping' => 'getIdMapping'
+        'id_mapping' => 'getIdMapping'
     ];
 
     /**
@@ -258,7 +258,7 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     {
         $this->setIfExists('success', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
-        $this->setIfExists('idMapping', $data ?? [], null);
+        $this->setIfExists('id_mapping', $data ?? [], null);
     }
 
     /**
@@ -358,28 +358,28 @@ class InstrumentDataResponse implements ModelInterface, ArrayAccess, \JsonSerial
     }
 
     /**
-     * Gets idMapping
+     * Gets id_mapping
      *
      * @return \LORISClient\Model\IdMapping[]|null
      */
     public function getIdMapping()
     {
-        return $this->container['idMapping'];
+        return $this->container['id_mapping'];
     }
 
     /**
-     * Sets idMapping
+     * Sets id_mapping
      *
-     * @param \LORISClient\Model\IdMapping[]|null $idMapping idMapping
+     * @param \LORISClient\Model\IdMapping[]|null $id_mapping id_mapping
      *
      * @return self
      */
-    public function setIdMapping($idMapping)
+    public function setIdMapping($id_mapping)
     {
-        if (is_null($idMapping)) {
-            throw new \InvalidArgumentException('non-nullable idMapping cannot be null');
+        if (is_null($id_mapping)) {
+            throw new \InvalidArgumentException('non-nullable id_mapping cannot be null');
         }
-        $this->container['idMapping'] = $idMapping;
+        $this->container['id_mapping'] = $id_mapping;
 
         return $this;
     }

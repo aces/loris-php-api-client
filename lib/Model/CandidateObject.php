@@ -57,11 +57,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'candID' => 'string',
+        'cand_id' => 'string',
         'project' => 'string',
-        'pSCID' => 'string',
+        'pscid' => 'string',
         'site' => 'string',
-        'doB' => '\DateTime',
+        'do_b' => '\DateTime',
         'sex' => 'string'
     ];
 
@@ -73,11 +73,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'candID' => null,
+        'cand_id' => null,
         'project' => null,
-        'pSCID' => null,
+        'pscid' => null,
         'site' => null,
-        'doB' => 'date',
+        'do_b' => 'date',
         'sex' => null
     ];
 
@@ -87,11 +87,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'candID' => false,
+        'cand_id' => false,
         'project' => false,
-        'pSCID' => false,
+        'pscid' => false,
         'site' => false,
-        'doB' => false,
+        'do_b' => false,
         'sex' => false
     ];
 
@@ -181,11 +181,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'candID' => 'CandID',
+        'cand_id' => 'CandID',
         'project' => 'Project',
-        'pSCID' => 'PSCID',
+        'pscid' => 'PSCID',
         'site' => 'Site',
-        'doB' => 'DoB',
+        'do_b' => 'DoB',
         'sex' => 'Sex'
     ];
 
@@ -195,11 +195,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'candID' => 'setCandID',
+        'cand_id' => 'setCandId',
         'project' => 'setProject',
-        'pSCID' => 'setPSCID',
+        'pscid' => 'setPscid',
         'site' => 'setSite',
-        'doB' => 'setDoB',
+        'do_b' => 'setDoB',
         'sex' => 'setSex'
     ];
 
@@ -209,11 +209,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'candID' => 'getCandID',
+        'cand_id' => 'getCandId',
         'project' => 'getProject',
-        'pSCID' => 'getPSCID',
+        'pscid' => 'getPscid',
         'site' => 'getSite',
-        'doB' => 'getDoB',
+        'do_b' => 'getDoB',
         'sex' => 'getSex'
     ];
 
@@ -291,11 +291,11 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('candID', $data ?? [], null);
+        $this->setIfExists('cand_id', $data ?? [], null);
         $this->setIfExists('project', $data ?? [], null);
-        $this->setIfExists('pSCID', $data ?? [], null);
+        $this->setIfExists('pscid', $data ?? [], null);
         $this->setIfExists('site', $data ?? [], null);
-        $this->setIfExists('doB', $data ?? [], null);
+        $this->setIfExists('do_b', $data ?? [], null);
         $this->setIfExists('sex', $data ?? [], null);
     }
 
@@ -351,28 +351,28 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets candID
+     * Gets cand_id
      *
      * @return string|null
      */
-    public function getCandID()
+    public function getCandId()
     {
-        return $this->container['candID'];
+        return $this->container['cand_id'];
     }
 
     /**
-     * Sets candID
+     * Sets cand_id
      *
-     * @param string|null $candID candID
+     * @param string|null $cand_id cand_id
      *
      * @return self
      */
-    public function setCandID($candID)
+    public function setCandId($cand_id)
     {
-        if (is_null($candID)) {
-            throw new \InvalidArgumentException('non-nullable candID cannot be null');
+        if (is_null($cand_id)) {
+            throw new \InvalidArgumentException('non-nullable cand_id cannot be null');
         }
-        $this->container['candID'] = $candID;
+        $this->container['cand_id'] = $cand_id;
 
         return $this;
     }
@@ -405,28 +405,28 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets pSCID
+     * Gets pscid
      *
      * @return string|null
      */
-    public function getPSCID()
+    public function getPscid()
     {
-        return $this->container['pSCID'];
+        return $this->container['pscid'];
     }
 
     /**
-     * Sets pSCID
+     * Sets pscid
      *
-     * @param string|null $pSCID pSCID
+     * @param string|null $pscid pscid
      *
      * @return self
      */
-    public function setPSCID($pSCID)
+    public function setPscid($pscid)
     {
-        if (is_null($pSCID)) {
-            throw new \InvalidArgumentException('non-nullable pSCID cannot be null');
+        if (is_null($pscid)) {
+            throw new \InvalidArgumentException('non-nullable pscid cannot be null');
         }
-        $this->container['pSCID'] = $pSCID;
+        $this->container['pscid'] = $pscid;
 
         return $this;
     }
@@ -459,28 +459,28 @@ class CandidateObject implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets doB
+     * Gets do_b
      *
      * @return \DateTime|null
      */
     public function getDoB()
     {
-        return $this->container['doB'];
+        return $this->container['do_b'];
     }
 
     /**
-     * Sets doB
+     * Sets do_b
      *
-     * @param \DateTime|null $doB doB
+     * @param \DateTime|null $do_b do_b
      *
      * @return self
      */
-    public function setDoB($doB)
+    public function setDoB($do_b)
     {
-        if (is_null($doB)) {
-            throw new \InvalidArgumentException('non-nullable doB cannot be null');
+        if (is_null($do_b)) {
+            throw new \InvalidArgumentException('non-nullable do_b cannot be null');
         }
-        $this->container['doB'] = $doB;
+        $this->container['do_b'] = $do_b;
 
         return $this;
     }

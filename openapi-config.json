@@ -3,7 +3,7 @@
   "apiPackage": "LORISClient\\Api",
   "modelPackage": "LORISClient\\Model",
   "srcBasePath": "lib",
-  "variableNamingConvention": "camelCase",
+  "variableNamingConvention": "snake_case",
   "phpLegacySupport": false,
   "hideGenerationTimestamp": true,
   "gitUserId": "aces",

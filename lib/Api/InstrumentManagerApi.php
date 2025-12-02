@@ -453,16 +453,16 @@ class InstrumentManagerApi
      *
      * Install instrument from LINST file or REDCap data dictionary
      *
-     * @param  \SplFileObject $installFile LINST file or REDCap CSV to install (required)
+     * @param  \SplFileObject $install_file LINST file or REDCap CSV to install (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\SuccessResponse|\LORISClient\Model\ErrorResponse
      */
-    public function installInstrument($installFile, string $contentType = self::contentTypes['installInstrument'][0])
+    public function installInstrument($install_file, string $contentType = self::contentTypes['installInstrument'][0])
     {
-        list($response) = $this->installInstrumentWithHttpInfo($installFile, $contentType);
+        list($response) = $this->installInstrumentWithHttpInfo($install_file, $contentType);
         return $response;
     }
 
@@ -471,16 +471,16 @@ class InstrumentManagerApi
      *
      * Install instrument from LINST file or REDCap data dictionary
      *
-     * @param  \SplFileObject $installFile LINST file or REDCap CSV to install (required)
+     * @param  \SplFileObject $install_file LINST file or REDCap CSV to install (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\SuccessResponse|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function installInstrumentWithHttpInfo($installFile, string $contentType = self::contentTypes['installInstrument'][0])
+    public function installInstrumentWithHttpInfo($install_file, string $contentType = self::contentTypes['installInstrument'][0])
     {
-        $request = $this->installInstrumentRequest($installFile, $contentType);
+        $request = $this->installInstrumentRequest($install_file, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -570,15 +570,15 @@ class InstrumentManagerApi
      *
      * Install instrument from LINST file or REDCap data dictionary
      *
-     * @param  \SplFileObject $installFile LINST file or REDCap CSV to install (required)
+     * @param  \SplFileObject $install_file LINST file or REDCap CSV to install (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function installInstrumentAsync($installFile, string $contentType = self::contentTypes['installInstrument'][0])
+    public function installInstrumentAsync($install_file, string $contentType = self::contentTypes['installInstrument'][0])
     {
-        return $this->installInstrumentAsyncWithHttpInfo($installFile, $contentType)
+        return $this->installInstrumentAsyncWithHttpInfo($install_file, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -591,16 +591,16 @@ class InstrumentManagerApi
      *
      * Install instrument from LINST file or REDCap data dictionary
      *
-     * @param  \SplFileObject $installFile LINST file or REDCap CSV to install (required)
+     * @param  \SplFileObject $install_file LINST file or REDCap CSV to install (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function installInstrumentAsyncWithHttpInfo($installFile, string $contentType = self::contentTypes['installInstrument'][0])
+    public function installInstrumentAsyncWithHttpInfo($install_file, string $contentType = self::contentTypes['installInstrument'][0])
     {
         $returnType = '\LORISClient\Model\SuccessResponse';
-        $request = $this->installInstrumentRequest($installFile, $contentType);
+        $request = $this->installInstrumentRequest($install_file, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -641,19 +641,19 @@ class InstrumentManagerApi
     /**
      * Create request for operation 'installInstrument'
      *
-     * @param  \SplFileObject $installFile LINST file or REDCap CSV to install (required)
+     * @param  \SplFileObject $install_file LINST file or REDCap CSV to install (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function installInstrumentRequest($installFile, string $contentType = self::contentTypes['installInstrument'][0])
+    public function installInstrumentRequest($install_file, string $contentType = self::contentTypes['installInstrument'][0])
     {
 
-        // verify the required parameter 'installFile' is set
-        if ($installFile === null || (is_array($installFile) && count($installFile) === 0)) {
+        // verify the required parameter 'install_file' is set
+        if ($install_file === null || (is_array($install_file) && count($install_file) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $installFile when calling installInstrument'
+                'Missing the required parameter $install_file when calling installInstrument'
             );
         }
 
@@ -672,7 +672,7 @@ class InstrumentManagerApi
         $formDataProcessor = new FormDataProcessor();
 
         $formData = $formDataProcessor->prepare([
-            'installFile' => $installFile,
+            'install_file' => $install_file,
         ]);
 
         $formParams = $formDataProcessor->flatten($formData);
@@ -742,18 +742,18 @@ class InstrumentManagerApi
      * Bulk upload instrument data from CSV
      *
      * @param  string $action action (required)
-     * @param  \SplFileObject $dataFile CSV file with instrument data (required)
+     * @param  \SplFileObject $data_file CSV file with instrument data (required)
      * @param  string|null $instrument Single instrument name (optional)
-     * @param  string|null $multiInstrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
+     * @param  string|null $multi_instrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\InstrumentDataResponse|\LORISClient\Model\InstrumentDataResponse
      */
-    public function uploadInstrumentData($action, $dataFile, $instrument = null, $multiInstrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentData($action, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        list($response) = $this->uploadInstrumentDataWithHttpInfo($action, $dataFile, $instrument, $multiInstrument, $contentType);
+        list($response) = $this->uploadInstrumentDataWithHttpInfo($action, $data_file, $instrument, $multi_instrument, $contentType);
         return $response;
     }
 
@@ -763,18 +763,18 @@ class InstrumentManagerApi
      * Bulk upload instrument data from CSV
      *
      * @param  string $action (required)
-     * @param  \SplFileObject $dataFile CSV file with instrument data (required)
+     * @param  \SplFileObject $data_file CSV file with instrument data (required)
      * @param  string|null $instrument Single instrument name (optional)
-     * @param  string|null $multiInstrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
+     * @param  string|null $multi_instrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\InstrumentDataResponse|\LORISClient\Model\InstrumentDataResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function uploadInstrumentDataWithHttpInfo($action, $dataFile, $instrument = null, $multiInstrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataWithHttpInfo($action, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        $request = $this->uploadInstrumentDataRequest($action, $dataFile, $instrument, $multiInstrument, $contentType);
+        $request = $this->uploadInstrumentDataRequest($action, $data_file, $instrument, $multi_instrument, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -865,17 +865,17 @@ class InstrumentManagerApi
      * Bulk upload instrument data from CSV
      *
      * @param  string $action (required)
-     * @param  \SplFileObject $dataFile CSV file with instrument data (required)
+     * @param  \SplFileObject $data_file CSV file with instrument data (required)
      * @param  string|null $instrument Single instrument name (optional)
-     * @param  string|null $multiInstrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
+     * @param  string|null $multi_instrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function uploadInstrumentDataAsync($action, $dataFile, $instrument = null, $multiInstrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataAsync($action, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        return $this->uploadInstrumentDataAsyncWithHttpInfo($action, $dataFile, $instrument, $multiInstrument, $contentType)
+        return $this->uploadInstrumentDataAsyncWithHttpInfo($action, $data_file, $instrument, $multi_instrument, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -889,18 +889,18 @@ class InstrumentManagerApi
      * Bulk upload instrument data from CSV
      *
      * @param  string $action (required)
-     * @param  \SplFileObject $dataFile CSV file with instrument data (required)
+     * @param  \SplFileObject $data_file CSV file with instrument data (required)
      * @param  string|null $instrument Single instrument name (optional)
-     * @param  string|null $multiInstrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
+     * @param  string|null $multi_instrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function uploadInstrumentDataAsyncWithHttpInfo($action, $dataFile, $instrument = null, $multiInstrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataAsyncWithHttpInfo($action, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
         $returnType = '\LORISClient\Model\InstrumentDataResponse';
-        $request = $this->uploadInstrumentDataRequest($action, $dataFile, $instrument, $multiInstrument, $contentType);
+        $request = $this->uploadInstrumentDataRequest($action, $data_file, $instrument, $multi_instrument, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -942,15 +942,15 @@ class InstrumentManagerApi
      * Create request for operation 'uploadInstrumentData'
      *
      * @param  string $action (required)
-     * @param  \SplFileObject $dataFile CSV file with instrument data (required)
+     * @param  \SplFileObject $data_file CSV file with instrument data (required)
      * @param  string|null $instrument Single instrument name (optional)
-     * @param  string|null $multiInstrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
+     * @param  string|null $multi_instrument Set to \\\&quot;true\\\&quot; for multi-instrument CSV (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function uploadInstrumentDataRequest($action, $dataFile, $instrument = null, $multiInstrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataRequest($action, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
 
         // verify the required parameter 'action' is set
@@ -960,10 +960,10 @@ class InstrumentManagerApi
             );
         }
 
-        // verify the required parameter 'dataFile' is set
-        if ($dataFile === null || (is_array($dataFile) && count($dataFile) === 0)) {
+        // verify the required parameter 'data_file' is set
+        if ($data_file === null || (is_array($data_file) && count($data_file) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $dataFile when calling uploadInstrumentData'
+                'Missing the required parameter $data_file when calling uploadInstrumentData'
             );
         }
 
@@ -986,8 +986,8 @@ class InstrumentManagerApi
         $formData = $formDataProcessor->prepare([
             'action' => $action,
             'instrument' => $instrument,
-            'multiInstrument' => $multiInstrument,
-            'dataFile' => $dataFile,
+            'multi_instrument' => $multi_instrument,
+            'data_file' => $data_file,
         ]);
 
         $formParams = $formDataProcessor->flatten($formData);

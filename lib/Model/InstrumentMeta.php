@@ -57,9 +57,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'fullName' => 'string',
+        'full_name' => 'string',
         'subgroup' => 'string',
-        'doubleDataEntryEnabled' => 'bool'
+        'double_data_entry_enabled' => 'bool'
     ];
 
     /**
@@ -70,9 +70,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'fullName' => null,
+        'full_name' => null,
         'subgroup' => null,
-        'doubleDataEntryEnabled' => null
+        'double_data_entry_enabled' => null
     ];
 
     /**
@@ -81,9 +81,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'fullName' => false,
+        'full_name' => false,
         'subgroup' => false,
-        'doubleDataEntryEnabled' => false
+        'double_data_entry_enabled' => false
     ];
 
     /**
@@ -172,9 +172,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'fullName' => 'FullName',
+        'full_name' => 'FullName',
         'subgroup' => 'Subgroup',
-        'doubleDataEntryEnabled' => 'DoubleDataEntryEnabled'
+        'double_data_entry_enabled' => 'DoubleDataEntryEnabled'
     ];
 
     /**
@@ -183,9 +183,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'fullName' => 'setFullName',
+        'full_name' => 'setFullName',
         'subgroup' => 'setSubgroup',
-        'doubleDataEntryEnabled' => 'setDoubleDataEntryEnabled'
+        'double_data_entry_enabled' => 'setDoubleDataEntryEnabled'
     ];
 
     /**
@@ -194,9 +194,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'fullName' => 'getFullName',
+        'full_name' => 'getFullName',
         'subgroup' => 'getSubgroup',
-        'doubleDataEntryEnabled' => 'getDoubleDataEntryEnabled'
+        'double_data_entry_enabled' => 'getDoubleDataEntryEnabled'
     ];
 
     /**
@@ -256,9 +256,9 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('fullName', $data ?? [], null);
+        $this->setIfExists('full_name', $data ?? [], null);
         $this->setIfExists('subgroup', $data ?? [], null);
-        $this->setIfExists('doubleDataEntryEnabled', $data ?? [], null);
+        $this->setIfExists('double_data_entry_enabled', $data ?? [], null);
     }
 
     /**
@@ -304,28 +304,28 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets fullName
+     * Gets full_name
      *
      * @return string|null
      */
     public function getFullName()
     {
-        return $this->container['fullName'];
+        return $this->container['full_name'];
     }
 
     /**
-     * Sets fullName
+     * Sets full_name
      *
-     * @param string|null $fullName fullName
+     * @param string|null $full_name full_name
      *
      * @return self
      */
-    public function setFullName($fullName)
+    public function setFullName($full_name)
     {
-        if (is_null($fullName)) {
-            throw new \InvalidArgumentException('non-nullable fullName cannot be null');
+        if (is_null($full_name)) {
+            throw new \InvalidArgumentException('non-nullable full_name cannot be null');
         }
-        $this->container['fullName'] = $fullName;
+        $this->container['full_name'] = $full_name;
 
         return $this;
     }
@@ -358,28 +358,28 @@ class InstrumentMeta implements ModelInterface, ArrayAccess, \JsonSerializable
     }
 
     /**
-     * Gets doubleDataEntryEnabled
+     * Gets double_data_entry_enabled
      *
      * @return bool|null
      */
     public function getDoubleDataEntryEnabled()
     {
-        return $this->container['doubleDataEntryEnabled'];
+        return $this->container['double_data_entry_enabled'];
     }
 
     /**
-     * Sets doubleDataEntryEnabled
+     * Sets double_data_entry_enabled
      *
-     * @param bool|null $doubleDataEntryEnabled doubleDataEntryEnabled
+     * @param bool|null $double_data_entry_enabled double_data_entry_enabled
      *
      * @return self
      */
-    public function setDoubleDataEntryEnabled($doubleDataEntryEnabled)
+    public function setDoubleDataEntryEnabled($double_data_entry_enabled)
     {
-        if (is_null($doubleDataEntryEnabled)) {
-            throw new \InvalidArgumentException('non-nullable doubleDataEntryEnabled cannot be null');
+        if (is_null($double_data_entry_enabled)) {
+            throw new \InvalidArgumentException('non-nullable double_data_entry_enabled cannot be null');
         }
-        $this->container['doubleDataEntryEnabled'] = $doubleDataEntryEnabled;
+        $this->container['double_data_entry_enabled'] = $double_data_entry_enabled;
 
         return $this;
     }

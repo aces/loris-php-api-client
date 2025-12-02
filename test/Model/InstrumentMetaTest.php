@@ -80,7 +80,7 @@ class InstrumentMetaTest extends TestCase
     }
 
     /**
-     * Test attribute "fullName"
+     * Test attribute "full_name"
      */
     public function testPropertyFullName()
     {
@@ -98,7 +98,7 @@ class InstrumentMetaTest extends TestCase
     }
 
     /**
-     * Test attribute "doubleDataEntryEnabled"
+     * Test attribute "double_data_entry_enabled"
      */
     public function testPropertyDoubleDataEntryEnabled()
     {

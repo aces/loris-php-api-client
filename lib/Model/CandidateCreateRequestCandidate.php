@@ -58,8 +58,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
       */
     protected static $openAPITypes = [
         'project' => 'string',
-        'pSCID' => 'string',
-        'doB' => '\DateTime',
+        'pscid' => 'string',
+        'do_b' => '\DateTime',
         'sex' => 'string',
         'site' => 'string'
     ];
@@ -73,8 +73,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
       */
     protected static $openAPIFormats = [
         'project' => null,
-        'pSCID' => null,
-        'doB' => 'date',
+        'pscid' => null,
+        'do_b' => 'date',
         'sex' => null,
         'site' => null
     ];
@@ -86,8 +86,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
       */
     protected static array $openAPINullables = [
         'project' => false,
-        'pSCID' => false,
-        'doB' => false,
+        'pscid' => false,
+        'do_b' => false,
         'sex' => false,
         'site' => false
     ];
@@ -179,8 +179,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
      */
     protected static $attributeMap = [
         'project' => 'Project',
-        'pSCID' => 'PSCID',
-        'doB' => 'DoB',
+        'pscid' => 'PSCID',
+        'do_b' => 'DoB',
         'sex' => 'Sex',
         'site' => 'Site'
     ];
@@ -192,8 +192,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
      */
     protected static $setters = [
         'project' => 'setProject',
-        'pSCID' => 'setPSCID',
-        'doB' => 'setDoB',
+        'pscid' => 'setPscid',
+        'do_b' => 'setDoB',
         'sex' => 'setSex',
         'site' => 'setSite'
     ];
@@ -205,8 +205,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
      */
     protected static $getters = [
         'project' => 'getProject',
-        'pSCID' => 'getPSCID',
-        'doB' => 'getDoB',
+        'pscid' => 'getPscid',
+        'do_b' => 'getDoB',
         'sex' => 'getSex',
         'site' => 'getSite'
     ];
@@ -286,8 +286,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
     public function __construct(?array $data = null)
     {
         $this->setIfExists('project', $data ?? [], null);
-        $this->setIfExists('pSCID', $data ?? [], null);
-        $this->setIfExists('doB', $data ?? [], null);
+        $this->setIfExists('pscid', $data ?? [], null);
+        $this->setIfExists('do_b', $data ?? [], null);
         $this->setIfExists('sex', $data ?? [], null);
         $this->setIfExists('site', $data ?? [], null);
     }
@@ -322,8 +322,8 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
         if ($this->container['project'] === null) {
             $invalidProperties[] = "'project' can't be null";
         }
-        if ($this->container['doB'] === null) {
-            $invalidProperties[] = "'doB' can't be null";
+        if ($this->container['do_b'] === null) {
+            $invalidProperties[] = "'do_b' can't be null";
         }
         if ($this->container['sex'] === null) {
             $invalidProperties[] = "'sex' can't be null";
@@ -383,55 +383,55 @@ class CandidateCreateRequestCandidate implements ModelInterface, ArrayAccess, \J
     }
 
     /**
-     * Gets pSCID
+     * Gets pscid
      *
      * @return string|null
      */
-    public function getPSCID()
+    public function getPscid()
     {
-        return $this->container['pSCID'];
+        return $this->container['pscid'];
     }
 
     /**
-     * Sets pSCID
+     * Sets pscid
      *
-     * @param string|null $pSCID pSCID
+     * @param string|null $pscid pscid
      *
      * @return self
      */
-    public function setPSCID($pSCID)
+    public function setPscid($pscid)
     {
-        if (is_null($pSCID)) {
-            throw new \InvalidArgumentException('non-nullable pSCID cannot be null');
+        if (is_null($pscid)) {
+            throw new \InvalidArgumentException('non-nullable pscid cannot be null');
         }
-        $this->container['pSCID'] = $pSCID;
+        $this->container['pscid'] = $pscid;
 
         return $this;
     }
 
     /**
-     * Gets doB
+     * Gets do_b
      *
      * @return \DateTime
      */
     public function getDoB()
     {
-        return $this->container['doB'];
+        return $this->container['do_b'];
     }
 
     /**
-     * Sets doB
+     * Sets do_b
      *
-     * @param \DateTime $doB doB
+     * @param \DateTime $do_b do_b
      *
      * @return self
      */
-    public function setDoB($doB)
+    public function setDoB($do_b)
     {
-        if (is_null($doB)) {
-            throw new \InvalidArgumentException('non-nullable doB cannot be null');
+        if (is_null($do_b)) {
+            throw new \InvalidArgumentException('non-nullable do_b cannot be null');
         }
-        $this->container['doB'] = $doB;
+        $this->container['do_b'] = $do_b;
 
         return $this;
     }

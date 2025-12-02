@@ -14,7 +14,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `createCandidate()`
 
 ```php
-createCandidate($candidateCreateRequest): \LORISClient\LORISClient\Model\CandidateObject
+createCandidate($candidate_create_request): \LORISClient\LORISClient\Model\CandidateObject
 ```
 
 Create a new candidate
@@ -36,10 +36,10 @@ $apiInstance = new LORISClient\Api\CandidatesApi(
     new GuzzleHttp\Client(),
     $config
 );
-$candidateCreateRequest = new \LORISClient\LORISClient\Model\CandidateCreateRequest(); // \LORISClient\LORISClient\Model\CandidateCreateRequest
+$candidate_create_request = new \LORISClient\LORISClient\Model\CandidateCreateRequest(); // \LORISClient\LORISClient\Model\CandidateCreateRequest
 
 try {
-    $result = $apiInstance->createCandidate($candidateCreateRequest);
+    $result = $apiInstance->createCandidate($candidate_create_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling CandidatesApi->createCandidate: ', $e->getMessage(), PHP_EOL;
@@ -50,7 +50,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **candidateCreateRequest** | [**\LORISClient\LORISClient\Model\CandidateCreateRequest**](../Model/CandidateCreateRequest.md)|  | |
+| **candidate_create_request** | [**\LORISClient\LORISClient\Model\CandidateCreateRequest**](../Model/CandidateCreateRequest.md)|  | |
 
 ### Return type
 

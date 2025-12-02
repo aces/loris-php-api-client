@@ -136,16 +136,16 @@ class CandidatesApi
      *
      * Create a new candidate
      *
-     * @param  \LORISClient\Model\CandidateCreateRequest $candidateCreateRequest candidateCreateRequest (required)
+     * @param  \LORISClient\Model\CandidateCreateRequest $candidate_create_request candidate_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCandidate'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse
      */
-    public function createCandidate($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
+    public function createCandidate($candidate_create_request, string $contentType = self::contentTypes['createCandidate'][0])
     {
-        list($response) = $this->createCandidateWithHttpInfo($candidateCreateRequest, $contentType);
+        list($response) = $this->createCandidateWithHttpInfo($candidate_create_request, $contentType);
         return $response;
     }
 
@@ -154,16 +154,16 @@ class CandidatesApi
      *
      * Create a new candidate
      *
-     * @param  \LORISClient\Model\CandidateCreateRequest $candidateCreateRequest (required)
+     * @param  \LORISClient\Model\CandidateCreateRequest $candidate_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCandidate'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\CandidateObject|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function createCandidateWithHttpInfo($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
+    public function createCandidateWithHttpInfo($candidate_create_request, string $contentType = self::contentTypes['createCandidate'][0])
     {
-        $request = $this->createCandidateRequest($candidateCreateRequest, $contentType);
+        $request = $this->createCandidateRequest($candidate_create_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -253,15 +253,15 @@ class CandidatesApi
      *
      * Create a new candidate
      *
-     * @param  \LORISClient\Model\CandidateCreateRequest $candidateCreateRequest (required)
+     * @param  \LORISClient\Model\CandidateCreateRequest $candidate_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCandidate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCandidateAsync($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
+    public function createCandidateAsync($candidate_create_request, string $contentType = self::contentTypes['createCandidate'][0])
     {
-        return $this->createCandidateAsyncWithHttpInfo($candidateCreateRequest, $contentType)
+        return $this->createCandidateAsyncWithHttpInfo($candidate_create_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -274,16 +274,16 @@ class CandidatesApi
      *
      * Create a new candidate
      *
-     * @param  \LORISClient\Model\CandidateCreateRequest $candidateCreateRequest (required)
+     * @param  \LORISClient\Model\CandidateCreateRequest $candidate_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCandidate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function createCandidateAsyncWithHttpInfo($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
+    public function createCandidateAsyncWithHttpInfo($candidate_create_request, string $contentType = self::contentTypes['createCandidate'][0])
     {
         $returnType = '\LORISClient\Model\CandidateObject';
-        $request = $this->createCandidateRequest($candidateCreateRequest, $contentType);
+        $request = $this->createCandidateRequest($candidate_create_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -324,19 +324,19 @@ class CandidatesApi
     /**
      * Create request for operation 'createCandidate'
      *
-     * @param  \LORISClient\Model\CandidateCreateRequest $candidateCreateRequest (required)
+     * @param  \LORISClient\Model\CandidateCreateRequest $candidate_create_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['createCandidate'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function createCandidateRequest($candidateCreateRequest, string $contentType = self::contentTypes['createCandidate'][0])
+    public function createCandidateRequest($candidate_create_request, string $contentType = self::contentTypes['createCandidate'][0])
     {
 
-        // verify the required parameter 'candidateCreateRequest' is set
-        if ($candidateCreateRequest === null || (is_array($candidateCreateRequest) && count($candidateCreateRequest) === 0)) {
+        // verify the required parameter 'candidate_create_request' is set
+        if ($candidate_create_request === null || (is_array($candidate_create_request) && count($candidate_create_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $candidateCreateRequest when calling createCandidate'
+                'Missing the required parameter $candidate_create_request when calling createCandidate'
             );
         }
 
@@ -359,12 +359,12 @@ class CandidatesApi
         );
 
         // for model (json/xml)
-        if (isset($candidateCreateRequest)) {
+        if (isset($candidate_create_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($candidateCreateRequest));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($candidate_create_request));
             } else {
-                $httpBody = $candidateCreateRequest;
+                $httpBody = $candidate_create_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

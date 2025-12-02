@@ -89,16 +89,16 @@ class CandidateCreateRequestCandidateTest extends TestCase
     }
 
     /**
-     * Test attribute "pSCID"
+     * Test attribute "pscid"
      */
-    public function testPropertyPSCID()
+    public function testPropertyPscid()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
     }
 
     /**
-     * Test attribute "doB"
+     * Test attribute "do_b"
      */
     public function testPropertyDoB()
     {

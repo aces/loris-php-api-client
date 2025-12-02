@@ -12,7 +12,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `login()`
 
 ```php
-login($loginRequest): \LORISClient\LORISClient\Model\LoginResponse
+login($login_request): \LORISClient\LORISClient\Model\LoginResponse
 ```
 
 Authenticate and obtain JWT token
@@ -30,10 +30,10 @@ $apiInstance = new LORISClient\Api\AuthenticationApi(
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
 );
-$loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
+$login_request = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->login($loginRequest);
+    $result = $apiInstance->login($login_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling AuthenticationApi->login: ', $e->getMessage(), PHP_EOL;
@@ -44,7 +44,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **loginRequest** | [**\LORISClient\LORISClient\Model\LoginRequest**](../Model/LoginRequest.md)|  | |
+| **login_request** | [**\LORISClient\LORISClient\Model\LoginRequest**](../Model/LoginRequest.md)|  | |
 
 ### Return type
 

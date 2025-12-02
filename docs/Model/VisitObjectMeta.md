@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**candID** | **string** |  | [optional]
+**cand_id** | **string** |  | [optional]
 **visit** | **string** |  | [optional]
 **site** | **string** |  | [optional]
 **project** | **string** |  | [optional]

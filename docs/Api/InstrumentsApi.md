@@ -137,7 +137,7 @@ try {
 ## `patchInstrumentData()`
 
 ```php
-patchInstrumentData($candid, $visit, $instrument, $instrumentDataRequest): \LORISClient\LORISClient\Model\InstrumentData
+patchInstrumentData($candid, $visit, $instrument, $instrument_data_request): \LORISClient\LORISClient\Model\InstrumentData
 ```
 
 Update instrument data
@@ -162,10 +162,10 @@ $apiInstance = new LORISClient\Api\InstrumentsApi(
 $candid = 'candid_example'; // string
 $visit = 'visit_example'; // string
 $instrument = 'instrument_example'; // string
-$instrumentDataRequest = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
+$instrument_data_request = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
 
 try {
-    $result = $apiInstance->patchInstrumentData($candid, $visit, $instrument, $instrumentDataRequest);
+    $result = $apiInstance->patchInstrumentData($candid, $visit, $instrument, $instrument_data_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentsApi->patchInstrumentData: ', $e->getMessage(), PHP_EOL;
@@ -179,7 +179,7 @@ try {
 | **candid** | **string**|  | |
 | **visit** | **string**|  | |
 | **instrument** | **string**|  | |
-| **instrumentDataRequest** | [**\LORISClient\LORISClient\Model\InstrumentDataRequest**](../Model/InstrumentDataRequest.md)|  | |
+| **instrument_data_request** | [**\LORISClient\LORISClient\Model\InstrumentDataRequest**](../Model/InstrumentDataRequest.md)|  | |
 
 ### Return type
 
@@ -201,7 +201,7 @@ try {
 ## `putInstrumentData()`
 
 ```php
-putInstrumentData($candid, $visit, $instrument, $instrumentDataRequest): \LORISClient\LORISClient\Model\InstrumentData
+putInstrumentData($candid, $visit, $instrument, $instrument_data_request): \LORISClient\LORISClient\Model\InstrumentData
 ```
 
 Replace instrument data
@@ -226,10 +226,10 @@ $apiInstance = new LORISClient\Api\InstrumentsApi(
 $candid = 'candid_example'; // string
 $visit = 'visit_example'; // string
 $instrument = 'instrument_example'; // string
-$instrumentDataRequest = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
+$instrument_data_request = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
 
 try {
-    $result = $apiInstance->putInstrumentData($candid, $visit, $instrument, $instrumentDataRequest);
+    $result = $apiInstance->putInstrumentData($candid, $visit, $instrument, $instrument_data_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentsApi->putInstrumentData: ', $e->getMessage(), PHP_EOL;
@@ -243,7 +243,7 @@ try {
 | **candid** | **string**|  | |
 | **visit** | **string**|  | |
 | **instrument** | **string**|  | |
-| **instrumentDataRequest** | [**\LORISClient\LORISClient\Model\InstrumentDataRequest**](../Model/InstrumentDataRequest.md)|  | |
+| **instrument_data_request** | [**\LORISClient\LORISClient\Model\InstrumentDataRequest**](../Model/InstrumentDataRequest.md)|  | |
 
 ### Return type
 

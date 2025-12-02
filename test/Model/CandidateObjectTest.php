@@ -80,9 +80,9 @@ class CandidateObjectTest extends TestCase
     }
 
     /**
-     * Test attribute "candID"
+     * Test attribute "cand_id"
      */
-    public function testPropertyCandID()
+    public function testPropertyCandId()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -98,9 +98,9 @@ class CandidateObjectTest extends TestCase
     }
 
     /**
-     * Test attribute "pSCID"
+     * Test attribute "pscid"
      */
-    public function testPropertyPSCID()
+    public function testPropertyPscid()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');
@@ -116,7 +116,7 @@ class CandidateObjectTest extends TestCase
     }
 
     /**
-     * Test attribute "doB"
+     * Test attribute "do_b"
      */
     public function testPropertyDoB()
     {

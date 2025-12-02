@@ -746,16 +746,16 @@ class InstrumentsApi
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
      * @param  string $instrument instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\InstrumentData
      */
-    public function patchInstrumentData($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['patchInstrumentData'][0])
+    public function patchInstrumentData($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['patchInstrumentData'][0])
     {
-        list($response) = $this->patchInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        list($response) = $this->patchInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, $contentType);
         return $response;
     }
 
@@ -767,16 +767,16 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\InstrumentData, HTTP status code, HTTP response headers (array of strings)
      */
-    public function patchInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['patchInstrumentData'][0])
+    public function patchInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['patchInstrumentData'][0])
     {
-        $request = $this->patchInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        $request = $this->patchInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -855,15 +855,15 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function patchInstrumentDataAsync($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['patchInstrumentData'][0])
+    public function patchInstrumentDataAsync($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['patchInstrumentData'][0])
     {
-        return $this->patchInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, $contentType)
+        return $this->patchInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -879,16 +879,16 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function patchInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['patchInstrumentData'][0])
+    public function patchInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['patchInstrumentData'][0])
     {
         $returnType = '\LORISClient\Model\InstrumentData';
-        $request = $this->patchInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        $request = $this->patchInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -932,13 +932,13 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['patchInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function patchInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['patchInstrumentData'][0])
+    public function patchInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['patchInstrumentData'][0])
     {
 
         // verify the required parameter 'candid' is set
@@ -962,10 +962,10 @@ class InstrumentsApi
             );
         }
 
-        // verify the required parameter 'instrumentDataRequest' is set
-        if ($instrumentDataRequest === null || (is_array($instrumentDataRequest) && count($instrumentDataRequest) === 0)) {
+        // verify the required parameter 'instrument_data_request' is set
+        if ($instrument_data_request === null || (is_array($instrument_data_request) && count($instrument_data_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $instrumentDataRequest when calling patchInstrumentData'
+                'Missing the required parameter $instrument_data_request when calling patchInstrumentData'
             );
         }
 
@@ -1012,12 +1012,12 @@ class InstrumentsApi
         );
 
         // for model (json/xml)
-        if (isset($instrumentDataRequest)) {
+        if (isset($instrument_data_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($instrumentDataRequest));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($instrument_data_request));
             } else {
-                $httpBody = $instrumentDataRequest;
+                $httpBody = $instrument_data_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {
@@ -1077,16 +1077,16 @@ class InstrumentsApi
      * @param  string $candid candid (required)
      * @param  string $visit visit (required)
      * @param  string $instrument instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\InstrumentData
      */
-    public function putInstrumentData($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['putInstrumentData'][0])
+    public function putInstrumentData($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['putInstrumentData'][0])
     {
-        list($response) = $this->putInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        list($response) = $this->putInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, $contentType);
         return $response;
     }
 
@@ -1098,16 +1098,16 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putInstrumentData'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\InstrumentData, HTTP status code, HTTP response headers (array of strings)
      */
-    public function putInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['putInstrumentData'][0])
+    public function putInstrumentDataWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['putInstrumentData'][0])
     {
-        $request = $this->putInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        $request = $this->putInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -1186,15 +1186,15 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function putInstrumentDataAsync($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['putInstrumentData'][0])
+    public function putInstrumentDataAsync($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['putInstrumentData'][0])
     {
-        return $this->putInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, $contentType)
+        return $this->putInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -1210,16 +1210,16 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function putInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['putInstrumentData'][0])
+    public function putInstrumentDataAsyncWithHttpInfo($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['putInstrumentData'][0])
     {
         $returnType = '\LORISClient\Model\InstrumentData';
-        $request = $this->putInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, $contentType);
+        $request = $this->putInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -1263,13 +1263,13 @@ class InstrumentsApi
      * @param  string $candid (required)
      * @param  string $visit (required)
      * @param  string $instrument (required)
-     * @param  \LORISClient\Model\InstrumentDataRequest $instrumentDataRequest (required)
+     * @param  \LORISClient\Model\InstrumentDataRequest $instrument_data_request (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['putInstrumentData'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function putInstrumentDataRequest($candid, $visit, $instrument, $instrumentDataRequest, string $contentType = self::contentTypes['putInstrumentData'][0])
+    public function putInstrumentDataRequest($candid, $visit, $instrument, $instrument_data_request, string $contentType = self::contentTypes['putInstrumentData'][0])
     {
 
         // verify the required parameter 'candid' is set
@@ -1293,10 +1293,10 @@ class InstrumentsApi
             );
         }
 
-        // verify the required parameter 'instrumentDataRequest' is set
-        if ($instrumentDataRequest === null || (is_array($instrumentDataRequest) && count($instrumentDataRequest) === 0)) {
+        // verify the required parameter 'instrument_data_request' is set
+        if ($instrument_data_request === null || (is_array($instrument_data_request) && count($instrument_data_request) === 0)) {
             throw new \InvalidArgumentException(
-                'Missing the required parameter $instrumentDataRequest when calling putInstrumentData'
+                'Missing the required parameter $instrument_data_request when calling putInstrumentData'
             );
         }
 
@@ -1343,12 +1343,12 @@ class InstrumentsApi
         );
 
         // for model (json/xml)
-        if (isset($instrumentDataRequest)) {
+        if (isset($instrument_data_request)) {
             if (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the body
-                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($instrumentDataRequest));
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($instrument_data_request));
             } else {
-                $httpBody = $instrumentDataRequest;
+                $httpBody = $instrument_data_request;
             }
         } elseif (count($formParams) > 0) {
             if ($multipart) {

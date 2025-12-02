@@ -98,9 +98,9 @@ class InstrumentDataRequestMetaTest extends TestCase
     }
 
     /**
-     * Test attribute "candID"
+     * Test attribute "cand_id"
      */
-    public function testPropertyCandID()
+    public function testPropertyCandId()
     {
         // TODO: implement
         self::markTestIncomplete('Not implemented');

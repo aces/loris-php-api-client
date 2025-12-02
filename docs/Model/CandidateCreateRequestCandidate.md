@@ -5,8 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **project** | **string** |  |
-**pSCID** | **string** |  | [optional]
-**doB** | **\DateTime** |  |
+**pscid** | **string** |  | [optional]
+**do_b** | **\DateTime** |  |
 **sex** | **string** |  |
 **site** | **string** |  |
 

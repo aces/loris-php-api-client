@@ -57,7 +57,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var string[]
       */
     protected static $openAPITypes = [
-        'candID' => 'string',
+        'cand_id' => 'string',
         'visit' => 'string',
         'site' => 'string',
         'project' => 'string'
@@ -71,7 +71,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'candID' => null,
+        'cand_id' => null,
         'visit' => null,
         'site' => null,
         'project' => null
@@ -83,7 +83,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'candID' => false,
+        'cand_id' => false,
         'visit' => false,
         'site' => false,
         'project' => false
@@ -175,7 +175,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $attributeMap = [
-        'candID' => 'CandID',
+        'cand_id' => 'CandID',
         'visit' => 'Visit',
         'site' => 'Site',
         'project' => 'Project'
@@ -187,7 +187,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $setters = [
-        'candID' => 'setCandID',
+        'cand_id' => 'setCandId',
         'visit' => 'setVisit',
         'site' => 'setSite',
         'project' => 'setProject'
@@ -199,7 +199,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      * @var string[]
      */
     protected static $getters = [
-        'candID' => 'getCandID',
+        'cand_id' => 'getCandId',
         'visit' => 'getVisit',
         'site' => 'getSite',
         'project' => 'getProject'
@@ -262,7 +262,7 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('candID', $data ?? [], null);
+        $this->setIfExists('cand_id', $data ?? [], null);
         $this->setIfExists('visit', $data ?? [], null);
         $this->setIfExists('site', $data ?? [], null);
         $this->setIfExists('project', $data ?? [], null);
@@ -311,28 +311,28 @@ class VisitObjectMeta implements ModelInterface, ArrayAccess, \JsonSerializable
 
 
     /**
-     * Gets candID
+     * Gets cand_id
      *
      * @return string|null
      */
-    public function getCandID()
+    public function getCandId()
     {
-        return $this->container['candID'];
+        return $this->container['cand_id'];
     }
 
     /**
-     * Sets candID
+     * Sets cand_id
      *
-     * @param string|null $candID candID
+     * @param string|null $cand_id cand_id
      *
      * @return self
      */
-    public function setCandID($candID)
+    public function setCandId($cand_id)
     {
-        if (is_null($candID)) {
-            throw new \InvalidArgumentException('non-nullable candID cannot be null');
+        if (is_null($cand_id)) {
+            throw new \InvalidArgumentException('non-nullable cand_id cannot be null');
         }
-        $this->container['candID'] = $candID;
+        $this->container['cand_id'] = $cand_id;
 
         return $this;
     }

@@ -13,7 +13,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `createVisit()`
 
 ```php
-createVisit($candid, $visit, $visitCreateRequest): \LORISClient\LORISClient\Model\VisitObject
+createVisit($candid, $visit, $visit_create_request): \LORISClient\LORISClient\Model\VisitObject
 ```
 
 Create a new visit
@@ -37,10 +37,10 @@ $apiInstance = new LORISClient\Api\VisitsApi(
 );
 $candid = 'candid_example'; // string
 $visit = 'visit_example'; // string
-$visitCreateRequest = new \LORISClient\LORISClient\Model\VisitCreateRequest(); // \LORISClient\LORISClient\Model\VisitCreateRequest
+$visit_create_request = new \LORISClient\LORISClient\Model\VisitCreateRequest(); // \LORISClient\LORISClient\Model\VisitCreateRequest
 
 try {
-    $result = $apiInstance->createVisit($candid, $visit, $visitCreateRequest);
+    $result = $apiInstance->createVisit($candid, $visit, $visit_create_request);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling VisitsApi->createVisit: ', $e->getMessage(), PHP_EOL;
@@ -53,7 +53,7 @@ try {
 | ------------- | ------------- | ------------- | ------------- |
 | **candid** | **string**|  | |
 | **visit** | **string**|  | |
-| **visitCreateRequest** | [**\LORISClient\LORISClient\Model\VisitCreateRequest**](../Model/VisitCreateRequest.md)|  | |
+| **visit_create_request** | [**\LORISClient\LORISClient\Model\VisitCreateRequest**](../Model/VisitCreateRequest.md)|  | |
 
 ### Return type
 
