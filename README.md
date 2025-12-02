@@ -1,6 +1,8 @@
 # OpenAPIClient-php
 
-The LORIS API uses standard HTTP error codes. Responses contain either an empty body or a JSON object.
+LORIS REST API for clinical data ingestion and management.
+Standard HTTP error codes are used. Responses contain either an empty body or a JSON object.
+
 
 For more information, please visit [https://github.com/aces/loris](https://github.com/aces/loris).
 
@@ -49,44 +51,89 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 
+// Configure Bearer (JWT) authorization: BearerAuth
+$config = LORISClient\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$apiInstance = new LORISClient\Api\InstrumentDataApi(
+
+$apiInstance = new LORISClient\Api\AuthenticationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
-$action = 'action_example'; // string | Either CREATE_SESSIONS or VALIDATE_SESSIONS. The latter is used when all sessions already exist.
-$instrument = 'instrument_example'; // string | Single instrument name
-$instruments = 'instruments_example'; // string | Comma-separated list of instruments
+$loginRequest = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
 try {
-    $result = $apiInstance->instrumentManagerInstrumentDataGet($action, $instrument, $instruments);
+    $result = $apiInstance->loginPost($loginRequest);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling InstrumentDataApi->instrumentManagerInstrumentDataGet: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling AuthenticationApi->loginPost: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
 
 ## API Endpoints
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://demo.loris.ca/api/v0.0.4-dev*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*InstrumentDataApi* | [**instrumentManagerInstrumentDataGet**](docs/Api/InstrumentDataApi.md#instrumentmanagerinstrumentdataget) | **GET** /instrument_manager/instrument_data | Generate CSV headers for one or more instruments
-*InstrumentDataApi* | [**instrumentManagerInstrumentDataPost**](docs/Api/InstrumentDataApi.md#instrumentmanagerinstrumentdatapost) | **POST** /instrument_manager/instrument_data | Upload CSV to insert instrument data
-*InstrumentManagerApi* | [**instrumentManagerPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerpost) | **POST** /instrument_manager | Install an instrument from a LINST file or REDCap data dictionary
+*AuthenticationApi* | [**loginPost**](docs/Api/AuthenticationApi.md#loginpost) | **POST** /login | Authenticate and obtain JWT token
+*CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
+*CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
+*CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | Get list of candidates
+*InstrumentManagerApi* | [**instrumentManagerInstrumentDataGet**](docs/Api/InstrumentManagerApi.md#instrumentmanagerinstrumentdataget) | **GET** /instrument_manager/instrument_data | Generate expected CSV headers for instrument data ingestion
+*InstrumentManagerApi* | [**instrumentManagerInstrumentDataPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerinstrumentdatapost) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV
+*InstrumentManagerApi* | [**instrumentManagerPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerpost) | **POST** /instrument_manager | Install instrument from LINST file or REDCap CSV
+*InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data for a candidate/visit
+*InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | Get instruments for a visit
+*InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data (preserves unspecified fields)
+*InstrumentsApi* | [**putInstrumentData**](docs/Api/InstrumentsApi.md#putinstrumentdata) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data (nulls unspecified fields)
+*ProjectsApi* | [**getProject**](docs/Api/ProjectsApi.md#getproject) | **GET** /projects/{project} | Get project details including instruments
+*ProjectsApi* | [**getProjectInstruments**](docs/Api/ProjectsApi.md#getprojectinstruments) | **GET** /projects/{project}/instruments | Get instruments for a project
+*ProjectsApi* | [**getProjects**](docs/Api/ProjectsApi.md#getprojects) | **GET** /projects | Get list of projects
+*SitesApi* | [**getSites**](docs/Api/SitesApi.md#getsites) | **GET** /sites | Get list of sites
+*VisitsApi* | [**createVisit**](docs/Api/VisitsApi.md#createvisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit/timepoint
+*VisitsApi* | [**getVisit**](docs/Api/VisitsApi.md#getvisit) | **GET** /candidates/{candid}/{visit} | Get visit details
 
 ## Models
 
+- [CandidateCreateRequest](docs/Model/CandidateCreateRequest.md)
+- [CandidateCreateRequestCandidate](docs/Model/CandidateCreateRequestCandidate.md)
+- [CandidateObject](docs/Model/CandidateObject.md)
+- [CandidatesResponse](docs/Model/CandidatesResponse.md)
+- [ErrorResponse](docs/Model/ErrorResponse.md)
 - [IdMapping](docs/Model/IdMapping.md)
-- [InstrumentManagerInstrumentDataPost200Response](docs/Model/InstrumentManagerInstrumentDataPost200Response.md)
-- [InstrumentManagerInstrumentDataPost201Response](docs/Model/InstrumentManagerInstrumentDataPost201Response.md)
-- [InstrumentManagerPost201Response](docs/Model/InstrumentManagerPost201Response.md)
+- [InstrumentData](docs/Model/InstrumentData.md)
+- [InstrumentDataMeta](docs/Model/InstrumentDataMeta.md)
+- [InstrumentDataRequest](docs/Model/InstrumentDataRequest.md)
+- [InstrumentDataRequestMeta](docs/Model/InstrumentDataRequestMeta.md)
+- [InstrumentDataResponse](docs/Model/InstrumentDataResponse.md)
+- [InstrumentDataResponseMessage](docs/Model/InstrumentDataResponseMessage.md)
+- [InstrumentMeta](docs/Model/InstrumentMeta.md)
+- [InstrumentsResponse](docs/Model/InstrumentsResponse.md)
+- [LoginRequest](docs/Model/LoginRequest.md)
+- [LoginResponse](docs/Model/LoginResponse.md)
+- [ProjectResponse](docs/Model/ProjectResponse.md)
+- [ProjectResponseMeta](docs/Model/ProjectResponseMeta.md)
+- [ProjectsResponse](docs/Model/ProjectsResponse.md)
+- [Site](docs/Model/Site.md)
+- [SitesResponse](docs/Model/SitesResponse.md)
+- [SuccessResponse](docs/Model/SuccessResponse.md)
+- [VisitCreateRequest](docs/Model/VisitCreateRequest.md)
+- [VisitInstrumentsResponse](docs/Model/VisitInstrumentsResponse.md)
+- [VisitInstrumentsResponseMeta](docs/Model/VisitInstrumentsResponseMeta.md)
+- [VisitObject](docs/Model/VisitObject.md)
+- [VisitObjectMeta](docs/Model/VisitObjectMeta.md)
+- [VisitObjectStages](docs/Model/VisitObjectStages.md)
+- [VisitObjectStagesVisit](docs/Model/VisitObjectStagesVisit.md)
 
 ## Authorization
-Endpoints do not require authorization.
+
+Authentication schemes defined for the API:
+### BearerAuth
+
+- **Type**: Bearer authentication (JWT)
 
 ## Tests
 
@@ -105,7 +152,7 @@ vendor/bin/phpunit
 
 This PHP package is automatically generated by the [OpenAPI Generator](https://openapi-generator.tech) project:
 
-- API version: `0.0.3`
+- API version: `0.0.4-dev`
     - Package version: `0.0.4-dev`
     - Generator version: `7.17.0`
 - Build package: `org.openapitools.codegen.languages.PhpClientCodegen`

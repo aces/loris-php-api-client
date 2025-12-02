@@ -1,7 +1,7 @@
 {
     "name": "aces/loris-php-api-client",
     "version": "0.0.4-dev",
-    "description": "The LORIS API uses standard HTTP error codes. Responses contain either an empty body or a JSON object.",
+    "description": "LORIS REST API for clinical data ingestion and management. Standard HTTP error codes are used. Responses contain either an empty body or a JSON object.",
     "keywords": [
         "openapitools",
         "openapi-generator",
