@@ -8,7 +8,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 | ------------- | ------------- | ------------- |
 | [**createCandidate()**](CandidatesApi.md#createCandidate) | **POST** /candidates | Create a new candidate |
 | [**getCandidate()**](CandidatesApi.md#getCandidate) | **GET** /candidates/{candid} | Get candidate details |
-| [**getCandidates()**](CandidatesApi.md#getCandidates) | **GET** /candidates | Get list of candidates |
+| [**getCandidates()**](CandidatesApi.md#getCandidates) | **GET** /candidates | List all candidates |
 
 
 ## `createCandidate()`
@@ -133,7 +133,7 @@ try {
 getCandidates(): \LORISClient\LORISClient\Model\CandidatesResponse
 ```
 
-Get list of candidates
+List all candidates
 
 ### Example
 

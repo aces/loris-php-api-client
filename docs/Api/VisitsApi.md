@@ -6,7 +6,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**createVisit()**](VisitsApi.md#createVisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit/timepoint |
+| [**createVisit()**](VisitsApi.md#createVisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit |
 | [**getVisit()**](VisitsApi.md#getVisit) | **GET** /candidates/{candid}/{visit} | Get visit details |
 
 
@@ -16,7 +16,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 createVisit($candid, $visit, $visitCreateRequest): \LORISClient\LORISClient\Model\VisitObject
 ```
 
-Create a new visit/timepoint
+Create a new visit
 
 ### Example
 

@@ -6,7 +6,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**getSites()**](SitesApi.md#getSites) | **GET** /sites | Get list of sites |
+| [**getSites()**](SitesApi.md#getSites) | **GET** /sites | List sites |
 
 
 ## `getSites()`
@@ -15,7 +15,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 getSites(): \LORISClient\LORISClient\Model\SitesResponse
 ```
 
-Get list of sites
+List sites
 
 ### Example
 

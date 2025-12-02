@@ -1,25 +1,36 @@
 # LORISClient\InstrumentManagerApi
 
-Instrument installation and bulk data operations: - Install instruments from LINST/REDCap files - Bulk upload instrument data via CSV - Get expected CSV headers
+**Module endpoints (non-versioned)**  These endpoints do NOT use the &#x60;/api/{version}&#x60; prefix. Configure client with base URL only.  &#x60;&#x60;&#x60;php // For InstrumentManager, use base URL without /api/{version} $moduleConfig-&gt;setHost(&#39;https://your-loris.ca&#39;); &#x60;&#x60;&#x60;
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**getInstrumentDataHeaders()**](InstrumentManagerApi.md#getInstrumentDataHeaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data ingestion |
+| [**getInstrumentDataHeaders()**](InstrumentManagerApi.md#getInstrumentDataHeaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data upload |
 | [**installInstrument()**](InstrumentManagerApi.md#installInstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary |
-| [**uploadInstrumentData()**](InstrumentManagerApi.md#uploadInstrumentData) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV file |
+| [**uploadInstrumentData()**](InstrumentManagerApi.md#uploadInstrumentData) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV |
 
 
 ## `getInstrumentDataHeaders()`
 
 ```php
-getInstrumentDataHeaders($action, $instrument, $instruments): \SplFileObject
+getInstrumentDataHeaders($action, $instrument, $instruments): string
 ```
+### URI(s):
+- {protocol}://{host} Module endpoint (non-versioned)
+    - Variables:
+      - protocol:  No description provided
+        - Allowed values:
+          - http
+          - https
+        - Default value: https
 
-Get expected CSV headers for instrument data ingestion
+      - host:  No description provided
+        - Default value: demo.loris.ca
 
-Generates and returns a CSV file with the expected headers for the specified instrument(s). Either \"instrument\" OR \"instruments\" must be set, not both.
+Get expected CSV headers for instrument data upload
+
+Returns a CSV template with expected headers for the specified instrument(s). Use either `instrument` (single) or `instruments` (comma-separated), not both.  **Note**: This is a module endpoint. Configure client with base URL only.
 
 ### Example
 
@@ -38,12 +49,18 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string | - CREATE_SESSIONS: For when sessions may need to be created - VALIDATE_SESSIONS: For when all sessions must already exist
-$instrument = 'instrument_example'; // string | Single instrument name (mutually exclusive with instruments)
-$instruments = 'instruments_example'; // string | Multiple instrument names, comma-separated (mutually exclusive with instrument)
+$action = 'action_example'; // string | - CREATE_SESSIONS: Headers for creating new candidates/sessions - VALIDATE_SESSIONS: Headers for existing candidates/sessions only
+$instrument = 'instrument_example'; // string | Single instrument name
+$instruments = 'instruments_example'; // string | Multiple instrument names (comma-separated)
+
+$hostIndex = 0;
+$variables = [
+    'protocol' => 'YOUR_VALUE',
+    'host' => 'YOUR_VALUE',
+];
 
 try {
-    $result = $apiInstance->getInstrumentDataHeaders($action, $instrument, $instruments);
+    $result = $apiInstance->getInstrumentDataHeaders($action, $instrument, $instruments, $hostIndex, $variables);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->getInstrumentDataHeaders: ', $e->getMessage(), PHP_EOL;
@@ -54,13 +71,15 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**| - CREATE_SESSIONS: For when sessions may need to be created - VALIDATE_SESSIONS: For when all sessions must already exist | |
-| **instrument** | **string**| Single instrument name (mutually exclusive with instruments) | [optional] |
-| **instruments** | **string**| Multiple instrument names, comma-separated (mutually exclusive with instrument) | [optional] |
+| **action** | **string**| - CREATE_SESSIONS: Headers for creating new candidates/sessions - VALIDATE_SESSIONS: Headers for existing candidates/sessions only | |
+| **instrument** | **string**| Single instrument name | [optional] |
+| **instruments** | **string**| Multiple instrument names (comma-separated) | [optional] |
+| hostIndex | null|int | Host index. Defaults to null. If null, then the library will use $this->hostIndex instead | [optional] |
+| variables | array | Associative array of variables to pass to the host. Defaults to empty array. | [optional] |
 
 ### Return type
 
-**\SplFileObject**
+**string**
 
 ### Authorization
 
@@ -69,7 +88,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/octet-stream`, `application/json`
+- **Accept**: `text/csv`, `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -80,10 +99,21 @@ try {
 ```php
 installInstrument($installFile): \LORISClient\LORISClient\Model\SuccessResponse
 ```
+### URI(s):
+- {protocol}://{host} Module endpoint (non-versioned)
+    - Variables:
+      - protocol:  No description provided
+        - Allowed values:
+          - http
+          - https
+        - Default value: https
+
+      - host:  No description provided
+        - Default value: demo.loris.ca
 
 Install instrument from LINST file or REDCap data dictionary
 
-Creates/installs a new instrument in LORIS from either: - A LINST file (.linst) - A CSV file with one or more REDCap data dictionaries
+Installs a new instrument in LORIS from either: - A LINST file (.linst) - A CSV file with REDCap data dictionary format  **Note**: This is a module endpoint. Configure client with base URL only, not `/api/{version}`.
 
 ### Example
 
@@ -102,10 +132,16 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$installFile = '/path/to/file.txt'; // \SplFileObject | Instrument definition file to install: - LINST file (.linst) - CSV with REDCap data dictionary
+$installFile = '/path/to/file.txt'; // \SplFileObject | LINST file or REDCap CSV to install
+
+$hostIndex = 0;
+$variables = [
+    'protocol' => 'YOUR_VALUE',
+    'host' => 'YOUR_VALUE',
+];
 
 try {
-    $result = $apiInstance->installInstrument($installFile);
+    $result = $apiInstance->installInstrument($installFile, $hostIndex, $variables);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->installInstrument: ', $e->getMessage(), PHP_EOL;
@@ -116,7 +152,9 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **installFile** | **\SplFileObject****\SplFileObject**| Instrument definition file to install: - LINST file (.linst) - CSV with REDCap data dictionary | |
+| **installFile** | **\SplFileObject****\SplFileObject**| LINST file or REDCap CSV to install | |
+| hostIndex | null|int | Host index. Defaults to null. If null, then the library will use $this->hostIndex instead | [optional] |
+| variables | array | Associative array of variables to pass to the host. Defaults to empty array. | [optional] |
 
 ### Return type
 
@@ -140,10 +178,21 @@ try {
 ```php
 uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
 ```
+### URI(s):
+- {protocol}://{host} Module endpoint (non-versioned)
+    - Variables:
+      - protocol:  No description provided
+        - Allowed values:
+          - http
+          - https
+        - Default value: https
 
-Bulk insert instrument data from CSV file
+      - host:  No description provided
+        - Default value: demo.loris.ca
 
-Uploads a CSV file to insert data for one or more instruments.  Actions: - CREATE_SESSIONS: Creates candidates and sessions if they don't exist - VALIDATE_SESSIONS: Requires all candidates/sessions to already exist  CSV must have columns: PSCID, Visit_label, plus instrument fields.
+Bulk upload instrument data from CSV
+
+Uploads CSV data for one or more instruments.  **Actions**: - `CREATE_SESSIONS`: Creates candidates/sessions if they don't exist - `VALIDATE_SESSIONS`: Fails if any candidate/session is missing  **CSV Requirements**: - Must include `PSCID` and `Visit_label` columns - For single instrument: include instrument field columns - For multi-instrument: set `multi-instrument=true` and include `Instrument` column  **Note**: This is a module endpoint. Configure client with base URL only.
 
 ### Example
 
@@ -162,13 +211,19 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string | - CREATE_SESSIONS: Creates candidates/sessions if missing - VALIDATE_SESSIONS: Fails if any candidate/session doesn't exist
-$dataFile = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data (must include PSCID, Visit_label columns)
-$instrument = 'instrument_example'; // string | Single instrument name
-$multiInstrument = 'multiInstrument_example'; // string | Set to \\\"true\\\" when uploading multi-instrument CSV
+$action = 'action_example'; // string
+$dataFile = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data
+$instrument = 'instrument_example'; // string | Single instrument name (omit for multi-instrument)
+$multiInstrument = 'multiInstrument_example'; // string | Set to \\\"true\\\" for multi-instrument CSV
+
+$hostIndex = 0;
+$variables = [
+    'protocol' => 'YOUR_VALUE',
+    'host' => 'YOUR_VALUE',
+];
 
 try {
-    $result = $apiInstance->uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument);
+    $result = $apiInstance->uploadInstrumentData($action, $dataFile, $instrument, $multiInstrument, $hostIndex, $variables);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->uploadInstrumentData: ', $e->getMessage(), PHP_EOL;
@@ -179,10 +234,12 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**| - CREATE_SESSIONS: Creates candidates/sessions if missing - VALIDATE_SESSIONS: Fails if any candidate/session doesn&#39;t exist | |
-| **dataFile** | **\SplFileObject****\SplFileObject**| CSV file with instrument data (must include PSCID, Visit_label columns) | |
-| **instrument** | **string**| Single instrument name | [optional] |
-| **multiInstrument** | **string**| Set to \\\&quot;true\\\&quot; when uploading multi-instrument CSV | [optional] |
+| **action** | **string**|  | |
+| **dataFile** | **\SplFileObject****\SplFileObject**| CSV file with instrument data | |
+| **instrument** | **string**| Single instrument name (omit for multi-instrument) | [optional] |
+| **multiInstrument** | **string**| Set to \\\&quot;true\\\&quot; for multi-instrument CSV | [optional] |
+| hostIndex | null|int | Host index. Defaults to null. If null, then the library will use $this->hostIndex instead | [optional] |
+| variables | array | Associative array of variables to pass to the host. Defaults to empty array. | [optional] |
 
 ### Return type
 

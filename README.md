@@ -1,10 +1,21 @@
 # OpenAPIClient-php
 
-LORIS REST API for clinical data ingestion pipelines.
-Authentication via JWT - POST /login to get token, use as \"Bearer <token>\".
+LORIS REST API and Module endpoints.
+
+## Server Configuration
+
+This schema has TWO types of endpoints with different base URLs:
+
+| Type | Base URL | Endpoints |
+|------|----------|-----------|
+| REST API (versioned) | `{baseUrl}/api/{version}` | /login, /candidates, /projects, /sites |
+| Module (non-versioned) | `{baseUrl}` (root) | /instrument_manager, /instrument_manager/instrument_data |
+
+**InstrumentManager endpoints use path-level server overrides** to specify the non-versioned base URL.
+When using `InstrumentManagerApi`, configure with base URL only (no `/api/{version}`).
 
 
-For more information, please visit [https://github.com/aces/loris](https://github.com/aces/loris).
+For more information, please visit [https://github.com/aces/Loris](https://github.com/aces/Loris).
 
 ## Installation & Usage
 
@@ -77,19 +88,19 @@ Class | Method | HTTP request | Description
 *AuthenticationApi* | [**login**](docs/Api/AuthenticationApi.md#login) | **POST** /login | Authenticate and obtain JWT token
 *CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
 *CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
-*CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | Get list of candidates
-*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data ingestion
+*CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | List all candidates
+*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data upload
 *InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary
-*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk insert instrument data from CSV file
-*InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data for a candidate/visit
-*InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | Get instruments for a visit
-*InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data (preserves unspecified fields)
-*InstrumentsApi* | [**putInstrumentData**](docs/Api/InstrumentsApi.md#putinstrumentdata) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data (nulls unspecified fields)
-*ProjectsApi* | [**getProject**](docs/Api/ProjectsApi.md#getproject) | **GET** /projects/{project} | Get project details including instruments
-*ProjectsApi* | [**getProjectInstruments**](docs/Api/ProjectsApi.md#getprojectinstruments) | **GET** /projects/{project}/instruments | Get instruments for a project
-*ProjectsApi* | [**getProjects**](docs/Api/ProjectsApi.md#getprojects) | **GET** /projects | Get list of projects
-*SitesApi* | [**getSites**](docs/Api/SitesApi.md#getsites) | **GET** /sites | Get list of sites
-*VisitsApi* | [**createVisit**](docs/Api/VisitsApi.md#createvisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit/timepoint
+*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV
+*InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data
+*InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | List instruments for a visit
+*InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data
+*InstrumentsApi* | [**putInstrumentData**](docs/Api/InstrumentsApi.md#putinstrumentdata) | **PUT** /candidates/{candid}/{visit}/instruments/{instrument} | Replace instrument data
+*ProjectsApi* | [**getProject**](docs/Api/ProjectsApi.md#getproject) | **GET** /projects/{project} | Get project details
+*ProjectsApi* | [**getProjectInstruments**](docs/Api/ProjectsApi.md#getprojectinstruments) | **GET** /projects/{project}/instruments | List project instruments
+*ProjectsApi* | [**getProjects**](docs/Api/ProjectsApi.md#getprojects) | **GET** /projects | List projects
+*SitesApi* | [**getSites**](docs/Api/SitesApi.md#getsites) | **GET** /sites | List sites
+*VisitsApi* | [**createVisit**](docs/Api/VisitsApi.md#createvisit) | **PUT** /candidates/{candid}/{visit} | Create a new visit
 *VisitsApi* | [**getVisit**](docs/Api/VisitsApi.md#getvisit) | **GET** /candidates/{candid}/{visit} | Get visit details
 
 ## Models
@@ -111,18 +122,14 @@ Class | Method | HTTP request | Description
 - [LoginRequest](docs/Model/LoginRequest.md)
 - [LoginResponse](docs/Model/LoginResponse.md)
 - [ProjectResponse](docs/Model/ProjectResponse.md)
-- [ProjectResponseMeta](docs/Model/ProjectResponseMeta.md)
 - [ProjectsResponse](docs/Model/ProjectsResponse.md)
 - [Site](docs/Model/Site.md)
 - [SitesResponse](docs/Model/SitesResponse.md)
-- [StageObject](docs/Model/StageObject.md)
 - [SuccessResponse](docs/Model/SuccessResponse.md)
 - [VisitCreateRequest](docs/Model/VisitCreateRequest.md)
 - [VisitInstrumentsResponse](docs/Model/VisitInstrumentsResponse.md)
-- [VisitInstrumentsResponseMeta](docs/Model/VisitInstrumentsResponseMeta.md)
 - [VisitObject](docs/Model/VisitObject.md)
 - [VisitObjectMeta](docs/Model/VisitObjectMeta.md)
-- [VisitObjectStages](docs/Model/VisitObjectStages.md)
 
 ## Authorization
 

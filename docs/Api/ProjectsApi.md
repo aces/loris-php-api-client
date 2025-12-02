@@ -1,14 +1,14 @@
 # LORISClient\ProjectsApi
 
-Project and instrument info
+Project information
 
 All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
-| [**getProject()**](ProjectsApi.md#getProject) | **GET** /projects/{project} | Get project details including instruments |
-| [**getProjectInstruments()**](ProjectsApi.md#getProjectInstruments) | **GET** /projects/{project}/instruments | Get instruments for a project |
-| [**getProjects()**](ProjectsApi.md#getProjects) | **GET** /projects | Get list of projects |
+| [**getProject()**](ProjectsApi.md#getProject) | **GET** /projects/{project} | Get project details |
+| [**getProjectInstruments()**](ProjectsApi.md#getProjectInstruments) | **GET** /projects/{project}/instruments | List project instruments |
+| [**getProjects()**](ProjectsApi.md#getProjects) | **GET** /projects | List projects |
 
 
 ## `getProject()`
@@ -17,7 +17,7 @@ All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the ope
 getProject($project): \LORISClient\LORISClient\Model\ProjectResponse
 ```
 
-Get project details including instruments
+Get project details
 
 ### Example
 
@@ -75,7 +75,7 @@ try {
 getProjectInstruments($project): \LORISClient\LORISClient\Model\InstrumentsResponse
 ```
 
-Get instruments for a project
+List project instruments
 
 ### Example
 
@@ -133,7 +133,7 @@ try {
 getProjects(): \LORISClient\LORISClient\Model\ProjectsResponse
 ```
 
-Get list of projects
+List projects
 
 ### Example
 
