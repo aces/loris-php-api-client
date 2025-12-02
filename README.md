@@ -1,180 +1,111 @@
-# LORIS PHP API Client
+# OpenAPIClient-php
 
-PHP client for LORIS REST API. Authentication via JWT.
+The LORIS API uses standard HTTP error codes. Responses contain either an empty body or a JSON object.
 
-## Installation
+For more information, please visit [https://github.com/aces/loris](https://github.com/aces/loris).
 
-```bash
-composer require aces/loris-php-api-client
-```
+## Installation & Usage
 
-## Dynamic API Version
+### Requirements
 
-```php
-<?php
-require_once __DIR__ . '/vendor/autoload.php';
+PHP 8.1 and later.
 
-use LORISClient\Configuration;
+### Composer
 
-$baseUrl    = 'https://your-loris.ca';
-$apiVersion = 'v0.0.4-dev';  // v0.0.3 | v0.0.3-dev | v0.0.4-dev | v0.0.4
+To install the bindings via [Composer](https://getcomposer.org/), add the following to `composer.json`:
 
-$config = Configuration::getDefaultConfiguration()
-    ->setHost("{$baseUrl}/api/{$apiVersion}");
-```
-
-## Authentication API
-
-```php
-use LORISClient\Api\AuthenticationApi;
-use LORISClient\Model\LoginRequest;
-use GuzzleHttp\Client;
-
-$authApi = new AuthenticationApi(new Client(), $config);
-
-$response = $authApi->login(new LoginRequest([
-    'username' => 'user',
-    'password' => 'pass'
-]));
-
-$config->setAccessToken($response->getToken());
-```
-
-## InstrumentManager API
-
-```php
-use LORISClient\Api\InstrumentManagerApi;
-use SplFileObject;
-
-$api = new InstrumentManagerApi(new Client(), $config);
-
-// Install instrument (LINST or REDCap CSV)
-$api->installInstrument(new SplFileObject('instrument.linst'));
-
-// Get expected CSV headers
-$headers = $api->getInstrumentDataHeaders('CREATE_SESSIONS', 'demographics');
-
-// Upload data - CREATE_SESSIONS (creates missing candidates/sessions)
-$result = $api->uploadInstrumentData(
-    'CREATE_SESSIONS',
-    'demographics',
-    null,
-    new SplFileObject('data.csv')
-);
-
-// Upload data - VALIDATE_SESSIONS (requires existing candidates/sessions)
-$result = $api->uploadInstrumentData(
-    'VALIDATE_SESSIONS',
-    'demographics',
-    null,
-    new SplFileObject('data.csv')
-);
-
-// Check result
-if ($result->getSuccess()) {
-    echo $result->getMessage();
-    foreach ($result->getIdMapping() ?? [] as $map) {
-        echo "{$map->getExtStudyId()} → {$map->getCandId()}\n";
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/aces/loris-php-api-client.git"
     }
+  ],
+  "require": {
+    "aces/loris-php-api-client": "*@dev"
+  }
 }
 ```
 
-## API Reference
+Then run `composer install`
 
-### AuthenticationApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `login()` | POST | `/login` | Get JWT token |
+### Manual Installation
 
-### InstrumentManagerApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `installInstrument()` | POST | `/instrument_manager` | Install LINST/REDCap instrument |
-| `getInstrumentDataHeaders()` | GET | `/instrument_manager/instrument_data` | Get expected CSV headers |
-| `uploadInstrumentData()` | POST | `/instrument_manager/instrument_data` | Bulk upload CSV data |
+Download the files and include `autoload.php`:
 
-### CandidatesApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `getCandidates()` | GET | `/candidates` | List all candidates |
-| `getCandidate()` | GET | `/candidates/{candid}` | Get candidate details |
-| `createCandidate()` | POST | `/candidates` | Create new candidate |
+```php
+<?php
+require_once('/path/to/OpenAPIClient-php/vendor/autoload.php');
+```
 
-### VisitsApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `getVisit()` | GET | `/candidates/{candid}/{visit}` | Get visit details |
-| `createVisit()` | PUT | `/candidates/{candid}/{visit}` | Create new visit |
+## Getting Started
 
-### InstrumentsApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `getVisitInstruments()` | GET | `/candidates/{candid}/{visit}/instruments` | List visit instruments |
-| `getInstrumentData()` | GET | `/candidates/{candid}/{visit}/instruments/{instrument}` | Get instrument data |
-| `putInstrumentData()` | PUT | `/candidates/{candid}/{visit}/instruments/{instrument}` | Replace instrument data |
-| `patchInstrumentData()` | PATCH | `/candidates/{candid}/{visit}/instruments/{instrument}` | Update instrument data |
+Please follow the [installation procedure](#installation--usage) and then run the following:
 
-### ProjectsApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `getProjects()` | GET | `/projects` | List projects |
-| `getProject()` | GET | `/projects/{project}` | Get project details |
-| `getProjectInstruments()` | GET | `/projects/{project}/instruments` | List project instruments |
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
 
-### SitesApi
-| Method | HTTP | Endpoint | Description |
-|--------|------|----------|-------------|
-| `getSites()` | GET | `/sites` | List sites |
+
+
+
+$apiInstance = new LORISClient\Api\InstrumentDataApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
+$action = 'action_example'; // string | Either CREATE_SESSIONS or VALIDATE_SESSIONS. The latter is used when all sessions already exist.
+$instrument = 'instrument_example'; // string | Single instrument name
+$instruments = 'instruments_example'; // string | Comma-separated list of instruments
+
+try {
+    $result = $apiInstance->instrumentManagerInstrumentDataGet($action, $instrument, $instruments);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling InstrumentDataApi->instrumentManagerInstrumentDataGet: ', $e->getMessage(), PHP_EOL;
+}
+
+```
+
+## API Endpoints
+
+All URIs are relative to *http://localhost*
+
+Class | Method | HTTP request | Description
+------------ | ------------- | ------------- | -------------
+*InstrumentDataApi* | [**instrumentManagerInstrumentDataGet**](docs/Api/InstrumentDataApi.md#instrumentmanagerinstrumentdataget) | **GET** /instrument_manager/instrument_data | Generate CSV headers for one or more instruments
+*InstrumentDataApi* | [**instrumentManagerInstrumentDataPost**](docs/Api/InstrumentDataApi.md#instrumentmanagerinstrumentdatapost) | **POST** /instrument_manager/instrument_data | Upload CSV to insert instrument data
+*InstrumentManagerApi* | [**instrumentManagerPost**](docs/Api/InstrumentManagerApi.md#instrumentmanagerpost) | **POST** /instrument_manager | Install an instrument from a LINST file or REDCap data dictionary
 
 ## Models
 
-### Request Models
-| Model | Usage |
-|-------|-------|
-| `LoginRequest` | Authentication credentials |
-| `CandidateCreateRequest` | New candidate data |
-| `VisitCreateRequest` | New visit data |
-| `InstrumentDataRequest` | Instrument data update |
+- [IdMapping](docs/Model/IdMapping.md)
+- [InstrumentManagerInstrumentDataPost200Response](docs/Model/InstrumentManagerInstrumentDataPost200Response.md)
+- [InstrumentManagerInstrumentDataPost201Response](docs/Model/InstrumentManagerInstrumentDataPost201Response.md)
+- [InstrumentManagerPost201Response](docs/Model/InstrumentManagerPost201Response.md)
 
-### Response Models
-| Model | Usage |
-|-------|-------|
-| `LoginResponse` | JWT token |
-| `CandidateObject` | Candidate details |
-| `CandidatesResponse` | List of candidates |
-| `VisitObject` | Visit details |
-| `InstrumentData` | Instrument data (Meta + Data) |
-| `InstrumentDataResponse` | Bulk upload result (success, message, idMapping) |
-| `IdMapping` | PSCID → CandID mapping |
-| `ProjectResponse` | Project with instruments |
-| `SitesResponse` | List of sites |
-| `ErrorResponse` | Error message |
-| `SuccessResponse` | Success confirmation |
+## Authorization
+Endpoints do not require authorization.
 
-## Regenerate Client
+## Tests
+
+To run the tests, use:
 
 ```bash
-
-# Using local OpenAPI Generator
-./generate.sh
-
-# Clean regenerate
-./generate.sh --clean
+composer install
+vendor/bin/phpunit
 ```
 
-### generate.sh
+## Author
 
-The script:
-1. Reads `schema.yml` and `openapi-config.json`
-2. Generates PHP client to `lib/`
 
-## Upload Actions
 
-| Action | Behavior |
-|--------|----------|
-| `CREATE_SESSIONS` | Creates candidates/sessions if missing |
-| `VALIDATE_SESSIONS` | Fails if candidate/session doesn't exist |
+## About this package
 
----
+This PHP package is automatically generated by the [OpenAPI Generator](https://openapi-generator.tech) project:
 
-[OpenAPI Generator](https://openapi-generator.tech)
+- API version: `0.0.3`
+    - Package version: `0.0.4-dev`
+    - Generator version: `7.17.0`
+- Build package: `org.openapitools.codegen.languages.PhpClientCodegen`

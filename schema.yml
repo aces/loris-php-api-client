@@ -1,126 +1,71 @@
 openapi: 3.0.1
 info:
   title: LORIS - REST API endpoints
-  description: |
-    LORIS REST API for clinical data ingestion pipelines.
-    Authentication via JWT - POST /login to get token, use as "Bearer <token>".
+  description: The LORIS API uses standard HTTP error codes. Responses contain either an empty body or a JSON object.
   contact:
     name: LORIS Development Team
     url: https://github.com/aces/loris
   license:
     name: GNU Public License, Version 3
     url: https://opensource.org/licenses/GPL-3.0
-  version: 0.0.4-dev
+  version: 0.0.3
 
 servers:
-  - url: '{protocol}://{host}/api/{version}'
-    variables:
-      protocol:
-        default: https
-        enum: [http, https]
-      host:
-        default: demo.loris.ca
-        description: LORIS instance hostname
-      version:
-        default: v0.0.4-dev
-        enum: [v0.0.3, v0.0.3-dev, v0.0.4-dev, v0.0.4]
-        description: API version
+  - url: /
 
 security:
-  - BearerAuth: []
+  - ApiKeyAuth: []
 
 paths:
-  # ============================================
-  # AUTHENTICATION
-  # ============================================
-  /login:
-    post:
-      tags:
-        - Authentication
-      summary: Authenticate and obtain JWT token
-      operationId: login
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginRequest'
-      responses:
-        '200':
-          description: Successful authentication
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LoginResponse'
-        '401':
-          description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  # ============================================
-  # INSTRUMENT MANAGER
-  # ============================================
   /instrument_manager:
     post:
       tags:
-        - InstrumentManager
-      summary: Install instrument from LINST file or REDCap data dictionary
-      description: |
-        Creates/installs a new instrument in LORIS from either:
-        - A LINST file (.linst)
-        - A CSV file with one or more REDCap data dictionaries
-      operationId: installInstrument
+        - Instrument Manager
+      summary: Install an instrument from a LINST file or REDCap data dictionary
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/InstrumentInstallForm'
+              $ref: '#/components/schemas/InstrumentManagerForm'
       responses:
         '201':
-          description: Instrument successfully created/installed
+          description: Successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        '400':
-          description: Invalid file or format
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                type: object
+                properties:
+                  ok:
+                    type: string
+                    default: "ok"
+                    description: Contains the string "ok"
 
   /instrument_manager/instrument_data:
     get:
       tags:
-        - InstrumentManager
-      summary: Get expected CSV headers for instrument data ingestion
-      description: |
-        Generates and returns a CSV file with the expected headers for the specified instrument(s).
-        Either "instrument" OR "instruments" must be set, not both.
-      operationId: getInstrumentDataHeaders
+        - Instrument Data
+      summary: Generate CSV headers for one or more instruments
+      description: Either `instrument` or `instruments` must be set, not both.
       parameters:
         - name: action
           in: query
-          description: |
-            - CREATE_SESSIONS: For when sessions may need to be created
-            - VALIDATE_SESSIONS: For when all sessions must already exist
+          description: "Either CREATE_SESSIONS or VALIDATE_SESSIONS. The latter is used when all sessions already exist."
           required: true
           schema:
             type: string
-            enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
+            enum:
+              - CREATE_SESSIONS
+              - VALIDATE_SESSIONS
         - name: instrument
           in: query
-          description: Single instrument name (mutually exclusive with instruments)
+          description: Single instrument name
           required: false
           schema:
             type: string
         - name: instruments
           in: query
-          description: Multiple instrument names, comma-separated (mutually exclusive with instrument)
+          description: Comma-separated list of instruments
           required: false
           schema:
             type: string
@@ -132,720 +77,92 @@ paths:
               schema:
                 type: string
                 format: binary
-        '400':
-          description: Invalid parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 
     post:
       tags:
-        - InstrumentManager
-      summary: Bulk insert instrument data from CSV file
+        - Instrument Data
+      summary: Upload CSV to insert instrument data
       description: |
-        Uploads a CSV file to insert data for one or more instruments.
-        
-        Actions:
-        - CREATE_SESSIONS: Creates candidates and sessions if they don't exist
-        - VALIDATE_SESSIONS: Requires all candidates/sessions to already exist
-        
-        CSV must have columns: PSCID, Visit_label, plus instrument fields.
-      operationId: uploadInstrumentData
+        CREATE_SESSIONS: creates missing candidates/sessions.  
+        VALIDATE_SESSIONS: fails if any candidate/session is missing.
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/InstrumentDataUploadForm'
+              $ref: '#/components/schemas/InstrumentDataForm'
       responses:
         '200':
-          description: Validation errors occurred (partial or no data inserted)
+          description: Validation error(s) occurred
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstrumentDataResponse'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether insertion succeeded
+                  message:
+                    type: string
+                    description: Success or error messages
         '201':
-          description: Data inserted successfully
+          description: Successfully inserted
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstrumentDataResponse'
-
-  # ============================================
-  # PROJECTS
-  # ============================================
-  /projects:
-    get:
-      tags:
-        - Projects
-      summary: Get list of projects
-      operationId: getProjects
-      responses:
-        '200':
-          description: List of projects
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectsResponse'
-
-  /projects/{project}:
-    get:
-      tags:
-        - Projects
-      summary: Get project details including instruments
-      operationId: getProject
-      parameters:
-        - name: project
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Project details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectResponse'
-
-  /projects/{project}/instruments:
-    get:
-      tags:
-        - Projects
-      summary: Get instruments for a project
-      operationId: getProjectInstruments
-      parameters:
-        - name: project
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Instruments list
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentsResponse'
-
-  # ============================================
-  # CANDIDATES
-  # ============================================
-  /candidates:
-    get:
-      tags:
-        - Candidates
-      summary: Get list of candidates
-      operationId: getCandidates
-      responses:
-        '200':
-          description: List of candidates
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidatesResponse'
-
-    post:
-      tags:
-        - Candidates
-      summary: Create a new candidate
-      operationId: createCandidate
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CandidateCreateRequest'
-      responses:
-        '201':
-          description: Candidate created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidateObject'
-        '400':
-          description: Invalid data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '409':
-          description: PSCID already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /candidates/{candid}:
-    get:
-      tags:
-        - Candidates
-      summary: Get candidate details
-      operationId: getCandidate
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Candidate details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidateObject'
-        '404':
-          description: Candidate not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  # ============================================
-  # VISITS
-  # ============================================
-  /candidates/{candid}/{visit}:
-    get:
-      tags:
-        - Visits
-      summary: Get visit details
-      operationId: getVisit
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Visit details
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VisitObject'
-
-    put:
-      tags:
-        - Visits
-      summary: Create a new visit/timepoint
-      operationId: createVisit
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VisitCreateRequest'
-      responses:
-        '201':
-          description: Visit created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VisitObject'
-        '409':
-          description: Visit already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  # ============================================
-  # INSTRUMENTS (Per Candidate/Visit)
-  # ============================================
-  /candidates/{candid}/{visit}/instruments:
-    get:
-      tags:
-        - Instruments
-      summary: Get instruments for a visit
-      operationId: getVisitInstruments
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: List of instruments
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VisitInstrumentsResponse'
-
-  /candidates/{candid}/{visit}/instruments/{instrument}:
-    get:
-      tags:
-        - Instruments
-      summary: Get instrument data for a candidate/visit
-      operationId: getInstrumentData
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: instrument
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Instrument data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentData'
-
-    put:
-      tags:
-        - Instruments
-      summary: Replace instrument data (nulls unspecified fields)
-      operationId: putInstrumentData
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: instrument
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InstrumentDataRequest'
-      responses:
-        '200':
-          description: Data replaced
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentData'
-
-    patch:
-      tags:
-        - Instruments
-      summary: Update instrument data (preserves unspecified fields)
-      operationId: patchInstrumentData
-      parameters:
-        - name: candid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: visit
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: instrument
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InstrumentDataRequest'
-      responses:
-        '200':
-          description: Data updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentData'
-
-  # ============================================
-  # SITES
-  # ============================================
-  /sites:
-    get:
-      tags:
-        - Sites
-      summary: Get list of sites
-      operationId: getSites
-      responses:
-        '200':
-          description: List of sites
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SitesResponse'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  idMapping:
+                    type: array
+                    description: Maps external PSCID to internal CandID
+                    items:
+                      $ref: '#/components/schemas/IdMapping'
 
 components:
-  securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   schemas:
-    # ============================================
-    # Authentication
-    # ============================================
-    LoginRequest:
+    InstrumentManagerForm:
       type: object
-      required: [username, password]
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-          format: password
-
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-
-    SuccessResponse:
-      type: object
-      properties:
-        ok:
-          type: string
-          default: "ok"
-
-    # ============================================
-    # Instrument Manager
-    # ============================================
-    InstrumentInstallForm:
-      type: object
-      required: [install_file]
+      required:
+        - install_file
       properties:
         install_file:
           type: string
           format: binary
-          description: |
-            Instrument definition file to install:
-            - LINST file (.linst)
-            - CSV with REDCap data dictionary
+          description: "Instrument to install. Can be a LINST file (.linst) or a CSV with REDCap data dictionary."
 
-    InstrumentDataUploadForm:
+    InstrumentDataForm:
       type: object
-      required: [action, data_file]
+      required:
+        - action
+        - data_file
       properties:
         action:
           type: string
-          enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
-          description: |
-            - CREATE_SESSIONS: Creates candidates/sessions if missing
-            - VALIDATE_SESSIONS: Fails if any candidate/session doesn't exist
+          enum:
+            - CREATE_SESSIONS
+            - VALIDATE_SESSIONS
+          description: "CREATE_SESSIONS: creates missing candidates/sessions. VALIDATE_SESSIONS: fails if missing."
         instrument:
           type: string
           description: Single instrument name
-        multi-instrument:
+        multiInstrument:
           type: string
-          description: Set to "true" when uploading multi-instrument CSV
+          description: "Set to 'true' if uploading a multi-instrument CSV"
         data_file:
           type: string
           format: binary
-          description: CSV file with instrument data (must include PSCID, Visit_label columns)
-
-    InstrumentDataResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Whether insertion was successful
-        message:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                type: object
-          description: Success message (e.g., "Saved 10 out of 10") or validation errors
-        idMapping:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdMapping'
-          description: Mapping of external PSCID to internal CandID (for CREATE_SESSIONS)
+          description: CSV file containing instrument data. Headers must match instrument(s).
 
     IdMapping:
       type: object
       properties:
         ExtStudyID:
           type: string
-          description: External study ID (PSCID)
+          description: External candidate ID (PSCID)
         CandID:
           type: string
-          description: LORIS candidate ID
-
-    # ============================================
-    # Candidates
-    # ============================================
-    CandidatesResponse:
-      type: object
-      properties:
-        Candidates:
-          type: array
-          items:
-            $ref: '#/components/schemas/CandidateObject'
-
-    CandidateObject:
-      type: object
-      properties:
-        CandID:
-          type: string
-        Project:
-          type: string
-        PSCID:
-          type: string
-        Site:
-          type: string
-        DoB:
-          type: string
-          format: date
-        Sex:
-          type: string
-          enum: [Male, Female, Other]
-
-    CandidateCreateRequest:
-      type: object
-      properties:
-        Candidate:
-          type: object
-          required: [Project, DoB, Sex, Site]
-          properties:
-            Project:
-              type: string
-            PSCID:
-              type: string
-              description: Required if PSCID generation is set to "prompt"
-            DoB:
-              type: string
-              format: date
-            Sex:
-              type: string
-              enum: [Male, Female, Other]
-            Site:
-              type: string
-
-    # ============================================
-    # Visits
-    # ============================================
-    VisitObject:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            CandID:
-              type: string
-            Visit:
-              type: string
-            Site:
-              type: string
-            Project:
-              type: string
-        Stages:
-          type: object
-          properties:
-            Visit:
-              $ref: '#/components/schemas/StageObject'
-
-    StageObject:
-      type: object
-      properties:
-        Status:
-          type: string
-          enum: [Not Started, In Progress, Pass, Failure, Withdrawal]
-        Date:
-          type: string
-          format: date
-
-    VisitCreateRequest:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            CandID:
-              type: string
-            Visit:
-              type: string
-            Site:
-              type: string
-            Project:
-              type: string
-
-    VisitInstrumentsResponse:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            CandID:
-              type: string
-            Visit:
-              type: string
-        Instruments:
-          type: array
-          items:
-            type: string
-
-    # ============================================
-    # Instrument Data (Per Candidate/Visit)
-    # ============================================
-    InstrumentData:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            Instrument:
-              type: string
-            Visit:
-              type: string
-            CandID:
-              type: string
-            DDE:
-              type: boolean
-        Data:
-          type: object
-          additionalProperties: true
-          description: Instrument field values
-
-    InstrumentDataRequest:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            Instrument:
-              type: string
-            Visit:
-              type: string
-            CandID:
-              type: string
-        Data:
-          type: object
-          additionalProperties: true
-          description: Instrument field values to update
-
-    # ============================================
-    # Projects
-    # ============================================
-    ProjectsResponse:
-      type: object
-      properties:
-        Projects:
-          type: array
-          items:
-            type: string
-
-    ProjectResponse:
-      type: object
-      properties:
-        Meta:
-          type: object
-          properties:
-            Project:
-              type: string
-        Instruments:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/InstrumentMeta'
-
-    InstrumentMeta:
-      type: object
-      properties:
-        FullName:
-          type: string
-        Subgroup:
-          type: string
-        DoubleDataEntryEnabled:
-          type: boolean
-
-    InstrumentsResponse:
-      type: object
-      properties:
-        Instruments:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/InstrumentMeta'
-
-    # ============================================
-    # Sites
-    # ============================================
-    SitesResponse:
-      type: object
-      properties:
-        Sites:
-          type: array
-          items:
-            $ref: '#/components/schemas/Site'
-
-    Site:
-      type: object
-      properties:
-        Name:
-          type: string
-        Alias:
-          type: string
-
-tags:
-  - name: Authentication
-    description: Login and JWT token
-  - name: InstrumentManager
-    description: |
-      Instrument installation and bulk data operations:
-      - Install instruments from LINST/REDCap files
-      - Bulk upload instrument data via CSV
-      - Get expected CSV headers
-  - name: Projects
-    description: Project and instrument info
-  - name: Candidates
-    description: Candidate management
-  - name: Visits
-    description: Visit/timepoint management
-  - name: Instruments
-    description: Individual instrument data operations (per candidate/visit)
-  - name: Sites
-    description: Site information
+          description: Internal LORIS candidate ID

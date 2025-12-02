@@ -1,12 +1,10 @@
-# # VisitObjectMeta
+# # InstrumentManagerInstrumentDataPost200Response
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**candID** | **string** |  | [optional]
-**visit** | **string** |  | [optional]
-**site** | **string** |  | [optional]
-**project** | **string** |  | [optional]
+**success** | **bool** | Whether insertion succeeded | [optional]
+**message** | **string** | Success or error messages | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
