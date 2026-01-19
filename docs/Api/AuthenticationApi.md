@@ -1,8 +1,8 @@
 # LORISClient\AuthenticationApi
 
-JWT authentication
 
-All URIs are relative to http://http:, except if the operation defines another base path.
+
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
@@ -24,11 +24,15 @@ Authenticate and obtain JWT token
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure Bearer (JWT) authorization: BearerAuth
+$config = LORISClient\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
 
 $apiInstance = new LORISClient\Api\AuthenticationApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 $login_request = new \LORISClient\LORISClient\Model\LoginRequest(); // \LORISClient\LORISClient\Model\LoginRequest
 
@@ -52,7 +56,7 @@ try {
 
 ### Authorization
 
-No authorization required
+[BearerAuth](../../README.md#BearerAuth)
 
 ### HTTP request headers
 

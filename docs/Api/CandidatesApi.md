@@ -1,8 +1,8 @@
 # LORISClient\CandidatesApi
 
-Candidate management
 
-All URIs are relative to http://http:, except if the operation defines another base path.
+
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
@@ -14,7 +14,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `createCandidate()`
 
 ```php
-createCandidate($candidate_create_request): \LORISClient\LORISClient\Model\CandidateObject
+createCandidate($candidate_create_request)
 ```
 
 Create a new candidate
@@ -39,8 +39,7 @@ $apiInstance = new LORISClient\Api\CandidatesApi(
 $candidate_create_request = new \LORISClient\LORISClient\Model\CandidateCreateRequest(); // \LORISClient\LORISClient\Model\CandidateCreateRequest
 
 try {
-    $result = $apiInstance->createCandidate($candidate_create_request);
-    print_r($result);
+    $apiInstance->createCandidate($candidate_create_request);
 } catch (Exception $e) {
     echo 'Exception when calling CandidatesApi->createCandidate: ', $e->getMessage(), PHP_EOL;
 }
@@ -54,7 +53,7 @@ try {
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\CandidateObject**](../Model/CandidateObject.md)
+void (empty response body)
 
 ### Authorization
 
@@ -63,7 +62,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

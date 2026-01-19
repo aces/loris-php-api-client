@@ -8,7 +8,8 @@ Name | Type | Description | Notes
 **project** | **string** |  | [optional]
 **pscid** | **string** |  | [optional]
 **site** | **string** |  | [optional]
-**do_b** | **\DateTime** |  | [optional]
+**edc** | **string** |  | [optional]
+**do_b** | **string** |  | [optional]
 **sex** | **string** |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

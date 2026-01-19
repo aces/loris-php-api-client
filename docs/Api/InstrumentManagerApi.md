@@ -1,8 +1,8 @@
 # LORISClient\InstrumentManagerApi
 
-Instrument installation and bulk data upload. Configure: &#x60;$config-&gt;setHost($baseUrl)&#x60; (no &#x60;/api/{version}&#x60;)
 
-All URIs are relative to http://http:, except if the operation defines another base path.
+
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
@@ -14,7 +14,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `getInstrumentDataHeaders()`
 
 ```php
-getInstrumentDataHeaders($action, $instrument, $instruments): string
+getInstrumentDataHeaders($instrument): object
 ```
 
 Get expected CSV headers for instrument data upload
@@ -36,12 +36,10 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string
 $instrument = 'instrument_example'; // string
-$instruments = 'instruments_example'; // string
 
 try {
-    $result = $apiInstance->getInstrumentDataHeaders($action, $instrument, $instruments);
+    $result = $apiInstance->getInstrumentDataHeaders($instrument);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->getInstrumentDataHeaders: ', $e->getMessage(), PHP_EOL;
@@ -52,13 +50,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**|  | |
-| **instrument** | **string**|  | [optional] |
-| **instruments** | **string**|  | [optional] |
+| **instrument** | **string**|  | |
 
 ### Return type
 
-**string**
+**object**
 
 ### Authorization
 
@@ -67,7 +63,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `text/csv`, `application/json`
+- **Accept**: `application/json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -76,7 +72,7 @@ try {
 ## `installInstrument()`
 
 ```php
-installInstrument($install_file): \LORISClient\LORISClient\Model\SuccessResponse
+installInstrument($file): \LORISClient\LORISClient\Model\SuccessResponse
 ```
 
 Install instrument from LINST file or REDCap data dictionary
@@ -98,10 +94,10 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$install_file = '/path/to/file.txt'; // \SplFileObject | LINST file or REDCap CSV to install
+$file = '/path/to/file.txt'; // \SplFileObject
 
 try {
-    $result = $apiInstance->installInstrument($install_file);
+    $result = $apiInstance->installInstrument($file);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->installInstrument: ', $e->getMessage(), PHP_EOL;
@@ -112,7 +108,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **install_file** | **\SplFileObject****\SplFileObject**| LINST file or REDCap CSV to install | |
+| **file** | **\SplFileObject****\SplFileObject**|  | [optional] |
 
 ### Return type
 
@@ -134,7 +130,7 @@ try {
 ## `uploadInstrumentData()`
 
 ```php
-uploadInstrumentData($action, $data_file, $instrument, $multi_instrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
+uploadInstrumentData($file): \LORISClient\LORISClient\Model\InstrumentDataResponseMessage
 ```
 
 Bulk upload instrument data from CSV
@@ -156,13 +152,10 @@ $apiInstance = new LORISClient\Api\InstrumentManagerApi(
     new GuzzleHttp\Client(),
     $config
 );
-$action = 'action_example'; // string
-$data_file = '/path/to/file.txt'; // \SplFileObject | CSV file with instrument data
-$instrument = 'instrument_example'; // string | Single instrument name
-$multi_instrument = 'multi_instrument_example'; // string | Set to \\\"true\\\" for multi-instrument CSV
+$file = '/path/to/file.txt'; // \SplFileObject
 
 try {
-    $result = $apiInstance->uploadInstrumentData($action, $data_file, $instrument, $multi_instrument);
+    $result = $apiInstance->uploadInstrumentData($file);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentManagerApi->uploadInstrumentData: ', $e->getMessage(), PHP_EOL;
@@ -173,14 +166,11 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **action** | **string**|  | |
-| **data_file** | **\SplFileObject****\SplFileObject**| CSV file with instrument data | |
-| **instrument** | **string**| Single instrument name | [optional] |
-| **multi_instrument** | **string**| Set to \\\&quot;true\\\&quot; for multi-instrument CSV | [optional] |
+| **file** | **\SplFileObject****\SplFileObject**|  | [optional] |
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\InstrumentDataResponse**](../Model/InstrumentDataResponse.md)
+[**\LORISClient\LORISClient\Model\InstrumentDataResponseMessage**](../Model/InstrumentDataResponseMessage.md)
 
 ### Authorization
 

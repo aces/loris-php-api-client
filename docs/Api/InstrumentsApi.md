@@ -1,8 +1,8 @@
 # LORISClient\InstrumentsApi
 
-Per-candidate instrument data
 
-All URIs are relative to http://http:, except if the operation defines another base path.
+
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
@@ -15,7 +15,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `getInstrumentData()`
 
 ```php
-getInstrumentData($candid, $visit, $instrument): \LORISClient\LORISClient\Model\InstrumentData
+getInstrumentData($candid, $visit, $instrument): \LORISClient\LORISClient\Model\InstrumentDataResponse
 ```
 
 Get instrument data
@@ -59,7 +59,7 @@ try {
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\InstrumentData**](../Model/InstrumentData.md)
+[**\LORISClient\LORISClient\Model\InstrumentDataResponse**](../Model/InstrumentDataResponse.md)
 
 ### Authorization
 
@@ -137,7 +137,7 @@ try {
 ## `patchInstrumentData()`
 
 ```php
-patchInstrumentData($candid, $visit, $instrument, $instrument_data_request): \LORISClient\LORISClient\Model\InstrumentData
+patchInstrumentData($candid, $visit, $instrument, $instrument_data_request)
 ```
 
 Update instrument data
@@ -165,8 +165,7 @@ $instrument = 'instrument_example'; // string
 $instrument_data_request = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
 
 try {
-    $result = $apiInstance->patchInstrumentData($candid, $visit, $instrument, $instrument_data_request);
-    print_r($result);
+    $apiInstance->patchInstrumentData($candid, $visit, $instrument, $instrument_data_request);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentsApi->patchInstrumentData: ', $e->getMessage(), PHP_EOL;
 }
@@ -183,7 +182,7 @@ try {
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\InstrumentData**](../Model/InstrumentData.md)
+void (empty response body)
 
 ### Authorization
 
@@ -192,7 +191,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)
@@ -201,7 +200,7 @@ try {
 ## `putInstrumentData()`
 
 ```php
-putInstrumentData($candid, $visit, $instrument, $instrument_data_request): \LORISClient\LORISClient\Model\InstrumentData
+putInstrumentData($candid, $visit, $instrument, $instrument_data_request)
 ```
 
 Replace instrument data
@@ -229,8 +228,7 @@ $instrument = 'instrument_example'; // string
 $instrument_data_request = new \LORISClient\LORISClient\Model\InstrumentDataRequest(); // \LORISClient\LORISClient\Model\InstrumentDataRequest
 
 try {
-    $result = $apiInstance->putInstrumentData($candid, $visit, $instrument, $instrument_data_request);
-    print_r($result);
+    $apiInstance->putInstrumentData($candid, $visit, $instrument, $instrument_data_request);
 } catch (Exception $e) {
     echo 'Exception when calling InstrumentsApi->putInstrumentData: ', $e->getMessage(), PHP_EOL;
 }
@@ -247,7 +245,7 @@ try {
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\InstrumentData**](../Model/InstrumentData.md)
+void (empty response body)
 
 ### Authorization
 
@@ -256,7 +254,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

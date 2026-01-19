@@ -4,6 +4,6 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**meta** | [**\LORISClient\LORISClient\Model\VisitObjectMeta**](VisitObjectMeta.md) |  | [optional]
+**meta** | [**\LORISClient\LORISClient\Model\VisitCreateRequestMeta**](VisitCreateRequestMeta.md) |  | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

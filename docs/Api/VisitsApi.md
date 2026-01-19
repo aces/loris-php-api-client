@@ -1,8 +1,8 @@
 # LORISClient\VisitsApi
 
-Visit/timepoint management
 
-All URIs are relative to http://http:, except if the operation defines another base path.
+
+All URIs are relative to https://demo.loris.ca/api/v0.0.4-dev, except if the operation defines another base path.
 
 | Method | HTTP request | Description |
 | ------------- | ------------- | ------------- |
@@ -13,7 +13,7 @@ All URIs are relative to http://http:, except if the operation defines another b
 ## `createVisit()`
 
 ```php
-createVisit($candid, $visit, $visit_create_request): \LORISClient\LORISClient\Model\VisitObject
+createVisit($candid, $visit, $visit_create_request)
 ```
 
 Create a new visit
@@ -40,8 +40,7 @@ $visit = 'visit_example'; // string
 $visit_create_request = new \LORISClient\LORISClient\Model\VisitCreateRequest(); // \LORISClient\LORISClient\Model\VisitCreateRequest
 
 try {
-    $result = $apiInstance->createVisit($candid, $visit, $visit_create_request);
-    print_r($result);
+    $apiInstance->createVisit($candid, $visit, $visit_create_request);
 } catch (Exception $e) {
     echo 'Exception when calling VisitsApi->createVisit: ', $e->getMessage(), PHP_EOL;
 }
@@ -57,7 +56,7 @@ try {
 
 ### Return type
 
-[**\LORISClient\LORISClient\Model\VisitObject**](../Model/VisitObject.md)
+void (empty response body)
 
 ### Authorization
 
@@ -66,7 +65,7 @@ try {
 ### HTTP request headers
 
 - **Content-Type**: `application/json`
-- **Accept**: `application/json`
+- **Accept**: Not defined
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

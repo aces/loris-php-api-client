@@ -1,15 +1,14 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: LORIS REST API
+  title: LORIS API
   description: |
     LORIS REST API and Module endpoints.
-    
+
     ## Server Configuration
-    
     | Type | Configuration | Endpoints |
-    |------|---------------|-----------|
+    | --- | --- | --- |
     | REST API | `setHost("{$baseUrl}/api/{$version}")` | /login, /candidates, /projects, /sites |
-    | Module | `setHost($baseUrl)` | /instrument_manager/* |
+    | Module | `setHost($baseUrl)` | /instrument_manager/*, /cbigr_api/script/* |
   contact:
     name: LORIS Development Team
     url: https://github.com/aces/Loris
@@ -17,27 +16,26 @@ info:
     name: GNU Public License, Version 3
     url: https://opensource.org/licenses/GPL-3.0
   version: 0.0.4-dev
-
 servers:
-  - url: '{baseUrl}'
+  - url: '{baseUrl}/api/{version}'
+    description: REST API endpoints
     variables:
       baseUrl:
-        default: ''
-        description: Set via Configuration::setHost()
-
-security:
-  - BearerAuth: []
-
+        default: https://demo.loris.ca
+      version:
+        default: v0.0.4-dev
+  - url: '{baseUrl}'
+    description: Module endpoints (instrument_manager, cbigr_api)
+    variables:
+      baseUrl:
+        default: https://demo.loris.ca
 paths:
-  # ═══════════════════════════════════════════════════════════════════════════
-  # AUTHENTICATION
-  # ═══════════════════════════════════════════════════════════════════════════
   /login:
     post:
-      tags: [Authentication]
+      tags:
+        - Authentication
       summary: Authenticate and obtain JWT token
       operationId: login
-      security: []
       requestBody:
         required: true
         content:
@@ -53,129 +51,15 @@ paths:
                 $ref: '#/components/schemas/LoginResponse'
         '401':
           description: Invalid credentials
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # INSTRUMENT MANAGER (Module endpoints)
-  # Configure: $config->setHost($baseUrl)  -- NO /api/{version}
-  # ═══════════════════════════════════════════════════════════════════════════
-  /instrument_manager:
-    post:
-      tags: [InstrumentManager]
-      summary: Install instrument from LINST file or REDCap data dictionary
-      operationId: installInstrument
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required: [install_file]
-              properties:
-                install_file:
-                  type: string
-                  format: binary
-                  description: LINST file or REDCap CSV to install
-      responses:
-        '201':
-          description: Instrument installed successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SuccessResponse'
-        '400':
-          description: Invalid file format
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /instrument_manager/instrument_data:
-    get:
-      tags: [InstrumentManager]
-      summary: Get expected CSV headers for instrument data upload
-      operationId: getInstrumentDataHeaders
-      parameters:
-        - name: action
-          in: query
-          required: true
-          schema:
-            type: string
-            enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
-        - name: instrument
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: instruments
-          in: query
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: CSV template with headers
-          content:
-            text/csv:
-              schema:
-                type: string
-        '400':
-          description: Invalid parameters
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-    post:
-      tags: [InstrumentManager]
-      summary: Bulk upload instrument data from CSV
-      operationId: uploadInstrumentData
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              required: [action, data_file]
-              properties:
-                action:
-                  type: string
-                  enum: [CREATE_SESSIONS, VALIDATE_SESSIONS]
-                instrument:
-                  type: string
-                  description: Single instrument name
-                multi-instrument:
-                  type: string
-                  description: Set to "true" for multi-instrument CSV
-                data_file:
-                  type: string
-                  format: binary
-                  description: CSV file with instrument data
-      responses:
-        '200':
-          description: Validation errors occurred
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentDataResponse'
-        '201':
-          description: Data inserted successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentDataResponse'
-
-  # ═══════════════════════════════════════════════════════════════════════════
-  # CANDIDATES
-  # ═══════════════════════════════════════════════════════════════════════════
   /candidates:
     get:
-      tags: [Candidates]
+      tags:
+        - Candidates
       summary: List all candidates
       operationId: getCandidates
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: List of candidates
@@ -183,11 +67,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CandidatesResponse'
-
     post:
-      tags: [Candidates]
+      tags:
+        - Candidates
       summary: Create a new candidate
       operationId: createCandidate
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -197,22 +83,17 @@ paths:
       responses:
         '201':
           description: Candidate created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CandidateObject'
-        '409':
-          description: PSCID already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid request
 
   /candidates/{candid}:
     get:
-      tags: [Candidates]
+      tags:
+        - Candidates
       summary: Get candidate details
       operationId: getCandidate
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -228,19 +109,15 @@ paths:
                 $ref: '#/components/schemas/CandidateObject'
         '404':
           description: Candidate not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # VISITS
-  # ═══════════════════════════════════════════════════════════════════════════
   /candidates/{candid}/{visit}:
     get:
-      tags: [Visits]
+      tags:
+        - Visits
       summary: Get visit details
       operationId: getVisit
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -259,11 +136,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VisitObject'
-
+        '404':
+          description: Visit not found
     put:
-      tags: [Visits]
+      tags:
+        - Visits
       summary: Create a new visit
       operationId: createVisit
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -284,25 +165,17 @@ paths:
       responses:
         '201':
           description: Visit created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VisitObject'
-        '409':
-          description: Visit already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Invalid request
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # INSTRUMENTS (per candidate/visit)
-  # ═══════════════════════════════════════════════════════════════════════════
   /candidates/{candid}/{visit}/instruments:
     get:
-      tags: [Instruments]
+      tags:
+        - Instruments
       summary: List instruments for a visit
       operationId: getVisitInstruments
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -324,9 +197,12 @@ paths:
 
   /candidates/{candid}/{visit}/instruments/{instrument}:
     get:
-      tags: [Instruments]
+      tags:
+        - Instruments
       summary: Get instrument data
       operationId: getInstrumentData
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -349,12 +225,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstrumentData'
-
+                $ref: '#/components/schemas/InstrumentDataResponse'
+        '404':
+          description: Instrument not found
     put:
-      tags: [Instruments]
+      tags:
+        - Instruments
       summary: Replace instrument data
       operationId: putInstrumentData
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -380,15 +260,15 @@ paths:
       responses:
         '200':
           description: Data replaced
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentData'
-
+        '400':
+          description: Invalid request
     patch:
-      tags: [Instruments]
+      tags:
+        - Instruments
       summary: Update instrument data
       operationId: patchInstrumentData
+      security:
+        - BearerAuth: []
       parameters:
         - name: candid
           in: path
@@ -414,19 +294,17 @@ paths:
       responses:
         '200':
           description: Data updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InstrumentData'
+        '400':
+          description: Invalid request
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # PROJECTS
-  # ═══════════════════════════════════════════════════════════════════════════
   /projects:
     get:
-      tags: [Projects]
+      tags:
+        - Projects
       summary: List projects
       operationId: getProjects
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: List of projects
@@ -437,9 +315,12 @@ paths:
 
   /projects/{project}:
     get:
-      tags: [Projects]
+      tags:
+        - Projects
       summary: Get project details
       operationId: getProject
+      security:
+        - BearerAuth: []
       parameters:
         - name: project
           in: path
@@ -456,9 +337,12 @@ paths:
 
   /projects/{project}/instruments:
     get:
-      tags: [Projects]
+      tags:
+        - Projects
       summary: List project instruments
       operationId: getProjectInstruments
+      security:
+        - BearerAuth: []
       parameters:
         - name: project
           in: path
@@ -467,20 +351,20 @@ paths:
             type: string
       responses:
         '200':
-          description: Instruments list
+          description: List of instruments
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InstrumentsResponse'
 
-  # ═══════════════════════════════════════════════════════════════════════════
-  # SITES
-  # ═══════════════════════════════════════════════════════════════════════════
   /sites:
     get:
-      tags: [Sites]
+      tags:
+        - Sites
       summary: List sites
       operationId: getSites
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: List of sites
@@ -488,6 +372,159 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SitesResponse'
+
+  /instrument_manager:
+    post:
+      tags:
+        - InstrumentManager
+      summary: Install instrument from LINST file or REDCap data dictionary
+      operationId: installInstrument
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Instrument installed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Invalid request
+
+  /instrument_manager/instrument_data:
+    get:
+      tags:
+        - InstrumentManager
+      summary: Get expected CSV headers for instrument data upload
+      operationId: getInstrumentDataHeaders
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: instrument
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: CSV headers
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+        - InstrumentManager
+      summary: Bulk upload instrument data from CSV
+      operationId: uploadInstrumentData
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Data uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstrumentDataResponseMessage'
+        '400':
+          description: Invalid request
+
+  # ==========================================================================
+  # Script API (CBIGR Module - use base URL without /api/version)
+  # ==========================================================================
+  /cbigr_api/script/bidsimport:
+    post:
+      tags:
+        - Script
+      summary: Import BIDS dataset into LORIS
+      description: Executes import_bids_dataset.py to import a BIDS dataset into LORIS.
+      operationId: runBidsImport
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BidsImportRequest'
+      responses:
+        '200':
+          description: Script executed (sync mode)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptSyncResponse'
+        '202':
+          description: Script started (async mode)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptAsyncResponse'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
+
+  /cbigr_api/script/tarchiveloader:
+    post:
+      tags:
+        - Script
+      summary: Load DICOM tarchive into LORIS
+      description: Executes tarchiveLoader.pl to process a DICOM archive.
+      operationId: runTarchiveLoader
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TarchiveLoaderRequest'
+      responses:
+        '200':
+          description: Script executed (sync mode)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptSyncResponse'
+        '202':
+          description: Script started (async mode)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScriptAsyncResponse'
+        '400':
+          description: Invalid request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Server error
 
 components:
   securitySchemes:
@@ -499,55 +536,19 @@ components:
   schemas:
     LoginRequest:
       type: object
-      required: [username, password]
+      required:
+        - username
+        - password
       properties:
         username:
           type: string
         password:
           type: string
-          format: password
 
     LoginResponse:
       type: object
       properties:
         token:
-          type: string
-
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-
-    SuccessResponse:
-      type: object
-      properties:
-        ok:
-          type: string
-          default: "ok"
-
-    InstrumentDataResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                type: object
-        idMapping:
-          type: array
-          items:
-            $ref: '#/components/schemas/IdMapping'
-
-    IdMapping:
-      type: object
-      properties:
-        ExtStudyID:
-          type: string
-        CandID:
           type: string
 
     CandidatesResponse:
@@ -569,9 +570,10 @@ components:
           type: string
         Site:
           type: string
+        EDC:
+          type: string
         DoB:
           type: string
-          format: date
         Sex:
           type: string
           enum: [Male, Female, Other]
@@ -580,38 +582,49 @@ components:
       type: object
       properties:
         Candidate:
-          type: object
-          required: [Project, DoB, Sex, Site]
-          properties:
-            Project:
-              type: string
-            PSCID:
-              type: string
-            DoB:
-              type: string
-              format: date
-            Sex:
-              type: string
-              enum: [Male, Female, Other]
-            Site:
-              type: string
+          $ref: '#/components/schemas/CandidateCreateRequestCandidate'
+
+    CandidateCreateRequestCandidate:
+      type: object
+      required:
+        - Project
+        - Site
+        - DoB
+        - Sex
+      properties:
+        Project:
+          type: string
+        Site:
+          type: string
+        EDC:
+          type: string
+        DoB:
+          type: string
+        Sex:
+          type: string
+          enum: [Male, Female, Other]
 
     VisitObject:
       type: object
       properties:
         Meta:
-          type: object
-          properties:
-            CandID:
-              type: string
-            Visit:
-              type: string
-            Site:
-              type: string
-            Project:
-              type: string
+          $ref: '#/components/schemas/VisitObjectMeta'
         Stages:
           type: object
+
+    VisitObjectMeta:
+      type: object
+      properties:
+        CandID:
+          type: string
+        Visit:
+          type: string
+        Site:
+          type: string
+        Battery:
+          type: string
+        Project:
+          type: string
 
     VisitCreateRequest:
       type: object
@@ -625,6 +638,8 @@ components:
               type: string
             Site:
               type: string
+            Battery:
+              type: string
             Project:
               type: string
 
@@ -633,6 +648,11 @@ components:
       properties:
         Meta:
           type: object
+          properties:
+            CandID:
+              type: string
+            Visit:
+              type: string
         Instruments:
           type: array
           items:
@@ -642,53 +662,55 @@ components:
       type: object
       properties:
         Meta:
-          type: object
-          properties:
-            Instrument:
-              type: string
-            Visit:
-              type: string
-            CandID:
-              type: string
-            DDE:
-              type: boolean
+          $ref: '#/components/schemas/InstrumentDataMeta'
         Data:
           type: object
-          additionalProperties: true
+
+    InstrumentDataMeta:
+      type: object
+      properties:
+        Instrument:
+          type: string
+        Visit:
+          type: string
+        CandID:
+          type: string
+        DDE:
+          type: boolean
 
     InstrumentDataRequest:
       type: object
       properties:
         Meta:
-          type: object
-          properties:
-            Instrument:
-              type: string
-            Visit:
-              type: string
-            CandID:
-              type: string
+          $ref: '#/components/schemas/InstrumentDataRequestMeta'
         Data:
           type: object
-          additionalProperties: true
 
-    ProjectsResponse:
+    InstrumentDataRequestMeta:
       type: object
       properties:
-        Projects:
-          type: array
-          items:
-            type: string
+        CandID:
+          type: string
+        Visit:
+          type: string
+        Instrument:
+          type: string
+        DDE:
+          type: boolean
 
-    ProjectResponse:
+    InstrumentDataResponse:
       type: object
       properties:
         Meta:
+          $ref: '#/components/schemas/InstrumentDataMeta'
+        Data:
           type: object
-        Instruments:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/InstrumentMeta'
+
+    InstrumentDataResponseMessage:
+      type: object
+      properties:
+        message:
+          type: string
 
     InstrumentMeta:
       type: object
@@ -703,10 +725,54 @@ components:
     InstrumentsResponse:
       type: object
       properties:
+        Meta:
+          type: object
+          properties:
+            Project:
+              type: string
         Instruments:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/InstrumentMeta'
+
+    ProjectsResponse:
+      type: object
+      properties:
+        Projects:
+          type: array
+          items:
+            type: string
+
+    ProjectResponse:
+      type: object
+      properties:
+        Meta:
+          type: object
+          properties:
+            Project:
+              type: string
+        Visits:
+          type: array
+          items:
+            type: string
+        Instruments:
+          type: array
+          items:
+            type: string
+        Candidates:
+          type: array
+          items:
+            type: string
+
+    Site:
+      type: object
+      properties:
+        Name:
+          type: string
+        Alias:
+          type: string
+        MRI_alias:
+          type: string
 
     SitesResponse:
       type: object
@@ -716,28 +782,134 @@ components:
           items:
             $ref: '#/components/schemas/Site'
 
-    Site:
+    ErrorResponse:
       type: object
       properties:
-        Name:
-          type: string
-        Alias:
+        error:
           type: string
 
-tags:
-  - name: Authentication
-    description: JWT authentication
-  - name: InstrumentManager
-    description: |
-      Instrument installation and bulk data upload.
-      Configure: `$config->setHost($baseUrl)` (no `/api/{version}`)
-  - name: Candidates
-    description: Candidate management
-  - name: Visits
-    description: Visit/timepoint management
-  - name: Instruments
-    description: Per-candidate instrument data
-  - name: Projects
-    description: Project information
-  - name: Sites
-    description: Site information
+    SuccessResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    IdMapping:
+      type: object
+      properties:
+        id:
+          type: string
+        mapping:
+          type: string
+
+    # ==========================================================================
+    # Script API Schemas
+    # ==========================================================================
+    BidsImportRequest:
+      type: object
+      required:
+        - args
+      properties:
+        args:
+          type: object
+          required:
+            - directory
+          properties:
+            directory:
+              type: string
+              description: BIDS directory to parse and insert into LORIS
+            profile:
+              type: string
+              default: database_config.py
+            type:
+              type: string
+              enum: [raw, derivative]
+        flags:
+          type: array
+          items:
+            type: string
+            enum: [createcandidate, createsession, nobidsvalidation, nocopy, verbose]
+        async:
+          type: boolean
+          default: false
+
+    TarchiveLoaderRequest:
+      type: object
+      required:
+        - args
+      properties:
+        args:
+          type: object
+          required:
+            - tarchive
+          properties:
+            tarchive:
+              type: string
+              description: Full path to DICOM tarchive file
+            profile:
+              type: string
+              default: prod
+            upload_id:
+              type: integer
+            center_name:
+              type: string
+        flags:
+          type: array
+          items:
+            type: string
+            enum: [verbose, glob_location, reckless, force, no_jiv, is_hrrt, no_nifti, no_minc, bypass_extra_checks]
+        async:
+          type: boolean
+          default: false
+
+    ScriptSyncResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [success, error]
+        code:
+          type: integer
+        command:
+          type: string
+        output:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScriptError'
+        error_type:
+          type: string
+
+    ScriptAsyncResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        job_id:
+          type: string
+        pid:
+          type: string
+        script:
+          type: string
+        command:
+          type: string
+        log_file:
+          type: string
+        tail_cmd:
+          type: string
+
+    ScriptError:
+      type: object
+      properties:
+        type:
+          type: string
+        message:
+          type: string
+
+security:
+  - BearerAuth: []
