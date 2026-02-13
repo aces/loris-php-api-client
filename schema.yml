@@ -373,11 +373,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/SitesResponse'
 
+  # ==========================================================================
+  # INSTRUMENT MANAGER ENDPOINTS - UPDATED WITH FORMAT PARAMETER
+  # ==========================================================================
   /instrument_manager:
     post:
       tags:
         - InstrumentManager
-      summary: Install instrument from LINST file or REDCap data dictionary
+      summary: Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
       operationId: installInstrument
       security:
         - BearerAuth: []
@@ -386,46 +389,85 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/InstrumentManagerForm'
       responses:
         '201':
-          description: Instrument installed
+          description: Successfully created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SuccessResponse'
+                type: object
+                properties:
+                  ok:
+                    type: string
+                    default: "ok"
+                    description: Contains the string "ok"
         '400':
           description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /instrument_manager/instrument_data:
     get:
       tags:
         - InstrumentManager
-      summary: Get expected CSV headers for instrument data upload
+      summary: Get expected CSV or TSV headers for instrument data upload
       operationId: getInstrumentDataHeaders
       security:
         - BearerAuth: []
       parameters:
-        - name: instrument
+        - name: action
           in: query
+          description: Either CREATE_SESSIONS or VALIDATE_SESSIONS
           required: true
           schema:
             type: string
+            enum:
+              - CREATE_SESSIONS
+              - VALIDATE_SESSIONS
+        - name: format
+          in: query
+          description: Data format - either LORIS_CSV or BIDS_TSV
+          required: true
+          schema:
+            type: string
+            enum:
+              - LORIS_CSV
+              - BIDS_TSV
+        - name: instrument
+          in: query
+          description: Single instrument name
+          required: false
+          schema:
+            type: string
+        - name: instruments
+          in: query
+          description: Multiple instrument names
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
-          description: CSV headers
+          description: CSV or TSV file with expected headers
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Invalid parameters or invalid combination (BIDS_TSV with CREATE_SESSIONS)
           content:
             application/json:
               schema:
-                type: object
+                $ref: '#/components/schemas/ErrorResponse'
     post:
       tags:
         - InstrumentManager
-      summary: Bulk upload instrument data from CSV
+      summary: Bulk upload instrument data from CSV or TSV file
       operationId: uploadInstrumentData
       security:
         - BearerAuth: []
@@ -434,20 +476,53 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/InstrumentDataForm'
       responses:
         '200':
-          description: Data uploaded
+          description: Validation errors
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InstrumentDataResponseMessage'
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether or not the insertion was successful
+                  message:
+                    oneOf:
+                      - type: string
+                      - type: array
+                        items:
+                          type: string
+        '201':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Whether or not the insertion was successful
+                  message:
+                    type: string
+                    description: Success message
+                  idMapping:
+                    type: array
+                    description: Mapping of candidates' internal to external ID
+                    items:
+                      type: object
+                      properties:
+                        ExtStudyID:
+                          type: string
+                        CandID:
+                          type: string
         '400':
-          description: Invalid request
+          description: Invalid request or invalid combination (BIDS_TSV with CREATE_SESSIONS)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   # ==========================================================================
   # Script API (CBIGR Module - use base URL without /api/version)
@@ -801,6 +876,57 @@ components:
           type: string
         mapping:
           type: string
+
+    # ==========================================================================
+    # INSTRUMENT MANAGER SCHEMAS - NEW SCHEMAS WITH FORMAT PARAMETER
+    # ==========================================================================
+    InstrumentDataForm:
+      type: object
+      required:
+        - action
+        - format
+        - data_file
+      properties:
+        action:
+          type: string
+          description: Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist
+          enum:
+            - CREATE_SESSIONS
+            - VALIDATE_SESSIONS
+        format:
+          type: string
+          description: Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action
+          enum:
+            - LORIS_CSV
+            - BIDS_TSV
+        instrument:
+          type: string
+          description: Set when a single instrument is selected
+        multi-instrument:
+          type: string
+          description: Set when multiple instruments are selected (JSON array with format [{"value":"instrument1"},{"value":"instrument2"}])
+        data_file:
+          type: string
+          description: CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s)
+          format: binary
+
+    InstrumentManagerForm:
+      type: object
+      required:
+        - install_file
+        - instrument_type
+      properties:
+        install_file:
+          type: string
+          description: Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries
+          format: binary
+        instrument_type:
+          type: string
+          description: Instrument type
+          enum:
+            - bids
+            - linst
+            - redcap
 
     # ==========================================================================
     # Script API Schemas

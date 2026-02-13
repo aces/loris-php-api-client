@@ -87,9 +87,9 @@ Class | Method | HTTP request | Description
 *CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
 *CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
 *CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | List all candidates
-*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV headers for instrument data upload
-*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from LINST file or REDCap data dictionary
-*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV
+*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV or TSV headers for instrument data upload
+*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV or TSV file
 *InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data
 *InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | List instruments for a visit
 *InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data
@@ -113,6 +113,7 @@ Class | Method | HTTP request | Description
 - [CandidatesResponse](docs/Model/CandidatesResponse.md)
 - [ErrorResponse](docs/Model/ErrorResponse.md)
 - [IdMapping](docs/Model/IdMapping.md)
+- [InstallInstrument201Response](docs/Model/InstallInstrument201Response.md)
 - [InstrumentData](docs/Model/InstrumentData.md)
 - [InstrumentDataMeta](docs/Model/InstrumentDataMeta.md)
 - [InstrumentDataRequest](docs/Model/InstrumentDataRequest.md)
@@ -134,6 +135,10 @@ Class | Method | HTTP request | Description
 - [SuccessResponse](docs/Model/SuccessResponse.md)
 - [TarchiveLoaderRequest](docs/Model/TarchiveLoaderRequest.md)
 - [TarchiveLoaderRequestArgs](docs/Model/TarchiveLoaderRequestArgs.md)
+- [UploadInstrumentData200Response](docs/Model/UploadInstrumentData200Response.md)
+- [UploadInstrumentData200ResponseMessage](docs/Model/UploadInstrumentData200ResponseMessage.md)
+- [UploadInstrumentData201Response](docs/Model/UploadInstrumentData201Response.md)
+- [UploadInstrumentData201ResponseIdMappingInner](docs/Model/UploadInstrumentData201ResponseIdMappingInner.md)
 - [VisitCreateRequest](docs/Model/VisitCreateRequest.md)
 - [VisitCreateRequestMeta](docs/Model/VisitCreateRequestMeta.md)
 - [VisitInstrumentsResponse](docs/Model/VisitInstrumentsResponse.md)
