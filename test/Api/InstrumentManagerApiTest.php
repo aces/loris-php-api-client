@@ -74,7 +74,7 @@ class InstrumentManagerApiTest extends TestCase
     /**
      * Test case for getInstrumentDataHeaders
      *
-     * Get expected CSV or TSV headers for instrument data upload.
+     * Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV)..
      *
      */
     public function testGetInstrumentDataHeaders()
@@ -86,7 +86,7 @@ class InstrumentManagerApiTest extends TestCase
     /**
      * Test case for installInstrument
      *
-     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv).
+     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap)..
      *
      */
     public function testInstallInstrument()
@@ -98,7 +98,7 @@ class InstrumentManagerApiTest extends TestCase
     /**
      * Test case for uploadInstrumentData
      *
-     * Bulk upload instrument data from CSV or TSV file.
+     * Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column..
      *
      */
     public function testUploadInstrumentData()

@@ -374,13 +374,13 @@ paths:
                 $ref: '#/components/schemas/SitesResponse'
 
   # ==========================================================================
-  # INSTRUMENT MANAGER ENDPOINTS - UPDATED WITH FORMAT PARAMETER
+  # INSTRUMENT MANAGER ENDPOINTS (im3 — explicit parameters)
   # ==========================================================================
   /instrument_manager:
     post:
       tags:
         - InstrumentManager
-      summary: Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+      summary: Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
       operationId: installInstrument
       security:
         - BearerAuth: []
@@ -413,7 +413,7 @@ paths:
     get:
       tags:
         - InstrumentManager
-      summary: Get expected CSV or TSV headers for instrument data upload
+      summary: Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
       operationId: getInstrumentDataHeaders
       security:
         - BearerAuth: []
@@ -429,12 +429,17 @@ paths:
               - VALIDATE_SESSIONS
         - name: format
           in: query
-          description: Data format - either LORIS_CSV or BIDS_TSV
+          description: |
+            Data format for the returned headers template.
+            LORIS_CSV — standard LORIS CSV headers
+            REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.)
+            BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS)
           required: true
           schema:
             type: string
             enum:
               - LORIS_CSV
+              - REDCAP_CSV
               - BIDS_TSV
         - name: instrument
           in: query
@@ -467,7 +472,10 @@ paths:
     post:
       tags:
         - InstrumentManager
-      summary: Bulk upload instrument data from CSV or TSV file
+      summary: |
+        Bulk upload instrument data from CSV or TSV file.
+        Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields.
+        Client auto-detects REDCap CSV via redcap_event_name column.
       operationId: uploadInstrumentData
       security:
         - BearerAuth: []
@@ -878,7 +886,7 @@ components:
           type: string
 
     # ==========================================================================
-    # INSTRUMENT MANAGER SCHEMAS - NEW SCHEMAS WITH FORMAT PARAMETER
+    # INSTRUMENT MANAGER SCHEMAS (im3 — explicit parameters)
     # ==========================================================================
     InstrumentDataForm:
       type: object
@@ -889,16 +897,33 @@ components:
       properties:
         action:
           type: string
-          description: Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist
+          description: |
+            Either CREATE_SESSIONS or VALIDATE_SESSIONS.
+            VALIDATE_SESSIONS is used when all sessions already exist.
+            Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS.
           enum:
             - CREATE_SESSIONS
             - VALIDATE_SESSIONS
         format:
           type: string
-          description: Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action
+          description: |
+            Data format of the uploaded file.
+            LORIS_CSV — standard LORIS CSV export
+            REDCAP_CSV — REDCap CSV export (contains redcap_event_name column)
+            BIDS_TSV — BIDS phenotype TSV (tab-separated)
+            Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV
           enum:
             - LORIS_CSV
+            - REDCAP_CSV
             - BIDS_TSV
+        strict:
+          type: boolean
+          default: false
+          description: |
+            Column validation mode.
+            true — all template columns must be present in the uploaded file
+            false — non-essential columns (e.g. _status, _date suffixes) may be missing
+            Pipeline always sends false.
         instrument:
           type: string
           description: Set when a single instrument is selected
@@ -907,7 +932,7 @@ components:
           description: Set when multiple instruments are selected (JSON array with format [{"value":"instrument1"},{"value":"instrument2"}])
         data_file:
           type: string
-          description: CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s)
+          description: CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s).
           format: binary
 
     InstrumentManagerForm:
@@ -918,11 +943,16 @@ components:
       properties:
         install_file:
           type: string
-          description: Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries
+          description: |
+            Instrument definition file to install.
+            Can be a LINST file (.linst), a BIDS JSON sidecar (.json),
+            or a CSV file with one or more REDCap data dictionaries (.csv).
           format: binary
         instrument_type:
           type: string
-          description: Instrument type
+          description: |
+            Instrument type — must match the file extension.
+            Client auto-detects: .csv → redcap, .linst → linst, .json → bids
           enum:
             - bids
             - linst

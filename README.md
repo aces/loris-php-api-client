@@ -87,9 +87,9 @@ Class | Method | HTTP request | Description
 *CandidatesApi* | [**createCandidate**](docs/Api/CandidatesApi.md#createcandidate) | **POST** /candidates | Create a new candidate
 *CandidatesApi* | [**getCandidate**](docs/Api/CandidatesApi.md#getcandidate) | **GET** /candidates/{candid} | Get candidate details
 *CandidatesApi* | [**getCandidates**](docs/Api/CandidatesApi.md#getcandidates) | **GET** /candidates | List all candidates
-*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV or TSV headers for instrument data upload
-*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
-*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV or TSV file
+*InstrumentManagerApi* | [**getInstrumentDataHeaders**](docs/Api/InstrumentManagerApi.md#getinstrumentdataheaders) | **GET** /instrument_manager/instrument_data | Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
+*InstrumentManagerApi* | [**installInstrument**](docs/Api/InstrumentManagerApi.md#installinstrument) | **POST** /instrument_manager | Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
+*InstrumentManagerApi* | [**uploadInstrumentData**](docs/Api/InstrumentManagerApi.md#uploadinstrumentdata) | **POST** /instrument_manager/instrument_data | Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column.
 *InstrumentsApi* | [**getInstrumentData**](docs/Api/InstrumentsApi.md#getinstrumentdata) | **GET** /candidates/{candid}/{visit}/instruments/{instrument} | Get instrument data
 *InstrumentsApi* | [**getVisitInstruments**](docs/Api/InstrumentsApi.md#getvisitinstruments) | **GET** /candidates/{candid}/{visit}/instruments | List instruments for a visit
 *InstrumentsApi* | [**patchInstrumentData**](docs/Api/InstrumentsApi.md#patchinstrumentdata) | **PATCH** /candidates/{candid}/{visit}/instruments/{instrument} | Update instrument data

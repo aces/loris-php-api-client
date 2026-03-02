@@ -134,10 +134,10 @@ class InstrumentManagerApi
     /**
      * Operation getInstrumentDataHeaders
      *
-     * Get expected CSV or TSV headers for instrument data upload
+     * Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
      *
      * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS (required)
-     * @param  string $format Data format - either LORIS_CSV or BIDS_TSV (required)
+     * @param  string $format Data format for the returned headers template. LORIS_CSV — standard LORIS CSV headers REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.) BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS) (required)
      * @param  string|null $instrument Single instrument name (optional)
      * @param  string[]|null $instruments Multiple instrument names (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getInstrumentDataHeaders'] to see the possible values for this operation
@@ -155,10 +155,10 @@ class InstrumentManagerApi
     /**
      * Operation getInstrumentDataHeadersWithHttpInfo
      *
-     * Get expected CSV or TSV headers for instrument data upload
+     * Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
      *
      * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS (required)
-     * @param  string $format Data format - either LORIS_CSV or BIDS_TSV (required)
+     * @param  string $format Data format for the returned headers template. LORIS_CSV — standard LORIS CSV headers REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.) BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS) (required)
      * @param  string|null $instrument Single instrument name (optional)
      * @param  string[]|null $instruments Multiple instrument names (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getInstrumentDataHeaders'] to see the possible values for this operation
@@ -257,10 +257,10 @@ class InstrumentManagerApi
     /**
      * Operation getInstrumentDataHeadersAsync
      *
-     * Get expected CSV or TSV headers for instrument data upload
+     * Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
      *
      * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS (required)
-     * @param  string $format Data format - either LORIS_CSV or BIDS_TSV (required)
+     * @param  string $format Data format for the returned headers template. LORIS_CSV — standard LORIS CSV headers REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.) BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS) (required)
      * @param  string|null $instrument Single instrument name (optional)
      * @param  string[]|null $instruments Multiple instrument names (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getInstrumentDataHeaders'] to see the possible values for this operation
@@ -281,10 +281,10 @@ class InstrumentManagerApi
     /**
      * Operation getInstrumentDataHeadersAsyncWithHttpInfo
      *
-     * Get expected CSV or TSV headers for instrument data upload
+     * Get expected CSV or TSV headers for instrument data upload. Requires format query param (LORIS_CSV/REDCAP_CSV/BIDS_TSV).
      *
      * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS (required)
-     * @param  string $format Data format - either LORIS_CSV or BIDS_TSV (required)
+     * @param  string $format Data format for the returned headers template. LORIS_CSV — standard LORIS CSV headers REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.) BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS) (required)
      * @param  string|null $instrument Single instrument name (optional)
      * @param  string[]|null $instruments Multiple instrument names (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getInstrumentDataHeaders'] to see the possible values for this operation
@@ -337,7 +337,7 @@ class InstrumentManagerApi
      * Create request for operation 'getInstrumentDataHeaders'
      *
      * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS (required)
-     * @param  string $format Data format - either LORIS_CSV or BIDS_TSV (required)
+     * @param  string $format Data format for the returned headers template. LORIS_CSV — standard LORIS CSV headers REDCAP_CSV — REDCap-style CSV headers (includes redcap_event_name etc.) BIDS_TSV — BIDS phenotype TSV headers (cannot be combined with CREATE_SESSIONS) (required)
      * @param  string|null $instrument Single instrument name (optional)
      * @param  string[]|null $instruments Multiple instrument names (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['getInstrumentDataHeaders'] to see the possible values for this operation
@@ -472,10 +472,10 @@ class InstrumentManagerApi
     /**
      * Operation installInstrument
      *
-     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
      *
-     * @param  \SplFileObject $install_file Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries (required)
-     * @param  string $instrument_type Instrument type (required)
+     * @param  \SplFileObject $install_file Instrument definition file to install. Can be a LINST file (.linst), a BIDS JSON sidecar (.json), or a CSV file with one or more REDCap data dictionaries (.csv). (required)
+     * @param  string $instrument_type Instrument type — must match the file extension. Client auto-detects: .csv → redcap, .linst → linst, .json → bids (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
@@ -491,10 +491,10 @@ class InstrumentManagerApi
     /**
      * Operation installInstrumentWithHttpInfo
      *
-     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
      *
-     * @param  \SplFileObject $install_file Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries (required)
-     * @param  string $instrument_type Instrument type (required)
+     * @param  \SplFileObject $install_file Instrument definition file to install. Can be a LINST file (.linst), a BIDS JSON sidecar (.json), or a CSV file with one or more REDCap data dictionaries (.csv). (required)
+     * @param  string $instrument_type Instrument type — must match the file extension. Client auto-detects: .csv → redcap, .linst → linst, .json → bids (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \LORISClient\ApiException on non-2xx response or if the response body is not in the expected format
@@ -591,10 +591,10 @@ class InstrumentManagerApi
     /**
      * Operation installInstrumentAsync
      *
-     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
      *
-     * @param  \SplFileObject $install_file Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries (required)
-     * @param  string $instrument_type Instrument type (required)
+     * @param  \SplFileObject $install_file Instrument definition file to install. Can be a LINST file (.linst), a BIDS JSON sidecar (.json), or a CSV file with one or more REDCap data dictionaries (.csv). (required)
+     * @param  string $instrument_type Instrument type — must match the file extension. Client auto-detects: .csv → redcap, .linst → linst, .json → bids (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -613,10 +613,10 @@ class InstrumentManagerApi
     /**
      * Operation installInstrumentAsyncWithHttpInfo
      *
-     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv)
+     * Install instrument from a LINST file, a BIDS phenotype sidecar (json), or a REDCap data dictionary (csv). Sends instrument_type field (bids/linst/redcap).
      *
-     * @param  \SplFileObject $install_file Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries (required)
-     * @param  string $instrument_type Instrument type (required)
+     * @param  \SplFileObject $install_file Instrument definition file to install. Can be a LINST file (.linst), a BIDS JSON sidecar (.json), or a CSV file with one or more REDCap data dictionaries (.csv). (required)
+     * @param  string $instrument_type Instrument type — must match the file extension. Client auto-detects: .csv → redcap, .linst → linst, .json → bids (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -666,8 +666,8 @@ class InstrumentManagerApi
     /**
      * Create request for operation 'installInstrument'
      *
-     * @param  \SplFileObject $install_file Instrument to install. Can be a LINST file, a BIDS JSON sidecar, or a CSV file with one or more REDCap data dictionaries (required)
-     * @param  string $instrument_type Instrument type (required)
+     * @param  \SplFileObject $install_file Instrument definition file to install. Can be a LINST file (.linst), a BIDS JSON sidecar (.json), or a CSV file with one or more REDCap data dictionaries (.csv). (required)
+     * @param  string $instrument_type Instrument type — must match the file extension. Client auto-detects: .csv → redcap, .linst → linst, .json → bids (required)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['installInstrument'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
@@ -773,11 +773,12 @@ class InstrumentManagerApi
     /**
      * Operation uploadInstrumentData
      *
-     * Bulk upload instrument data from CSV or TSV file
+     * Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column.
      *
-     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist (required)
-     * @param  string $format Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action (required)
-     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s) (required)
+     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist. Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS. (required)
+     * @param  string $format Data format of the uploaded file. LORIS_CSV — standard LORIS CSV export REDCAP_CSV — REDCap CSV export (contains redcap_event_name column) BIDS_TSV — BIDS phenotype TSV (tab-separated) Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV (required)
+     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s). (required)
+     * @param  bool|null $strict Column validation mode. true — all template columns must be present in the uploaded file false — non-essential columns (e.g. _status, _date suffixes) may be missing Pipeline always sends false. (optional, default to false)
      * @param  string|null $instrument Set when a single instrument is selected (optional)
      * @param  string|null $multi_instrument Set when multiple instruments are selected (JSON array with format [{\\\&quot;value\\\&quot;:\\\&quot;instrument1\\\&quot;},{\\\&quot;value\\\&quot;:\\\&quot;instrument2\\\&quot;}]) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
@@ -786,20 +787,21 @@ class InstrumentManagerApi
      * @throws \InvalidArgumentException
      * @return \LORISClient\Model\UploadInstrumentData200Response|\LORISClient\Model\UploadInstrumentData201Response|\LORISClient\Model\ErrorResponse
      */
-    public function uploadInstrumentData($action, $format, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentData($action, $format, $data_file, $strict = false, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        list($response) = $this->uploadInstrumentDataWithHttpInfo($action, $format, $data_file, $instrument, $multi_instrument, $contentType);
+        list($response) = $this->uploadInstrumentDataWithHttpInfo($action, $format, $data_file, $strict, $instrument, $multi_instrument, $contentType);
         return $response;
     }
 
     /**
      * Operation uploadInstrumentDataWithHttpInfo
      *
-     * Bulk upload instrument data from CSV or TSV file
+     * Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column.
      *
-     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist (required)
-     * @param  string $format Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action (required)
-     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s) (required)
+     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist. Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS. (required)
+     * @param  string $format Data format of the uploaded file. LORIS_CSV — standard LORIS CSV export REDCAP_CSV — REDCap CSV export (contains redcap_event_name column) BIDS_TSV — BIDS phenotype TSV (tab-separated) Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV (required)
+     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s). (required)
+     * @param  bool|null $strict Column validation mode. true — all template columns must be present in the uploaded file false — non-essential columns (e.g. _status, _date suffixes) may be missing Pipeline always sends false. (optional, default to false)
      * @param  string|null $instrument Set when a single instrument is selected (optional)
      * @param  string|null $multi_instrument Set when multiple instruments are selected (JSON array with format [{\\\&quot;value\\\&quot;:\\\&quot;instrument1\\\&quot;},{\\\&quot;value\\\&quot;:\\\&quot;instrument2\\\&quot;}]) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
@@ -808,9 +810,9 @@ class InstrumentManagerApi
      * @throws \InvalidArgumentException
      * @return array of \LORISClient\Model\UploadInstrumentData200Response|\LORISClient\Model\UploadInstrumentData201Response|\LORISClient\Model\ErrorResponse, HTTP status code, HTTP response headers (array of strings)
      */
-    public function uploadInstrumentDataWithHttpInfo($action, $format, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataWithHttpInfo($action, $format, $data_file, $strict = false, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        $request = $this->uploadInstrumentDataRequest($action, $format, $data_file, $instrument, $multi_instrument, $contentType);
+        $request = $this->uploadInstrumentDataRequest($action, $format, $data_file, $strict, $instrument, $multi_instrument, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -912,11 +914,12 @@ class InstrumentManagerApi
     /**
      * Operation uploadInstrumentDataAsync
      *
-     * Bulk upload instrument data from CSV or TSV file
+     * Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column.
      *
-     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist (required)
-     * @param  string $format Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action (required)
-     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s) (required)
+     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist. Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS. (required)
+     * @param  string $format Data format of the uploaded file. LORIS_CSV — standard LORIS CSV export REDCAP_CSV — REDCap CSV export (contains redcap_event_name column) BIDS_TSV — BIDS phenotype TSV (tab-separated) Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV (required)
+     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s). (required)
+     * @param  bool|null $strict Column validation mode. true — all template columns must be present in the uploaded file false — non-essential columns (e.g. _status, _date suffixes) may be missing Pipeline always sends false. (optional, default to false)
      * @param  string|null $instrument Set when a single instrument is selected (optional)
      * @param  string|null $multi_instrument Set when multiple instruments are selected (JSON array with format [{\\\&quot;value\\\&quot;:\\\&quot;instrument1\\\&quot;},{\\\&quot;value\\\&quot;:\\\&quot;instrument2\\\&quot;}]) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
@@ -924,9 +927,9 @@ class InstrumentManagerApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function uploadInstrumentDataAsync($action, $format, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataAsync($action, $format, $data_file, $strict = false, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
-        return $this->uploadInstrumentDataAsyncWithHttpInfo($action, $format, $data_file, $instrument, $multi_instrument, $contentType)
+        return $this->uploadInstrumentDataAsyncWithHttpInfo($action, $format, $data_file, $strict, $instrument, $multi_instrument, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -937,11 +940,12 @@ class InstrumentManagerApi
     /**
      * Operation uploadInstrumentDataAsyncWithHttpInfo
      *
-     * Bulk upload instrument data from CSV or TSV file
+     * Bulk upload instrument data from CSV or TSV file. Sends format (LORIS_CSV/REDCAP_CSV/BIDS_TSV) and strict (true/false) fields. Client auto-detects REDCap CSV via redcap_event_name column.
      *
-     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist (required)
-     * @param  string $format Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action (required)
-     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s) (required)
+     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist. Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS. (required)
+     * @param  string $format Data format of the uploaded file. LORIS_CSV — standard LORIS CSV export REDCAP_CSV — REDCap CSV export (contains redcap_event_name column) BIDS_TSV — BIDS phenotype TSV (tab-separated) Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV (required)
+     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s). (required)
+     * @param  bool|null $strict Column validation mode. true — all template columns must be present in the uploaded file false — non-essential columns (e.g. _status, _date suffixes) may be missing Pipeline always sends false. (optional, default to false)
      * @param  string|null $instrument Set when a single instrument is selected (optional)
      * @param  string|null $multi_instrument Set when multiple instruments are selected (JSON array with format [{\\\&quot;value\\\&quot;:\\\&quot;instrument1\\\&quot;},{\\\&quot;value\\\&quot;:\\\&quot;instrument2\\\&quot;}]) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
@@ -949,10 +953,10 @@ class InstrumentManagerApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function uploadInstrumentDataAsyncWithHttpInfo($action, $format, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataAsyncWithHttpInfo($action, $format, $data_file, $strict = false, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
         $returnType = '\LORISClient\Model\UploadInstrumentData200Response';
-        $request = $this->uploadInstrumentDataRequest($action, $format, $data_file, $instrument, $multi_instrument, $contentType);
+        $request = $this->uploadInstrumentDataRequest($action, $format, $data_file, $strict, $instrument, $multi_instrument, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -993,9 +997,10 @@ class InstrumentManagerApi
     /**
      * Create request for operation 'uploadInstrumentData'
      *
-     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist (required)
-     * @param  string $format Either LORIS_CSV or BIDS_TSV. Note - BIDS_TSV cannot be used with CREATE_SESSIONS action (required)
-     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s) (required)
+     * @param  string $action Either CREATE_SESSIONS or VALIDATE_SESSIONS. VALIDATE_SESSIONS is used when all sessions already exist. Note: BIDS_TSV format cannot be combined with CREATE_SESSIONS. (required)
+     * @param  string $format Data format of the uploaded file. LORIS_CSV — standard LORIS CSV export REDCAP_CSV — REDCap CSV export (contains redcap_event_name column) BIDS_TSV — BIDS phenotype TSV (tab-separated) Client auto-detects: .tsv → BIDS_TSV, CSV with redcap_event_name → REDCAP_CSV, else → LORIS_CSV (required)
+     * @param  \SplFileObject $data_file CSV or TSV file with instrument data. Headers must match the headers of the set instrument(s). (required)
+     * @param  bool|null $strict Column validation mode. true — all template columns must be present in the uploaded file false — non-essential columns (e.g. _status, _date suffixes) may be missing Pipeline always sends false. (optional, default to false)
      * @param  string|null $instrument Set when a single instrument is selected (optional)
      * @param  string|null $multi_instrument Set when multiple instruments are selected (JSON array with format [{\\\&quot;value\\\&quot;:\\\&quot;instrument1\\\&quot;},{\\\&quot;value\\\&quot;:\\\&quot;instrument2\\\&quot;}]) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['uploadInstrumentData'] to see the possible values for this operation
@@ -1003,7 +1008,7 @@ class InstrumentManagerApi
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function uploadInstrumentDataRequest($action, $format, $data_file, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
+    public function uploadInstrumentDataRequest($action, $format, $data_file, $strict = false, $instrument = null, $multi_instrument = null, string $contentType = self::contentTypes['uploadInstrumentData'][0])
     {
 
         // verify the required parameter 'action' is set
@@ -1030,6 +1035,7 @@ class InstrumentManagerApi
 
 
 
+
         $resourcePath = '/instrument_manager/instrument_data';
         $formParams = [];
         $queryParams = [];
@@ -1046,6 +1052,7 @@ class InstrumentManagerApi
         $formData = $formDataProcessor->prepare([
             'action' => $action,
             'format' => $format,
+            'strict' => $strict,
             'instrument' => $instrument,
             'multi_instrument' => $multi_instrument,
             'data_file' => $data_file,
